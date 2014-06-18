@@ -1,0 +1,28 @@
+{% load staticfiles %}
+<div class="container mt50">
+    <div class="row">
+        <!-- Slider -->
+        <div class="col-sm-12">
+            <h2 class="lined-heading"><span>{{ listing.listing_name }}</span></h2>
+        </div>
+        <section class="standard-slider room-slider">
+            <div class="col-sm-12 col-md-8 col-lg-8">
+                <div class="item"><a href="{% static 'images/rooms/slider/750x481.gif' %}"><img
+                        src="{% static 'images/rooms/slider/750x481.gif' %}" alt="Image 2" class="img-responsive"></a>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-4">
+                <div class="tab-pane fade in active" id="overview">
+                    <div class="tp-leftarrow tparrows default detail-back"></div>
+                    <h3>
+                        Overview
+                    </h3>
+
+                    <p>{{ listing.description }}</p>
+
+                    <p>$ {{ listing.get_price }}</p>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

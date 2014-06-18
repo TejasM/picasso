@@ -19,7 +19,7 @@ def get_env_setting(setting):
         error_msg = "Set the %s env variable" % setting
         raise ImproperlyConfigured(error_msg)
 
-########## HOST CONFIGURATION
+# ######### HOST CONFIGURATION
 # See: https://docs.djangoproject.com/en/1.5/releases/1.5/#allowed-hosts-required-in-production
 ALLOWED_HOSTS = []
 ########## END HOST CONFIGURATION
@@ -51,7 +51,16 @@ SERVER_EMAIL = EMAIL_HOST_USER
 ########## END EMAIL CONFIGURATION
 
 ########## DATABASE CONFIGURATION
-DATABASES = {}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'picasso',
+        'USER': 'tejas',
+        'PASSWORD': 'tejas',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
 ########## END DATABASE CONFIGURATION
 
 

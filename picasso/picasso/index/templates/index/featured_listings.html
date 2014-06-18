@@ -1,0 +1,34 @@
+{% load staticfiles %}
+<!-- Rooms -->
+<section class="rooms mt50">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2 class="lined-heading"><span>Featured Listings</span></h2>
+            </div>
+            <!-- Room -->
+            {% for l in listings %}
+                <div class="col-sm-12 col-lg-4" style="margin-top: 4em">
+                    <div class="room-thumb"><img src="{% static 'images/rooms/356x228.gif' %}" alt="room 1"
+                                                 class="img-responsive"/>
+
+                        <div class="mask">
+                            <div class="main">
+                                <h5>{{ l.listing_name }}</h5>
+
+                                <div class="price">&euro; {{ l.get_price }}<span>per lesson</span></div>
+                            </div>
+                            <div class="content">
+                                <p>{{ l.description }}</p>
+
+                                <a href="javascript:void (0);" class="btn btn-primary btn-block to-listing"
+                                   data-url="{% url 'main:detail_listing' l.id %}">Read
+                                    More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

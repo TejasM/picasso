@@ -1,11 +1,10 @@
 """Common settings and globals."""
 
-
 from os.path import abspath, basename, dirname, join, normpath
 from sys import path
 
 
-########## PATH CONFIGURATION
+# ######### PATH CONFIGURATION
 # Absolute filesystem path to the Django project directory:
 DJANGO_ROOT = dirname(dirname(abspath(__file__)))
 
@@ -194,6 +193,7 @@ DJANGO_APPS = (
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
+    'picasso.index',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
