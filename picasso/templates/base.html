@@ -45,7 +45,8 @@
                     <li class="active"><a href="/">Home</a>
                     </li>
                     {% if not user.is_authenticated %}
-                        <li class="dropdown"> <a href="#" data-toggle="dropdown" class="dropdown-toggle js-activated">Sign In <b class="caret"></b></a>
+                        <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle js-activated">Sign
+                            In <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="#" id="sign-up">Sign Up</a></li>
                                 <li><a href="#" id="login">Login</a></li>
@@ -176,37 +177,41 @@
 
 </div>
 <div id="sign-in-lightbox" style="display: none">
-    <form class="clearfix mt50" role="form" method="post" action="{% url 'main:signup' %}"
-          id="signupform" onsubmit="javascript:void(0)">
-        <input type="hidden" value="sign-up" id="type-signin" name="type">
+    <div class="row">
+        <div class="col-md-12">
+            <form class="clearfix mt50" role="form" method="post" action="{% url 'main:signup' %}"
+                  id="signupform" onsubmit="javascript:void(0)">
+                <input type="hidden" value="sign-up" id="type-signin" name="type">
 
-        <div class="row" id="sign-up-stuff">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="first-name" accesskey="U"><span class="required">*</span>First Name</label>
-                    <input name="first-name" type="text" id="first-name" class="form-control" value="">
+                <div class="row" id="sign-up-stuff">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="first-name" accesskey="U"><span class="required">*</span>First Name</label>
+                            <input name="first-name" type="text" id="first-name" class="form-control" value="">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="last-name" accesskey="E"><span class="required">*</span>Last Name</label>
+                            <input name="last-name" type="text" id="last-name" value="" class="form-control">
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-6">
                 <div class="form-group">
-                    <label for="last-name" accesskey="E"><span class="required">*</span>Last Name</label>
-                    <input name="last-name" type="text" id="last-name" value="" class="form-control">
+                    <label for="email" accesskey="S"><span class="required">*</span>Email</label>
+                    <input name="email" id="email" class="form-control" type="email">
                 </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="email" accesskey="S"><span class="required">*</span>Email</label>
-            <input name="email" id="email" class="form-control" type="email">
-        </div>
-        <div class="form-group">
-            <label for="password" accesskey="S"><span class="required">*</span>Password</label>
-            <input name="password" id="password" class="form-control" type="password">
-        </div>
-        <div class="error_message">
+                <div class="form-group">
+                    <label for="password" accesskey="S"><span class="required">*</span>Password</label>
+                    <input name="password" id="password" class="form-control" type="password">
+                </div>
+                <div class="error_message">
 
+                </div>
+                <button type="submit" class="btn  btn-lg btn-primary" id="sign-in-button">Sign Up</button>
+            </form>
         </div>
-        <button type="submit" class="btn  btn-lg btn-primary" id="sign-in-button">Sign Up</button>
-    </form>
+    </div>
 </div>
 <!-- Footer -->
 <footer>
@@ -299,6 +304,9 @@
         $('#sign-up').click(function () {
             $('#main-section').hide();
             $('#sign-in-lightbox').show();
+            $('#sign-up-stuff').show();
+            $('#type-signin').val('sign-up');
+            $('#sign-in-button').text('Sign Up');
         });
 
         $('#login').click(function () {
