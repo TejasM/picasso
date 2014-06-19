@@ -22,7 +22,7 @@ class Listing(BaseModel):
     tags = models.ManyToManyField(Tag)
     address = models.ForeignKey(Address, default=None, null=True)
     price = models.FloatField(default=0)
-    scraped_url = models.CharField(default="")
+    scraped_url = models.CharField(default="", max_length=10000)
 
     @property
     def get_price(self):
