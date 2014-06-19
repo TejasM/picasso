@@ -324,7 +324,7 @@
             $.post('{% url 'main:signup' %}', {'first-name': $('#first-name').val(),
                 'last-name': $('#last-name').val(), 'type': $('#type-signin').val(),
                 'email': $('#email').val(), 'password': $('#password').val(),
-                'csrfmiddlewaretoken': $('#csrfmiddlewaretoken').val()}, function (data) {
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()}, function (data) {
                 if (parseInt(data['success']) == 0) {
                     $('.error_message').text(data['error']);
                 } else {
