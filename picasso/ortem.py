@@ -44,7 +44,7 @@ for info, id_member in zip(names, ids):
         l = Listing.objects.create(listing_name=name, scraped_url=temp_url)
     l.description = bio
     if l.address is None:
-        add = Address.objects.create(city=cities, address=address, postal_code=postal)
+        add = Address.objects.create(city=cities, location=address, postal_code=postal)
         l.address = add
     for t in tags:
         l.tags.add(t)
