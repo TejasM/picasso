@@ -176,7 +176,7 @@
 
 </div>
 <div id="sign-in-lightbox" style="display: none">
-    <form class="clearfix mt50" role="form" method="post" action="{% url 'index:signup' %}"
+    <form class="clearfix mt50" role="form" method="post" action="{% url 'main:signup' %}"
           id="signupform" onsubmit="javascript:void(0)">
         <input type="hidden" value="sign-up" id="type-signin" name="type">
 
@@ -310,7 +310,7 @@
         });
 
         $('#signupform').submit(function () {
-            $.post('{% url 'index:signup' %}', {'first-name': $('#first-name').val(),
+            $.post('{% url 'main:signup' %}', {'first-name': $('#first-name').val(),
                 'last-name': $('#last-name').val(), 'type': $('#type-signin').val(),
                 'email': $('#email').val(), 'password': $('#password').val()}, function (data) {
                 if (parseInt(data['success']) == 0) {
