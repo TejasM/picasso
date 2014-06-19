@@ -31,6 +31,13 @@ class Listing(BaseModel):
             return self.price
         return "N/A"
 
+    @property
+    def get_string_tags(self):
+        if self.tags.count() != 0:
+            return ", ".join(self.tags.values_list('tag_name', flat=True))
+        else:
+            return "Unknown"
+
 
 class Review(BaseModel):
     comment = models.CharField(default="", max_length=10000)
