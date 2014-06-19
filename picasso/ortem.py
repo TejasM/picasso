@@ -14,6 +14,10 @@ for info, id_member in zip(names, ids):
     cities = info['c4'][0]['v']
     skills = info['c2'][0]['v'].split(', ')
     temp_url = url + str(id_member)
+    try:
+        Listing.objects.get(listing_name=name, scraped_url=temp_url)
+    except Listing.DoesNotExist:
+        continue
     r = requests.get(temp_url)
     postal = ""
     address = ""
@@ -38,14 +42,14 @@ for info, id_member in zip(names, ids):
             t = Tag.objects.get(tag_name=s)
         tags.append(t)
     temp_url = url + str(id_member)
-    try:
-        l = Listing.objects.get(listing_name=name, scraped_url=temp_url)
-    except Listing.DoesNotExist:
-        l = Listing.objects.create(listing_name=name, scraped_url=temp_url)
+    l = Listing.objects.create(listing_name=name, scraped_url=temp_url)
     l.description = bio
     if l.address is None:
-        add = Address.objects.create(city=cities, location=address, postal_code=postal)
-        l.address = add
+        try:
+            add = Address.objects.create(city=cities, location=address, postal_code=postal)
+            l.address = add
+        except Exception as e:
+            print e
     for t in tags:
         l.tags.add(t)
     l.save()
