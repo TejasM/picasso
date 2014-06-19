@@ -49,7 +49,7 @@ for info, id_member in zip(names, ids):
             add = Address.objects.create(city=cities, location=address, postal_code=postal)
             l.address = add
         except Exception as e:
-            print e
+            print postal
     for t in tags:
         l.tags.add(t)
     l.save()
