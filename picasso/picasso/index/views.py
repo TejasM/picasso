@@ -1,5 +1,9 @@
+import json
+from django.contrib import messages
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.models import User
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template import RequestContext
 
 from picasso.index.models import Listing, Tag
@@ -42,3 +46,30 @@ def get_listing(request, list_id):
         listings = Listing.objects.filter(id=int(list_id))
         context = {'listings': listings}
         return render(request, 'index/listings.html', context)
+
+
+def signin(request):
+    if request.method == "POST":
+        if request.POST['type'] == "sign-up":
+            first_name = request.POST['first-name']
+            last_name = request.POST['last-name']
+            username = request.POST['email']
+            password = request.POST['password']
+            user = User.objects.create(first_name=first_name, last_name=last_name, email=username, username=username)
+            user.set_password(password)
+            login(request, user)
+        else:
+            username = request.POST['email']
+            password = request.POST['password']
+            try:
+                User.objects.get(email=username, username=username)
+            except User.DoesNotExist:
+                return HttpResponse(json.dumps({'success': 0, 'error': 'Incorrect Username/Password'}),
+                                    content_type='application/json')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                if not user.is_active():
+                    login(request, user)
+            login(request, user)
+        return HttpResponse(json.dumps({'success': 1}),
+                            content_type='application/json')

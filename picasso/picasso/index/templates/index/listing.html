@@ -18,7 +18,7 @@
                         Overview
                     </h3>
 
-                    <p>{{ listing.description }}</p>
+                    <p>{{ listing.description|safe }}</p>
 
                     <p>$ {{ listing.get_price }}</p>
                 </div>

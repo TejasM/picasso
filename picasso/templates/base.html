@@ -44,8 +44,14 @@
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="/">Home</a>
                     </li>
-                    <li class=""><a href="#">Sign Up</a>
-                    </li>
+                    {% if not user.is_authenticated %}
+                        <li class="dropdown"><a href="#">Sign In <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" id="sign-up">Sign Up</a></li>
+                                <li><a href="#" id="login">Login</a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -169,28 +175,39 @@
 <div id="main-section">
 
 </div>
+<div id="sign-in-lightbox" style="display: none">
+    <form class="clearfix mt50" role="form" method="post" action="{% url 'index:signup' %}"
+          id="signupform" onsubmit="javascript:void(0)">
+        <input type="hidden" value="sign-up" id="type-signin" name="type">
 
-<!-- Parallax Effect -->
-<script type="text/javascript">$(document).ready(function () {
-    $('#parallax-image').parallax("50%", -0.25);
-});</script>
-
-<section class="parallax-effect mt100">
-    <div id="parallax-image" style="background-image: url('{% static '/images/parallax/1900x911.gif' %}');">
-        <div class="color-overlay fadeIn appear" data-start="600">
-            <div class="container">
-                <div class="content">
-                    <h3 class="text-center"><i class="fa fa fa-star-o"></i> PICASSO</h3>
-
-                    <p class="text-center">An Exceptional Hotel Template!
-                        <br>
-                        <a href="" class="btn btn-default btn-lg mt30">See rooms</a></p>
+        <div class="row" id="sign-up-stuff">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="first-name" accesskey="U"><span class="required">*</span>First Name</label>
+                    <input name="first-name" type="text" id="first-name" class="form-control" value="">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="last-name" accesskey="E"><span class="required">*</span>Last Name</label>
+                    <input name="last-name" type="text" id="last-name" value="" class="form-control">
                 </div>
             </div>
         </div>
-    </div>
-</section>
+        <div class="form-group">
+            <label for="email" accesskey="S"><span class="required">*</span>Email</label>
+            <input name="email" id="email" class="form-control" type="email">
+        </div>
+        <div class="form-group">
+            <label for="password" accesskey="S"><span class="required">*</span>Password</label>
+            <input name="password" id="password" class="form-control" type="password">
+        </div>
+        <div class="error_message">
 
+        </div>
+        <button type="submit" class="btn  btn-lg btn-primary" id="sign-in-button">Sign Up</button>
+    </form>
+</div>
 <!-- Footer -->
 <footer>
     <div class="container">
@@ -242,6 +259,8 @@
 <script type="text/javascript" src="{% static 'rs-plugin/js/jquery.themepunch.plugins.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'rs-plugin/js/jquery.themepunch.revolution.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/custom.js' %}"></script>
+<script type="text/javascript"
+        src="https://raw.githubusercontent.com/buckwilson/Lightbox_me/master/jquery.lightbox_me.js"></script>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -275,6 +294,31 @@
             $('.revolution-slider').hide();
             $main.find('> div:last-child').remove();
             $main.find('> section').show();
+        });
+
+        $('#sign-up').click(function () {
+            $('#main-section').hide();
+            $('#sign-in-lightbox').show();
+        });
+
+        $('#login').click(function () {
+            $('#main-section').hide();
+            $('#sign-in-lightbox').show();
+            $('#sign-up-stuff').hide();
+            $('#type-signin').val('login');
+            $('#sign-in-button').text('Login');
+        });
+
+        $('#signupform').submit(function () {
+            $.post('{% url 'index:signup' %}', {'first-name': $('#first-name').val(),
+                'last-name': $('#last-name').val(), 'type': $('#type-signin').val(),
+                'email': $('#email').val(), 'password': $('#password').val()}, function (data) {
+                if (parseInt(data['success']) == 0) {
+                    $('.error_message').text(data['error']);
+                } else {
+                    document.location.href = '/';
+                }
+            });
         });
     });
 </script>
