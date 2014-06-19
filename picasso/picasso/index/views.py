@@ -70,6 +70,5 @@ def signin(request):
             if user is not None:
                 if not user.is_active():
                     login(request, user)
-            login(request, user)
         return HttpResponse(json.dumps({'success': 1}),
                             content_type='application/json')
