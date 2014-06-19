@@ -14,12 +14,12 @@
 
                         <div class="mask">
                             <div class="main">
-                                <h5>{{ l.listing_name }}<span>{{ l.get_string_tags }}</span></h5>
+                                <h5>{{ l.listing_name }}<br><span>{{ l.get_string_tags }}</span></h5>
 
                                 <div class="price">&euro; {{ l.get_price }}<span>per lesson</span></div>
                             </div>
                             <div class="content">
-                                <p>{{ l.description|safe }}</p>
+                                <p>{{ l.description|safe|truncatewords:30 }}</p>
 
                                 <a href="javascript:void (0);" class="btn btn-primary btn-block to-listing"
                                    data-url="{% url 'main:detail_listing' l.id %}">Read
