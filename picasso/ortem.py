@@ -13,7 +13,7 @@ for info, id_member in zip(names, ids):
     name = info['c1'][0]['v']
     cities = info['c4'][0]['v']
     skills = info['c2'][0]['v'].split(', ')
-    temp_url = 'http://www.ormta.org/Content/Members/MemberPublicProfile.aspx?pageId=1718443&memberId=9559660'
+    temp_url = url + str(id_member)
     r = requests.get(temp_url)
     postal = ""
     address = ""
