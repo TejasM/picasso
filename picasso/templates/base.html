@@ -182,6 +182,7 @@
             <div class="col-md-12">
                 <form class="clearfix mt50" role="form" method="post" action="{% url 'main:signup' %}"
                       id="signupform" onsubmit="javascript:void(0)">
+                    {% csrf_token %}
                     <input type="hidden" value="sign-up" id="type-signin" name="type">
 
                     <div class="row" id="sign-up-stuff">
@@ -216,7 +217,7 @@
     </div>
 </div>
 <!-- Footer -->
-<footer>
+<footer style="margin-top: 20px;">
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-sm-4">
@@ -322,7 +323,8 @@
         $('#signupform').submit(function () {
             $.post('{% url 'main:signup' %}', {'first-name': $('#first-name').val(),
                 'last-name': $('#last-name').val(), 'type': $('#type-signin').val(),
-                'email': $('#email').val(), 'password': $('#password').val()}, function (data) {
+                'email': $('#email').val(), 'password': $('#password').val(),
+                'csrfmiddlewaretoken': $('#csrfmiddlewaretoken').val()}, function (data) {
                 if (parseInt(data['success']) == 0) {
                     $('.error_message').text(data['error']);
                 } else {
