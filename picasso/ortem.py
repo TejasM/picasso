@@ -19,7 +19,7 @@ for info, id_member in zip(names, ids):
         else:
             t = Tag.objects.get(tag_name=s)
         tags.append(t)
-    temp_url = url + id_member
+    temp_url = url + str(id_member)
     l = Listing.objects.create(listing_name=name, scraped_url=temp_url)
     for t in tags:
         l.tags.add(t)
