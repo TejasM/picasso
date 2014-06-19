@@ -10,6 +10,9 @@ from .base import *
 # into your settings, but ImproperlyConfigured is an exception.
 from django.core.exceptions import ImproperlyConfigured
 
+DEBUG = True
+TEMPLATE_DEBUG = True
+
 
 def get_env_setting(setting):
     """ Get the environment setting or return exception """
