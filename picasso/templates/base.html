@@ -267,8 +267,6 @@
 <script type="text/javascript" src="{% static 'rs-plugin/js/jquery.themepunch.plugins.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'rs-plugin/js/jquery.themepunch.revolution.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/custom.js' %}"></script>
-<script type="text/javascript"
-        src="https://raw.githubusercontent.com/buckwilson/Lightbox_me/master/jquery.lightbox_me.js"></script>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -320,7 +318,7 @@
             $('#sign-in-button').text('Login');
         });
 
-        $('#signupform').submit(function () {
+        $('#sign-in-button').click(function () {
             $.post('{% url 'main:signup' %}', {'first-name': $('#first-name').val(),
                 'last-name': $('#last-name').val(), 'type': $('#type-signin').val(),
                 'email': $('#email').val(), 'password': $('#password').val(),
