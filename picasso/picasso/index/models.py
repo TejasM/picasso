@@ -13,7 +13,8 @@ class Tag(BaseModel):
 class Address(BaseModel):
     city = models.CharField(default="Toronto", max_length=100)
     country = models.CharField(default="Canada", max_length=100)
-    address = models.CharField(default="", max_length=100)
+    address = models.CharField(default="", max_length=1000)
+    postal_code = models.CharField(default="", max_length=100)
 
 
 class Listing(BaseModel):
