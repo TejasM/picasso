@@ -2,6 +2,7 @@ import json
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
+from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import RequestContext
@@ -55,9 +56,18 @@ def signin(request):
             last_name = request.POST['last-name']
             username = request.POST['email']
             password = request.POST['password']
-            user = User.objects.create(first_name=first_name, last_name=last_name, email=username, username=username)
-            user.set_password(password)
-            login(request, user)
+            try:
+                user = User.objects.create(first_name=first_name, last_name=last_name, email=username,
+                                           username=username)
+                user.set_password(password)
+                user.save()
+                user = authenticate(username=username, password=password)
+                login(request, user)
+                return HttpResponse(json.dumps({'success': 1}),
+                                    content_type='application/json')
+            except IntegrityError:
+                return HttpResponse(json.dumps({'success': 0, 'error': 'Username is taken'}),
+                                    content_type='application/json')
         else:
             username = request.POST['email']
             password = request.POST['password']
@@ -70,5 +80,7 @@ def signin(request):
             if user is not None:
                 if not user.is_active():
                     login(request, user)
-        return HttpResponse(json.dumps({'success': 1}),
-                            content_type='application/json')
+                    return HttpResponse(json.dumps({'success': 1}),
+                                        content_type='application/json')
+            return HttpResponse(json.dumps({'success': 0, 'error': 'Incorrect Username/Password'}),
+                                content_type='application/json')
