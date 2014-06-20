@@ -16,8 +16,9 @@ for info, id_member in zip(names, ids):
     temp_url = url + str(id_member)
     try:
         Listing.objects.get(listing_name=name, scraped_url=temp_url)
-    except Listing.DoesNotExist:
         continue
+    except Listing.DoesNotExist:
+        pass
     r = requests.get(temp_url)
     postal = ""
     address = ""
