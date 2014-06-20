@@ -43,5 +43,5 @@ class Listing(BaseModel):
 class Review(BaseModel):
     comment = models.CharField(default="", max_length=10000)
     rating = models.FloatField(default=-1)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, default=None, null=True)
     listing = models.ForeignKey(Listing)
