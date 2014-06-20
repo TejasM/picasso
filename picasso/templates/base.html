@@ -331,7 +331,7 @@
             $.post('{% url 'main:signup' %}', {'first-name': $('#first-name').val(),
                 'last-name': $('#last-name').val(), 'type': $('#type-signin').val(),
                 'email': $('#email').val(), 'password': $('#password').val(),
-                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()}, function (data) {
+                'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
                 if (parseInt(data['success']) == 0) {
                     $('.error_message').text(data['error']);
                 } else {
@@ -357,7 +357,23 @@
             $('#review_form').hide();
         });
         $main.on('click', '#review-submit', function () {
-            //$.post('')
+            var url = $(this).data('url');
+            $.post(url, {'comment': $('#review-comment').val(), 'rating': $('#review-rating').val(),
+                'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
+                var $owls = $('.owl-item');
+                var $items = $owls.find('.item');
+                if ($owls.length == 0) {
+                    $('.owl-wrapper').append('<div class="owl-item" style="width: 610px;">' + data + '</div>');
+                } else {
+                    if ($items.length % 2 == 1) {
+                        $($owls[$owls.length - 1]).append(data);
+                    } else {
+                        $('.owl-wrapper').append('<div class="owl-item" style="width: 610px;">' + data + '</div>');
+                    }
+                }
+                $('#review_form').remove();
+                $('#review-button').remove();
+            });
         });
     });
 </script>

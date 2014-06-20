@@ -45,6 +45,8 @@ def detail_listing(request, list_id):
                 context = {'listing': listing, 'reviewed': True}
             except Review.DoesNotExist:
                 context = {'listing': listing}
+            except Review.MultipleObjectsReturned:
+                context = {'listing': listing, 'reviewed': True}
         else:
             context = {'listing': listing}
         return render(request, 'index/listing.html', context)

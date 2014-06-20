@@ -21,7 +21,7 @@
 
                     <p>{{ listing.description|safe }}</p>
 
-                    <p>$ {{ listing.get_price }}</p>
+                    <p>Rating: {{ listing.get_rating }}</p>
                 </div>
             </div>
         </section>
@@ -48,43 +48,44 @@
 
                 </div>
                 <button type="button" class="btn  btn-lg btn-primary" id="cancel-review-button">Cancel</button>
-                <button type="button" class="btn  btn-lg btn-primary" id="review-submit">Submit Review</button>
+                <button type="button" class="btn  btn-lg btn-primary" id="review-submit"
+                        data-url="{% url 'main:review_listing' listing.id %}">
+                    Submit Review
+                </button>
             </form>
         </div>
     {% endif %}
-    {% if listing.review_set.count != 0 %}
-        <div class="row">
-            <!-- Testimonials -->
-            <section class="testimonials mt50">
-                <div class="col-md-12 col-sm-12">
-                    <h3 class="lined-heading"><span>Testimonials</span></h3>
+    <div class="row" {% if listing.review_set.count == 0 %}style="display:none;"{% endif %}>
+        <!-- Testimonials -->
+        <section class="testimonials mt50">
+            <div class="col-md-12 col-sm-12">
+                <h3 class="lined-heading"><span>Testimonials</span></h3>
 
-                    <div id="owl-reviews" class="owl-carousel mt30 owl-theme" style="display: block; opacity: 1;">
-                        <div class="owl-wrapper-outer">
-                            <div class="owl-wrapper"
-                                 style="width: 2440px; left: 0px; display: block; transition: all 1000ms ease; -webkit-transition: all 1000ms ease; -webkit-transform: translate3d(0px, 0px, 0px);">
-                                {% for review in listing.review_set.all %}
-                                    {% if forloop.counter0|mod:2 == 0 %}
-                                        <div class="owl-item" style="width: 610px;">
-                                    {% endif %}
-                                {% include 'index/review.html' with review=review count=forloop.counter %}
-                                {% if forloop.counter0|mod:2 == 1 %}
-                                    </div>
+                <div id="owl-reviews" class="owl-carousel mt30 owl-theme" style="display: block; opacity: 1;">
+                    <div class="owl-wrapper-outer">
+                        <div class="owl-wrapper"
+                             style="width: 2440px; left: 0px; display: block; transition: all 1000ms ease; -webkit-transition: all 1000ms ease; -webkit-transform: translate3d(0px, 0px, 0px);">
+                            {% for review in listing.review_set.all %}
+                                {% if forloop.counter0|mod:2 == 0 %}
+                                    <div class="owl-item" style="width: 610px;">
                                 {% endif %}
-                                {% endfor %}
+                            {% include 'index/review.html' with review=review count=forloop.counter %}
+                            {% if forloop.counter0|mod:2 == 1 %}
+                                </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% if listing.review_set.count >= 3 %}
+                        <div class="owl-controls clickable">
+                            <div class="owl-buttons">
+                                <div class="owl-prev"><i class="fa fa-angle-left fa-3x"></i></div>
+                                <div class="owl-next"><i class="fa fa-angle-right fa-3x"></i></div>
                             </div>
                         </div>
-                        {% if listing.review_set.count >= 3 %}
-                            <div class="owl-controls clickable">
-                                <div class="owl-buttons">
-                                    <div class="owl-prev"><i class="fa fa-angle-left fa-3x"></i></div>
-                                    <div class="owl-next"><i class="fa fa-angle-right fa-3x"></i></div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    </div>
+                    {% endif %}
                 </div>
-            </section>
-        </div>
-    {% endif %}
+            </div>
+        </section>
+    </div>
 </div>

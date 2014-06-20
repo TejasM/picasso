@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Avg
 from django.utils import timezone
 
 
@@ -30,6 +31,12 @@ class Listing(BaseModel):
     def get_price(self):
         if self.price != 0:
             return self.price
+        return "N/A"
+
+    @property
+    def get_rating(self):
+        if self.review_set.count() != 0:
+            return self.review_set.aggregate(Avg('rating')).values()[0]
         return "N/A"
 
     @property
