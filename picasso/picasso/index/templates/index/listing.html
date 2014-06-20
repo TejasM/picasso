@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load mathfilters %}
 <div class="container mt50">
     <div class="row">
         <!-- Slider -->
@@ -25,4 +26,64 @@
             </div>
         </section>
     </div>
+    {% if not reviewed %}
+        <div class="row">
+            <div class="col-sm-12">
+                <button type="button" class="btn btn-primary btn-block" id="review-button">Review</button>
+            </div>
+        </div>
+        <div class="row" id="review_form">
+            <form class="clearfix mt50" role="form" method="post" action="{% url 'main:review' listing.id %}"
+                  id="reviewform" onsubmit="javascript:void(0)">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="review-comment" accesskey="S"><span class="required">*</span>Comment</label>
+                    <textarea name="comment" id="review-comment" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="review-rating" accesskey="S"><span class="required">*</span>Rating</label>
+                    <input id="review-rating" name="rating" class="form-control">
+                </div>
+                <div class="error_message">
+
+                </div>
+                <button type="button" class="btn  btn-lg btn-primary" id="sign-in-button">Submit Review</button>
+            </form>
+        </div>
+    {% endif %}
+    {% if listing.review_set.count != 0 %}
+        <div class="row">
+            <!-- Testimonials -->
+            <section class="testimonials mt50">
+                <div class="col-md-12 col-sm-12">
+                    <h3 class="lined-heading"><span>Testimonials</span></h3>
+
+                    <div id="owl-reviews" class="owl-carousel mt30 owl-theme" style="display: block; opacity: 1;">
+                        <div class="owl-wrapper-outer">
+                            <div class="owl-wrapper"
+                                 style="width: 2440px; left: 0px; display: block; transition: all 1000ms ease; -webkit-transition: all 1000ms ease; -webkit-transform: translate3d(0px, 0px, 0px);">
+                                {% for review in listing.review_set.all %}
+                                    {% if forloop.counter0|mod:2 == 0 %}
+                                        <div class="owl-item" style="width: 610px;">
+                                    {% endif %}
+                                {% include 'index/review.html' with review=review count=forloop.counter %}
+                                {% if forloop.counter0|mod:2 == 1 %}
+                                    </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% if listing.review_set.count >= 3 %}
+                            <div class="owl-controls clickable">
+                                <div class="owl-buttons">
+                                    <div class="owl-prev"><i class="fa fa-angle-left fa-3x"></i></div>
+                                    <div class="owl-next"><i class="fa fa-angle-right fa-3x"></i></div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+        </div>
+    {% endif %}
 </div>

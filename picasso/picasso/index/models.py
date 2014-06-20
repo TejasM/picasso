@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
@@ -42,4 +43,5 @@ class Listing(BaseModel):
 class Review(BaseModel):
     comment = models.CharField(default="", max_length=10000)
     rating = models.FloatField(default=-1)
+    user = models.ForeignKey(User)
     listing = models.ForeignKey(Listing)

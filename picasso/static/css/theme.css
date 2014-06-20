@@ -804,7 +804,6 @@ header #logo {
 /* Reservation Form
 -------------------------------------------------- */
 #reservation-form {
-	margin-top: -60px;
 }
 /* Vertical */
 #reservation-form .reservation-horizontal, #reservation-form .reservation-vertical, #contact-form .contact-vertical {

@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600,700">
     <script type="text/javascript" src="{% static 'js/jquery-1.11.0.min.js' %}"></script>
+    <link href="{% static 'css/star-rating.min.css' %}" media="all" rel="stylesheet" type="text/css"/>
 </head>
 
 <body>
@@ -267,6 +268,7 @@
 <script type="text/javascript" src="{% static 'rs-plugin/js/jquery.themepunch.plugins.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'rs-plugin/js/jquery.themepunch.revolution.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/custom.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/star-rating.min.js' %}"></script>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -329,6 +331,19 @@
                     document.location.href = '/';
                 }
             });
+        });
+
+        $('#review-button').on('click', function () {
+            {% if user.is_authenticated %}
+                $('#review_form').show();
+                $("#review-rating").rating(['min' = > 1, 'max' = > 5, 'step' = > 1, 'size' =>'lg']);
+            {% else %}
+                $('#main-section').hide();
+                $('#sign-in-lightbox').show();
+                $('#sign-up-stuff').show();
+                $('#type-signin').val('sign-up');
+                $('#sign-in-button').text('Sign Up');
+            {% endif %}
         });
     });
 </script>
