@@ -27,13 +27,13 @@
         </section>
     </div>
     {% if not reviewed %}
-        <div class="row">
+        <div class="row mt20">
             <div class="col-sm-12">
                 <button type="button" class="btn btn-primary btn-block" id="review-button">Review</button>
             </div>
         </div>
-        <div class="row" id="review_form">
-            <form class="clearfix mt50" role="form" method="post" action="{% url 'main:review' listing.id %}"
+        <div class="row" id="review_form" style="display: none">
+            <form class="clearfix mt50" role="form" method="post" action="{% url 'main:review_listing' listing.id %}"
                   id="reviewform" onsubmit="javascript:void(0)">
                 {% csrf_token %}
                 <div class="form-group">
@@ -47,7 +47,8 @@
                 <div class="error_message">
 
                 </div>
-                <button type="button" class="btn  btn-lg btn-primary" id="sign-in-button">Submit Review</button>
+                <button type="button" class="btn  btn-lg btn-primary" id="cancel-review-button">Cancel</button>
+                <button type="button" class="btn  btn-lg btn-primary" id="review-submit">Submit Review</button>
             </form>
         </div>
     {% endif %}

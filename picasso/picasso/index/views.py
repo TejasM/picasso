@@ -86,7 +86,7 @@ def signin(request):
                                     content_type='application/json')
             user = authenticate(username=username, password=password)
             if user is not None:
-                if not user.is_active():
+                if user.is_active:
                     login(request, user)
                     return HttpResponse(json.dumps({'success': 1}),
                                         content_type='application/json')

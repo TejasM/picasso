@@ -179,9 +179,14 @@
 </div>
 <div id="sign-in-lightbox" style="display: none">
     <div class="container">
+        <div class="row mt50">
+            <div class="col-sm-12">
+                <h2 class="lined-heading"><span id="signin-heading">Sign Up</span></h2>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
-                <form class="clearfix mt50" role="form" method="post" action="{% url 'main:signup' %}"
+                <form class="clearfix" role="form" method="post" action="{% url 'main:signup' %}"
                       id="signupform" onsubmit="javascript:void(0)">
                     {% csrf_token %}
                     <input type="hidden" value="sign-up" id="type-signin" name="type">
@@ -309,6 +314,7 @@
             $('#sign-in-lightbox').show();
             $('#sign-up-stuff').show();
             $('#type-signin').val('sign-up');
+            $('#signin-heading').text('Sign Up');
             $('#sign-in-button').text('Sign Up');
         });
 
@@ -317,6 +323,7 @@
             $('#sign-in-lightbox').show();
             $('#sign-up-stuff').hide();
             $('#type-signin').val('login');
+            $('#signin-heading').text('Login');
             $('#sign-in-button').text('Login');
         });
 
@@ -333,17 +340,24 @@
             });
         });
 
-        $('#review-button').on('click', function () {
+        $main.on('click', '#review-button', function () {
             {% if user.is_authenticated %}
                 $('#review_form').show();
-                $("#review-rating").rating(['min' = > 1, 'max' = > 5, 'step' = > 1, 'size' =>'lg']);
+                $("#review-rating").rating({'min': 0, 'max': 5, 'step': 1});
             {% else %}
                 $('#main-section').hide();
                 $('#sign-in-lightbox').show();
                 $('#sign-up-stuff').show();
+                $('#signin-heading').text('Sign Up');
                 $('#type-signin').val('sign-up');
                 $('#sign-in-button').text('Sign Up');
             {% endif %}
+        });
+        $main.on('click', '#cancel-review-button', function () {
+            $('#review_form').hide();
+        });
+        $main.on('click', '#review-submit', function () {
+            //$.post('')
         });
     });
 </script>
