@@ -59,6 +59,13 @@ class Listing(BaseModel):
         else:
             return "Unknown"
 
+    @property
+    def get_string_tags_no_comma(self):
+        if self.tags.count() != 0:
+            return " ".join(self.tags.values_list('tag_name', flat=True))
+        else:
+            return "Unknown"
+
 
 class Review(BaseModel):
     comment = models.CharField(default="", max_length=10000)
