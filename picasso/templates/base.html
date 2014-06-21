@@ -297,6 +297,7 @@
                 $main.empty();
                 $main.append(data);
             });
+            return false;
         });
         $main.on('click', '.to-listing', function () {
             var url = $(this).data('url');
@@ -377,6 +378,7 @@
                 }
                 $('#review_form').remove();
                 $('#review-button').remove();
+                $('#reviews-box').show();
             });
         });
     });
