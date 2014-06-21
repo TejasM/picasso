@@ -16,7 +16,7 @@ for info, id_member in zip(names, ids):
     active = info['c3'][0]['v'] == "Active"
     temp_url = url + str(id_member)
     # try:
-    #     Listing.objects.get(listing_name=name, scraped_url=temp_url)
+    # Listing.objects.get(listing_name=name, scraped_url=temp_url)
     #     continue
     # except Listing.DoesNotExist:
     #     pass
@@ -43,7 +43,7 @@ for info, id_member in zip(names, ids):
     except:
         pass
     try:
-        email = r.text.split('e-Mail')[1].split('</span>')[1].split('">')[2]
+        email = r.text.split('e-Mail')[1].split('</span>')[1].split('">')[2].split('target=_blank>')[1].split('</a>')[0]
     except:
         pass
     tags = []
@@ -61,8 +61,6 @@ for info, id_member in zip(names, ids):
     l.description = bio
     l.email = email
     l.phone = phone
-    print phone
-    print email
     l.active = active
     if l.address is None:
         try:
