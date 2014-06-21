@@ -2,32 +2,34 @@
 jQuery(document).ready(function () {
     "use strict";
 
-	
+
     //Gmap
     if (jQuery().gMap) {
         jQuery('#map').gMap({
             zoom: 16, //Integer: Level of zoom in to the map
-            markers: [{
-                address: "Calle Hamburgo, Las Palmas, Spanje", //Address of the company
-                html: "<h4>Our hotel</h4><p>This is our hotel</p>", //Quicktip
-                popup: false, //Boolean	
-                scrollwheel: false, //Boolean
-                maptype: 'TERRAIN', //Choose between: 'HYBRID', 'TERRAIN', 'SATELLITE' or 'ROADMAP'.
-                icon: {
-                    image: "images/ui/gmap-icon.png",
-                    iconsize: [42, 53],
-                    iconanchor: [12, 46]
-                },
+            markers: [
+                {
+                    address: "Calle Hamburgo, Las Palmas, Spanje", //Address of the company
+                    html: "<h4>Our hotel</h4><p>This is our hotel</p>", //Quicktip
+                    popup: false, //Boolean
+                    scrollwheel: false, //Boolean
+                    maptype: 'TERRAIN', //Choose between: 'HYBRID', 'TERRAIN', 'SATELLITE' or 'ROADMAP'.
+                    icon: {
+                        image: "images/ui/gmap-icon.png",
+                        iconsize: [42, 53],
+                        iconanchor: [12, 46]
+                    },
 
-                controls: {
-                    panControl: false, //Boolean
-                    zoomControl: false, //Boolean
-                    mapTypeControl: true, //Boolean
-                    scaleControl: true, //Boolean
-                    streetViewControl: true, //Boolean
-                    overviewMapControl: false //Boolean
+                    controls: {
+                        panControl: false, //Boolean
+                        zoomControl: false, //Boolean
+                        mapTypeControl: true, //Boolean
+                        scaleControl: true, //Boolean
+                        streetViewControl: true, //Boolean
+                        overviewMapControl: false //Boolean
+                    }
                 }
-            }]
+            ]
         });
     }
 
@@ -86,9 +88,9 @@ jQuery(document).ready(function () {
             delay: 9000,
             startwidth: 1170,
             startheight: 449,
-            autoHeight:"off",
-			fullScreenAlignForce:"off",
-            
+            autoHeight: "off",
+            fullScreenAlignForce: "off",
+
             onHoverStop: "on",
 
             thumbWidth: 100,
@@ -99,12 +101,12 @@ jQuery(document).ready(function () {
             hideBulletsOnMobile: "on",
             hideArrowsOnMobile: "on",
             hideThumbsUnderResoluition: 0,
-			
-			hideThumbs:0,
-			hideTimerBar:"on",
 
-			keyboardNavigation:"on",
-			
+            hideThumbs: 0,
+            hideTimerBar: "on",
+
+            keyboardNavigation: "on",
+
             navigationType: "none",
             navigationArrows: "solo",
             navigationStyle: "round",
@@ -125,10 +127,10 @@ jQuery(document).ready(function () {
             soloArrowRightVOffset: 0,
 
             touchenabled: "on",
-			swipe_velocity:"0.7",
-			swipe_max_touches:"1",
-			swipe_min_touches:"1",
-			drag_block_vertical:"false",
+            swipe_velocity: "0.7",
+            swipe_max_touches: "1",
+            swipe_min_touches: "1",
+            drag_block_vertical: "false",
 
             stopAtSlide: -1,
             stopAfterLoops: -1,
@@ -138,8 +140,8 @@ jQuery(document).ready(function () {
 
             dottedOverlay: "none",
 
-			fullWidth:"off",
-			forceFullWidth:"off",
+            fullWidth: "off",
+            forceFullWidth: "off",
             fullScreen: "off",
             fullScreenOffsetContainer: "#topheader-to-offset",
 
@@ -162,7 +164,7 @@ jQuery(document).ready(function () {
             autoplay_slideshow: false, // true/false
             opacity: 0.80, // Value between 0 and 1 
             show_title: true, // true/false            
-			allow_resize: true, // Resize the photos bigger than viewport. true/false
+            allow_resize: true, // Resize the photos bigger than viewport. true/false
             default_width: 500,
             default_height: 344,
             counter_separator_label: '/', // The separator for the gallery counter 1 "of" 2
@@ -175,8 +177,10 @@ jQuery(document).ready(function () {
             deeplinking: true, // Allow prettyPhoto to update the url to enable deeplinking. 
             overlay_gallery: true, // If set to true, a gallery will overlay the fullscreen image on mouse over 
             keyboard_shortcuts: true, // Set to false if you open forms inside prettyPhoto 
-            changepicturecallback: function () {}, // Called everytime an item is shown/changed 
-            callback: function () {}, // Called when prettyPhoto is closed
+            changepicturecallback: function () {
+            }, // Called everytime an item is shown/changed
+            callback: function () {
+            }, // Called when prettyPhoto is closed
         });
     }
 
@@ -221,91 +225,19 @@ jQuery(document).ready(function () {
         }, '2000', 'swing');
     })
 
-	
+
     //niceScroll
     if (jQuery().niceScroll) {
-         $(".parallax-effect").niceScroll();
-		 };
-		 
-
-    // Isotope
- window.onload = function () {	
-    if (jQuery().isotope) {
-        // cache container
-        var jQuerycontainer1 = jQuery('.room-list');
-        // initialize isotope
-        jQuerycontainer1.isotope({
-            filter: '*',
-            masonry: {
-                columnWidth: 1
-            }
-        });
-
-        // filter items when filter link is clicked
-        jQuery('#filters a').click(function () {
-            var selector = jQuery(this).attr('data-filter');
-            jQuerycontainer1.isotope({
-                filter: selector
-            });
-            return false;
-        });
-        // set selected menu items
-        var jQueryfilters = jQuery('#filters'),
-            jQueryfiltersLinks = jQueryfilters.find('a');
-
-        jQueryfiltersLinks.click(function () {
-            console.log(this);
-            var jQuerythis = jQuery(this).parent(this);
-            // don't proceed if already selected
-            if (jQuerythis.hasClass('active')) {
-                return false;
-            }
-            var jQueryfilterLink = jQuerythis.parents('#filters');
-            jQueryfilterLink.find('.active').removeClass('active');
-            jQuerythis.addClass('active');
-        });
-
-        var jQuerycontainer2 = jQuery('.gallery');
-        // initialize isotope
-        jQuerycontainer2.isotope({
-            filter: '*',
-            masonry: {
-                columnWidth: 1,
-                gutterWidth: 0
-            }
-        });
-
-        // filter items when filter link is clicked
-        jQuery('#filters a').click(function () {
-            var selector = jQuery(this).attr('data-filter');
-            jQuerycontainer2.isotope({
-                filter: selector
-            });
-            return false;
-        });
-        // set selected menu items
-        var jQueryfilters = jQuery('#filters'),
-            jQueryfiltersLinks = jQueryfilters.find('a');
-
-        jQueryfiltersLinks.click(function () {
-            console.log(this);
-            var jQuerythis = jQuery(this).parent(this);
-            // don't proceed if already selected
-            if (jQuerythis.hasClass('active')) {
-                return false;
-            }
-            var jQueryfilterLink = jQuerythis.parents('#filters');
-            jQueryfilterLink.find('.active').removeClass('active');
-            jQuerythis.addClass('active');
-        });
+        $(".parallax-effect").niceScroll();
     }
-}
+    ;
 
     // Sticky Navigation
     if (jQuery().sticky) {
         jQuery(".navbar").sticky({
             topSpacing: 0,
-        });;
+        });
+        ;
     }
     var shrinkHeader = 100;
     jQuery(window).scroll(function () {
@@ -382,7 +314,6 @@ jQuery(document).ready(function () {
     var opt2;
     var total;
     jQuery('.adults select, .children select').change(
-
         function () {
             opt1 = jQuery('.adults').find('option:selected');
             opt2 = jQuery('.children').find('option:selected');
@@ -393,3 +324,74 @@ jQuery(document).ready(function () {
 
 
 });
+function loadFilters() {
+    if (jQuery().isotope) {
+        // cache container
+        var jQuerycontainer1 = jQuery('.room-list');
+        // initialize isotope
+        jQuerycontainer1.isotope({
+            filter: '*',
+            masonry: {
+                columnWidth: 1
+            }
+        });
+
+        // filter items when filter link is clicked
+        jQuery('#filters a').click(function () {
+            var selector = jQuery(this).attr('data-filter');
+            jQuerycontainer1.isotope({
+                filter: selector
+            });
+            return false;
+        });
+        // set selected menu items
+        var jQueryfilters = jQuery('#filters'),
+            jQueryfiltersLinks = jQueryfilters.find('a');
+
+        jQueryfiltersLinks.click(function () {
+            console.log(this);
+            var jQuerythis = jQuery(this).parent(this);
+            // don't proceed if already selected
+            if (jQuerythis.hasClass('active')) {
+                return false;
+            }
+            var jQueryfilterLink = jQuerythis.parents('#filters');
+            jQueryfilterLink.find('.active').removeClass('active');
+            jQuerythis.addClass('active');
+        });
+
+        var jQuerycontainer2 = jQuery('.gallery');
+        // initialize isotope
+        jQuerycontainer2.isotope({
+            filter: '*',
+            masonry: {
+                columnWidth: 1,
+                gutterWidth: 0
+            }
+        });
+
+        // filter items when filter link is clicked
+        jQuery('#filters a').click(function () {
+            var selector = jQuery(this).attr('data-filter');
+            jQuerycontainer2.isotope({
+                filter: selector
+            });
+            return false;
+        });
+        // set selected menu items
+        var jQueryfilters = jQuery('#filters'),
+            jQueryfiltersLinks = jQueryfilters.find('a');
+
+        jQueryfiltersLinks.click(function () {
+            console.log(this);
+            var jQuerythis = jQuery(this).parent(this);
+            // don't proceed if already selected
+            if (jQuerythis.hasClass('active')) {
+                return false;
+            }
+            var jQueryfilterLink = jQuerythis.parents('#filters');
+            jQueryfilterLink.find('.active').removeClass('active');
+            jQuerythis.addClass('active');
+        });
+    }
+}

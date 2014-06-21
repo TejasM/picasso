@@ -6,29 +6,44 @@
             <div class="col-sm-12">
                 <h2 class="lined-heading"><span>Featured Listings</span></h2>
             </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="nav nav-pills" id="filters">
+                        <li class="active"><a href="#" data-filter="*">All</a></li>
+                        <li><a href="#" data-filter=".piano">Piano</a></li>
+                        <li><a href="#" data-filter=".string">String</a></li>
+                        <li><a href="#" data-filter=".voice">Voice</a></li>
+                        <li><a href="#" data-filter=".english">English</a></li>
+                        <li><a href="#" data-filter=".french">French</a></li>
+                        <li><a href="#" data-filter=".german">German</a></li>
+                    </ul>
+                </div>
+            </div>
             <!-- Room -->
-            {% for l in listings %}
-                <div class="col-sm-12 col-lg-4" style="margin-top: 4em">
-                    <div class="room-thumb"><img src="http://placehold.it/140x100" alt="room 1"
-                                                 class="img-responsive"/>
+            <div class="isotope gallery">
+                {% for l in listings %}
+                    <div class="col-sm-12 col-lg-4 isotope-item {{ l.get_string_tags }}" style="margin-top: 2em">
+                        <div class="room-thumb"><img src="http://placehold.it/140x100" alt="room 1"
+                                                     class="img-responsive"/>
 
-                        <div class="mask">
-                            <div class="main">
-                                <h5>{{ l.listing_name }}<br><span>{{ l.get_string_tags }}</span></h5>
+                            <div class="mask">
+                                <div class="main">
+                                    <h5>{{ l.listing_name }}<br><span>{{ l.get_string_tags }}</span></h5>
 
-                                <div class="price"><span>Rating: </span>{{ l.get_rating }}</div>
-                            </div>
-                            <div class="content">
-                                <p>{{ l.description|safe|truncatewords:30 }}</p>
+                                    <div class="price"><span>Rating: </span>{{ l.get_rating }}</div>
+                                </div>
+                                <div class="content">
+                                    <p>{{ l.description|safe|truncatewords:30 }}</p>
 
-                                <a href="javascript:void (0);" class="btn btn-primary btn-block to-listing"
-                                   data-url="{% url 'main:detail_listing' l.id %}">Read
-                                    More</a>
+                                    <a href="javascript:void (0);" class="btn btn-primary btn-block to-listing"
+                                       data-url="{% url 'main:detail_listing' l.id %}">Read
+                                        More</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
     </div>
 </section>

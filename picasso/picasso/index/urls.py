@@ -6,6 +6,7 @@ import views
 
 __author__ = 'tmehta'
 urlpatterns = patterns('',
+                       url(r'^logout$', views.user_logout, name='logout'),
                        url(r'^featured$', views.featured, name='featured'),
                        url(r'^get-listings$', views.get_listings, name='get_listings'),
                        url(r'^get-listing/(?P<list_id>\w+)$', views.get_listing, name='get_listing'),

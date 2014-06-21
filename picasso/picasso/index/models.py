@@ -26,6 +26,9 @@ class Listing(BaseModel):
     address = models.ForeignKey(Address, default=None, null=True)
     price = models.FloatField(default=0)
     scraped_url = models.CharField(default="", max_length=10000)
+    active = models.BooleanField(default=True)
+    email = models.EmailField(default="", blank=True, null=True)
+    phone = models.CharField(default="", blank=True, null=True)
 
     @property
     def get_price(self):

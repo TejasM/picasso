@@ -53,6 +53,9 @@
                                 <li><a href="#" id="login">Login</a></li>
                             </ul>
                         </li>
+                    {% else %}
+                        <li class=""><a href="{% url 'main:logout' %}">Logout</a>
+                        </li>
                     {% endif %}
                 </ul>
             </div>
@@ -285,6 +288,7 @@
         var $main = $('#main-section');
         $.get('{% url 'main:featured' %}', function (data) {
             $main.append(data);
+            loadFilters();
         });
         $('#reservationform').submit(function (e) {
             e.preventDefault();
