@@ -38,4 +38,4 @@ tramp
 Thumbs.db
 Desktop.ini
 migrations/
-
+*.xcf
