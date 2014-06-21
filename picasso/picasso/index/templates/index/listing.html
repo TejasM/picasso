@@ -23,7 +23,7 @@
 
                     <p>{{ listing.description|safe }}</p>
 
-                    <p><strong>Address: </strong>{{ listing.address }}</p>
+                    <p><strong>Address: </strong>{{ listing.address|safe }}</p>
 
                     {% if listing.active %}<p><strong>Active: </strong><i class="fa fa-2x fa-check-circle"></i>
                         </p>{% endif %}
@@ -63,7 +63,7 @@
             </form>
         </div>
     {% endif %}
-    <div class="row" {% if listing.review_set.count == 0 %}style="display:none;"{% endif %}>
+    <div class="row" {% if listing.review_set.count == 0 %}style="display:none;"{% endif %} id="reviews-box">
         <!-- Testimonials -->
         <section class="testimonials mt50">
             <div class="col-md-12 col-sm-12">
