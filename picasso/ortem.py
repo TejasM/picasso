@@ -61,6 +61,7 @@ for info, id_member in zip(names, ids):
     l.description = bio
     l.email = email
     l.phone = phone
+    print phone
     l.active = active
     if l.address is None:
         try:
