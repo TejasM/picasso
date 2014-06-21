@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
+from django.http.response import HttpResponse
 from django.views.generic import TemplateView
 
 # Uncomment the next two lines to enable the admin:
@@ -12,6 +13,9 @@ admin.autodiscover()
 urlpatterns = patterns('',
                        url(r'^$', TemplateView.as_view(template_name='base.html')),
                        url(r'^main/', include('picasso.index.urls', namespace='main')),
+                       url(r'^google46c8e47a069f43cd\.html$',
+                           lambda r: HttpResponse("google-site-verification: google46c8e47a069f43cd.html",
+                                                  mimetype="text/plain")),
 
                        # Examples:
                        # url(r'^$', 'picasso.views.home', name='home'),
