@@ -18,6 +18,16 @@ class Address(BaseModel):
     location = models.CharField(default="", max_length=1000)
     postal_code = models.CharField(default="", max_length=100)
 
+    def __unicode__(self):
+        string = ""
+        string += self.location
+        if self.location != "":
+            string += "<br>"
+        string += self.city + ", " + self.country
+        if self.postal_code != "":
+            string += "<br>" + self.postal_code
+        return string
+
 
 class Listing(BaseModel):
     listing_name = models.CharField(default="", max_length=500)

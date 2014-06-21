@@ -62,6 +62,7 @@ for info, id_member in zip(names, ids):
     l.email = email
     l.phone = phone
     print phone
+    print email
     l.active = active
     if l.address is None:
         try:
