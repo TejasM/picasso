@@ -24,6 +24,7 @@ def get_listings(request):
         possible_tags = Tag.objects.filter(tag_name__contains=search).values_list('id', flat=True)
         listings = Listing.objects.filter(listing_name__contains=search) | Listing.objects.filter(
             description__contains=search) | Listing.objects.filter(tags__in=possible_tags)
+        listings = listings.distinct()
         context = {'listings': listings}
         return render(request, 'index/listings.html', context)
 
