@@ -7,6 +7,7 @@ from django.views.generic import TemplateView
 from django.contrib import admin
 from picasso import index
 import picasso
+from django.http import HttpResponse
 
 admin.autodiscover()
 
