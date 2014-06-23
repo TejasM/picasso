@@ -37,8 +37,16 @@ def edit_listing(request, list_id):
         listing = Listing.objects.get(pk=int(list_id))
         listing.listing_name = request.POST['listing_name']
         listing.description = request.POST['description']
+        listing.address.location = request.POST['address']
+        listing.address.postal = request.POST['postal']
+        listing.address.city = request.POST['city']
+        listing.address.country = request.POST['country']
+        listing.address.save()
+        listing.phone = request.POST['phone']
+        listing.owner = request.POST['owner']
+        listing.active = request.POST['active']
         listing.save()
-        return HttpResponse({'listing': listing.id}, content_type='application/json')
+        return HttpResponse({'id': listing.id}, content_type='application/json')
     else:
         listing = Listing.objects.get(pk=int(list_id))
         context = {'listing': listing}
