@@ -1,4 +1,4 @@
-<div id="create-listing-div" class="container mt30">
+<div id="edit-listing-div" class="container mt30">
     <form class="clearfix" role="form" method="post" action="{% url 'profile:edit_listing' listing.id %}"
           id="editlistingform" onsubmit="return false;">
         {% csrf_token %}
@@ -62,7 +62,7 @@
             </div>
         </div>
         <button type="button" class="btn btn-lg btn-primary" id="cancel-edit-listing">Cancel</button>
-        <button type="button" class="btn btn-lg btn-primary" id="edit-listing-button"
+        <button type="button" class="btn btn-lg btn-primary" id="save-edit-listing"
                 data-url="{% url 'profile:edit_listing' listing.id %}">
             Save Listing
         </button>

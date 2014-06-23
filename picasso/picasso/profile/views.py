@@ -18,9 +18,9 @@ def add_listing(request):
         country = request.POST['country']
         phone = request.POST['phone']
         owner = request.POST['owner']
-        active = request.POST['active']
+        active = True if request.POST['active'] == "true" else False
         address = Address.objects.create(city=city, country=country, postal_code=postal, location=address)
-        if owner:
+        if owner == "true":
             listing = Listing.objects.create(listing_name=listing_name, description=description, address=address,
                                              phone=phone, active=active, owner=request.user, created_by=request.user)
         else:
@@ -43,10 +43,14 @@ def edit_listing(request, list_id):
         listing.address.country = request.POST['country']
         listing.address.save()
         listing.phone = request.POST['phone']
-        listing.owner = request.POST['owner']
-        listing.active = request.POST['active']
+        if request.POST['owner'] == "true":
+            listing.owner = request.user
+        if request.POST['active'] == "true":
+            listing.active = True
+        else:
+            listing.active = False
         listing.save()
-        return HttpResponse({'id': listing.id}, content_type='application/json')
+        return HttpResponse(json.dumps({'id': listing.id}), content_type='application/json')
     else:
         listing = Listing.objects.get(pk=int(list_id))
         context = {'listing': listing}

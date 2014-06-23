@@ -175,6 +175,8 @@
             $.get(url, function (data) {
                 $('#listing-detail').remove();
                 $main.append(data);
+                $("#are-owner").bootstrapSwitch();
+                $("#are-active").bootstrapSwitch();
             });
         });
 
@@ -205,7 +207,7 @@
             $my_listings.show();
         });
 
-        $main.on('click', '#edit-listing-button', function () {
+        $main.on('click', '#save-edit-listing', function () {
             var url = $(this).data('url');
             $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
                         'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
@@ -217,7 +219,7 @@
                         $('#edit-listing-div').remove();
                         $my_listings.find('#listing-' + data['id']).remove();
                         $.get('/main/get-listing/' + data['id'], function (data2) {
-                            $my_listings.find('.rooms').append(data2);
+                            $my_listings.find('.rooms .row').append(data2);
                         });
                         $my_listings.show();
                     });
