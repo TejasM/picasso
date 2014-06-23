@@ -22,10 +22,10 @@ def add_listing(request):
         address = Address.objects.create(city=city, country=country, postal_code=postal, location=address)
         if owner:
             listing = Listing.objects.create(listing_name=listing_name, description=description, address=address,
-                                             phone=phone, active=active, owner=request.user)
+                                             phone=phone, active=active, owner=request.user, created_by=request.user)
         else:
             listing = Listing.objects.create(listing_name=listing_name, description=description, address=address,
-                                             phone=phone, active=active)
+                                             phone=phone, active=active, created_by=request.user)
         return HttpResponse(json.dumps({'id': listing.id}), content_type='application/json')
     else:
         return render(request, 'profile/create_listing.html')
