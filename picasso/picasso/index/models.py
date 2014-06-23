@@ -39,6 +39,8 @@ class Listing(BaseModel):
     active = models.BooleanField(default=True)
     email = models.EmailField(default="", blank=True, null=True)
     phone = models.CharField(default="", blank=True, null=True, max_length=20)
+    created_by = models.ForeignKey(User, null=True, default=None, related_name='creator')
+    owner = models.ForeignKey(User, null=True, default=None, related_name='owner')
 
     @property
     def get_price(self):

@@ -1,0 +1,70 @@
+<div id="create-listing-div" class="container mt30">
+    <form class="clearfix" role="form" method="post" action="{% url 'profile:add_listing' %}"
+          id="createlistingform" onsubmit="return false;">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="listing-name" accesskey="S"><span class="required">*</span>Listing Name</label>
+            <input id="listing-name" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="listing-description" accesskey="S"><span class="required">*</span>Description</label>
+            <textarea id="listing-description" class="form-control"></textarea>
+        </div>
+        <div class="row">
+            <div class="col-lg-10 col-sm-12">
+                <div class="form-group">
+                    <label for="listing-address" accesskey="S">Address</label>
+                    <input id="listing-address" class="form-control">
+                </div>
+            </div>
+            <div class="col-lg-2 col-sm-12">
+                <div class="form-group">
+                    <label for="listing-postal" accesskey="S">Postal Code</label>
+                    <input id="listing-postal" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-sm-12">
+                <div class="form-group">
+                    <label for="listing-city" accesskey="S">Cities</label>
+                    <input id="listing-city" class="form-control">
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-12">
+                <div class="form-group">
+                    <label for="listing-country" accesskey="S">Country</label>
+                    <input id="listing-country" class="form-control">
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-12">
+                <div class="form-group">
+                    <label for="listing-phone" accesskey="S">Phone</label>
+                    <input id="listing-phone" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-sm-12">
+                <div class="form-group">
+                    <label for="are-owner" accesskey="S"><span class="required">*</span>Is this your own
+                        listing?</label>
+                    <br>
+                    <input id="are-owner" type="checkbox" class="form-control">
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-12">
+                <div class="form-group">
+                    <label for="are-active" accesskey="S"><span class="required">*</span>Currently Active</label>
+                    <br>
+                    <input id="are-active" type="checkbox" class="form-control" checked>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-lg btn-primary" id="cancel-create-listing">Cancel</button>
+        <button type="button" class="btn btn-lg btn-primary" id="submit-create-listing"
+                data-url="{% url 'profile:add_listing' %}">
+            Submit Listing
+        </button>
+    </form>
+</div>

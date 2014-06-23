@@ -1,0 +1,105 @@
+{% load staticfiles %}
+{% load mathfilters %}
+<div class="container mt50" id="listing-detail">
+    <div class="row">
+        <!-- Slider -->
+        <div class="col-sm-12">
+            <h2 class="lined-heading"><span>{{ listing.listing_name }}</span></h2>
+        </div>
+        <section class="standard-slider room-slider">
+            <div class="col-sm-12 col-md-8 col-lg-8">
+                <div class="item"><a href="{% static 'images/rooms/slider/750x481.gif' %}"><img
+                        src="{% static 'images/rooms/slider/750x481.gif' %}" alt="Image 2" class="img-responsive"></a>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-4">
+                <div class="tab-pane fade in active" id="overview">
+                    <div class="tp-leftarrow tparrows default detail-back"></div>
+                    <h3>
+                        Overview
+                    </h3>
+
+                    <p><strong>Subjects: </strong>{{ listing.get_string_tags }}</p>
+
+                    <p>{{ listing.description|safe }}</p>
+
+                    <p><strong>Address: </strong>{{ listing.address|safe }}</p>
+
+                    {% if listing.active %}<p><strong>Active: </strong><i class="fa fa-2x fa-check-circle"></i>
+                        </p>{% endif %}
+
+                    {% if listing.phone != "" %}<p><strong>Phone:</strong>{{ listing.phone }}</p>{% endif %}
+                    <p><strong>Rating:</strong> {{ listing.get_rating }}</p>
+
+                    {% if listing.owner == user or listing.created_by == user %}
+                        <button type="button" class="btn btn-primary btn-block" id="edit-listing-button"
+                                data-url="{% url 'profile:edit_listing' listing.id %}">Edit
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    </div>
+    {% if not reviewed and listing.owner != user %}
+        <div class="row mt20">
+            <div class="col-sm-12">
+                <button type="button" class="btn btn-primary btn-block" id="review-button">Review</button>
+            </div>
+        </div>
+        <div class="row" id="review_form" style="display: none">
+            <form class="clearfix mt50" role="form" method="post" action="{% url 'main:review_listing' listing.id %}"
+                  id="reviewform" onsubmit="javascript:void(0)">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="review-comment" accesskey="S"><span class="required">*</span>Comment</label>
+                    <textarea name="comment" id="review-comment" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="review-rating" accesskey="S"><span class="required">*</span>Rating</label>
+                    <input id="review-rating" name="rating" class="form-control">
+                </div>
+                <div class="error_message">
+
+                </div>
+                <button type="button" class="btn  btn-lg btn-primary" id="cancel-review-button">Cancel</button>
+                <button type="button" class="btn  btn-lg btn-primary" id="review-submit"
+                        data-url="{% url 'main:review_listing' listing.id %}">
+                    Submit Review
+                </button>
+            </form>
+        </div>
+    {% endif %}
+    <div class="row" {% if listing.review_set.count == 0 %}style="display:none;"{% endif %} id="reviews-box">
+        <!-- Testimonials -->
+        <section class="testimonials mt50">
+            <div class="col-md-12 col-sm-12">
+                <h3 class="lined-heading"><span>Testimonials</span></h3>
+
+                <div id="owl-reviews" class="owl-carousel mt30 owl-theme" style="display: block; opacity: 1;">
+                    <div class="owl-wrapper-outer">
+                        <div class="owl-wrapper"
+                             style="width: 2440px; left: 0px; display: block; transition: all 1000ms ease; -webkit-transition: all 1000ms ease; -webkit-transform: translate3d(0px, 0px, 0px);">
+                            {% for review in listing.review_set.all %}
+                                {% if forloop.counter0|mod:2 == 0 %}
+                                    <div class="owl-item" style="width: 610px;">
+                                {% endif %}
+                            {% include 'index/review.html' with review=review count=forloop.counter %}
+                            {% if forloop.counter0|mod:2 == 1 %}
+                                </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% if listing.review_set.count >= 3 %}
+                        <div class="owl-controls clickable">
+                            <div class="owl-buttons">
+                                <div class="owl-prev"><i class="fa fa-angle-left fa-3x"></i></div>
+                                <div class="owl-next"><i class="fa fa-angle-right fa-3x"></i></div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

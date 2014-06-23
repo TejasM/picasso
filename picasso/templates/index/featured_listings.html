@@ -1,0 +1,47 @@
+{% load staticfiles %}
+<!-- Rooms -->
+<section class="rooms mt50">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2 class="lined-heading"><span>Featured Listings</span></h2>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="nav nav-pills" id="filters">
+                        <li class="active"><a href="#" data-filter="*">All</a></li>
+                        <li><a href="#" data-filter=".Piano">Piano</a></li>
+                        <li><a href="#" data-filter=".String">String</a></li>
+                        <li><a href="#" data-filter=".Singing">Singing</a></li>
+                        <li><a href="#" data-filter=".Theory">Theory</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Room -->
+            <div class="isotope gallery">
+                {% for l in listings %}
+                    <div class="col-sm-12 col-lg-4 isotope-item {{ l.get_string_tags_no_comma}}" style="margin-top: 2em">
+                        <div class="room-thumb"><img src="http://placehold.it/140x100" alt="room 1"
+                                                     class="img-responsive"/>
+
+                            <div class="mask">
+                                <div class="main">
+                                    <h5>{{ l.listing_name }}<br><span>{{ l.get_string_tags }}</span></h5>
+
+                                    <div class="price"><span>Rating: </span>{{ l.get_rating }}</div>
+                                </div>
+                                <div class="content">
+                                    <p>{{ l.description|safe|truncatewords:30 }}</p>
+
+                                    <a href="javascript:void (0);" class="btn btn-primary btn-block to-listing"
+                                       data-url="{% url 'main:detail_listing' l.id %}">Read
+                                        More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>

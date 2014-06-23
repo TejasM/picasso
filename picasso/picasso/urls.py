@@ -14,6 +14,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
                        url(r'^$', TemplateView.as_view(template_name='base.html')),
                        url(r'^main/', include('picasso.index.urls', namespace='main')),
+                       url(r'^user/', include('picasso.profile.urls', namespace='profile')),
                        url(r'^google46c8e47a069f43cd\.html$',
                            lambda r: HttpResponse("google-site-verification: google46c8e47a069f43cd.html",
                                                   mimetype="text/plain")),

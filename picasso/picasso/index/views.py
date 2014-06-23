@@ -25,16 +25,8 @@ def get_listings(request):
         listings = Listing.objects.filter(listing_name__contains=search) | Listing.objects.filter(
             description__contains=search) | Listing.objects.filter(tags__in=possible_tags)
         listings = listings.distinct()
-        context = {'listings': listings}
+        context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More'}
         return render(request, 'index/listings.html', context)
-
-
-def add_listing(request):
-    if request.method == "POST":
-        listing_name = request.POST['listing_name']
-        description = request.POST['description']
-        listing = Listing.objects.create(listing_name=listing_name, description=description)
-        return HttpResponse({'listing': listing.id}, content_type='application/json')
 
 
 def detail_listing(request, list_id):
@@ -55,9 +47,9 @@ def detail_listing(request, list_id):
 
 def get_listing(request, list_id):
     if request.method == "GET":
-        listings = Listing.objects.filter(id=int(list_id))
-        context = {'listings': listings}
-        return render(request, 'index/listings.html', context)
+        listing = Listing.objects.get(id=int(list_id))
+        context = {'l': listing, 'button_name': 'View'}
+        return render(request, 'index/single-listing.html', context)
 
 
 def signin(request):

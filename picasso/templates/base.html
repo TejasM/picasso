@@ -54,6 +54,10 @@
                             </ul>
                         </li>
                     {% else %}
+                        <li class=""><a href="{% url 'profile:my_listings' %}">My Listings</a>
+                        </li>
+                        <li class=""><a href="{% url 'profile:profile' %}">Profile</a>
+                        </li>
                         <li class=""><a href="{% url 'main:logout' %}">Logout</a>
                         </li>
                     {% endif %}
