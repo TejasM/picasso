@@ -188,7 +188,7 @@
                     function (data) {
                         $('#create-listing-div').remove();
                         $.get('/main/get-listing/' + data['id'], function (data2) {
-                            $my_listings.find('rooms').append(data2);
+                            $my_listings.find('.rooms').append(data2);
                         });
                         $my_listings.show();
                     });
