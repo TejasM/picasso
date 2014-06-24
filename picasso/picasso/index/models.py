@@ -59,6 +59,11 @@ class Listing(BaseModel):
     created_by = models.ForeignKey(User, null=True, default=None, related_name='creator')
     owner = models.ForeignKey(User, null=True, default=None, related_name='owner')
     unique_url = models.CharField(max_length=1000, default="")
+    PLACE_CHOICES = (
+        ('Pri', 'Private'),
+        ('Sch', 'School'),
+    )
+    place = models.CharField(max_length=3, choices=PLACE_CHOICES, default='Pri')
 
     @property
     def get_price(self):
