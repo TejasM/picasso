@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Avg
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils import timezone
 
 
@@ -10,6 +12,10 @@ class BaseModel(models.Model):
 
 class Tag(BaseModel):
     tag_name = models.CharField(default="", max_length=500)
+
+    @property
+    def dash_version(self):
+        return self.tag_name.replace(' ', '-').replace(',', '-').replace('/', '-')
 
 
 class Address(BaseModel):
@@ -29,6 +35,14 @@ class Address(BaseModel):
         return string
 
 
+def get_unique_url(instance):
+    count = Listing.objects.filter(listing_name=instance.listing_name).count()
+    if count == 0:
+        return instance.listing_name.replace(' ', '-').replace(',', '-').replace('/', '-')
+    else:
+        return instance.listing_name.replace(' ', '-').replace(',', '-').replace('/', '-') + str(count)
+
+
 class Listing(BaseModel):
     listing_name = models.CharField(default="", max_length=500)
     description = models.CharField(default="", max_length=10000)
@@ -41,6 +55,7 @@ class Listing(BaseModel):
     phone = models.CharField(default="", blank=True, null=True, max_length=20)
     created_by = models.ForeignKey(User, null=True, default=None, related_name='creator')
     owner = models.ForeignKey(User, null=True, default=None, related_name='owner')
+    unique_url = models.CharField(max_length=1000, default="")
 
     @property
     def get_price(self):
@@ -71,13 +86,27 @@ class Listing(BaseModel):
     @property
     def get_string_tags_no_space(self):
         if self.tags.count() != 0:
-            return self.tags.all()[0].tag_name.replace(' ', '').replace(',', '').replace('-', '').replace('/', '')
+            return self.tags.all().order_by('?')[0].tag_name.replace(' ', '').replace(',', '').replace('-', '').replace(
+                '/', '').lower()
         else:
             return "Unknown"
 
     @property
     def get_listing_name(self):
         return self.listing_name.replace(' ', '').replace(',', '').replace('-', '').replace('/', '')
+
+    def save(self, **kwargs):
+        count = Listing.objects.filter(listing_name=self.listing_name).count()
+        if count == 0:
+            self.unique_url = self.listing_name.replace(' ', '-').replace(',', '-').replace('/', '-')
+        else:
+            count = 0
+            for l in Listing.objects.filter(listing_name=self.listing_name):
+                if l.unique_url != '':
+                    count += 1
+            self.unique_url = self.listing_name.replace(' ', '-').replace(',', '-').replace('/', '-') + "-" + str(
+                count)
+        super(Listing, self).save(**kwargs)
 
 
 class Review(BaseModel):

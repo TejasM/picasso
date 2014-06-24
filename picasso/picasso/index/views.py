@@ -104,19 +104,3 @@ def review_listing(request, list_id):
 def user_logout(request):
     logout(request)
     return redirect('/')
-
-
-def individual_listing(request, list_tags, list_name, list_id):
-    if request.method == "GET":
-        listing = Listing.objects.get(pk=int(list_id))
-        if request.user.is_authenticated():
-            try:
-                Review.objects.get(user=request.user, listing=listing)
-                context = {'listing': listing, 'reviewed': True}
-            except Review.DoesNotExist:
-                context = {'listing': listing}
-            except Review.MultipleObjectsReturned:
-                context = {'listing': listing, 'reviewed': True}
-        else:
-            context = {'listing': listing}
-        return render(request, 'index/individual_listing.html', context)

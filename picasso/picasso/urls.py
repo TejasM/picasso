@@ -6,8 +6,9 @@ from django.views.generic import TemplateView
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 from picasso import index
-import picasso
+import views
 from django.http import HttpResponse
+from picasso.index.models import Tag
 
 admin.autodiscover()
 
@@ -33,6 +34,10 @@ urlpatterns = patterns('',
 
 # Uncomment the next line to serve media files in dev.
 # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+for t in Tag.objects.all():
+    urlpatterns += patterns('',
+                            url(r'^' + t.dash_version + '/(?P<list_name>.*)/$', view=views.individual_listing))
 
 if settings.DEBUG:
     import debug_toolbar
