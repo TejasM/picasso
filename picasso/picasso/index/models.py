@@ -77,7 +77,7 @@ class Listing(BaseModel):
 
     @property
     def get_listing_name(self):
-        return self.listing_name.replace(' ', '')
+        return self.listing_name.replace(' ', '').replace(',', '')
 
 
 class Review(BaseModel):
