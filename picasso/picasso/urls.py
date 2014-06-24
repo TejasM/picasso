@@ -16,6 +16,7 @@ urlpatterns = patterns('',
                        url(r'^$', TemplateView.as_view(template_name='base.html')),
                        url(r'^main/', include('picasso.index.urls', namespace='main')),
                        url(r'^user/', include('picasso.profile.urls', namespace='profile')),
+                       url(r'^(?P<tag_name>[^/]*)/$', view=views.category_listings),
                        url(r'^google46c8e47a069f43cd\.html$',
                            lambda r: HttpResponse("google-site-verification: google46c8e47a069f43cd.html",
                                                   mimetype="text/plain")),
@@ -38,7 +39,7 @@ urlpatterns += patterns('',
                         url(r'^unknown/(?P<list_name>.*)/$', view=views.individual_listing))
 for t in Tag.objects.all():
     urlpatterns += patterns('',
-                            url(r'^' + t.dash_version + '/(?P<list_name>.*)/$', view=views.individual_listing))
+                            url(r'^' + t.dash_version + '/(?P<list_name>.*)/$', view=views.individual_listing), )
 
 if settings.DEBUG:
     import debug_toolbar

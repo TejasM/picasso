@@ -13,10 +13,12 @@ class BaseModel(models.Model):
 
 class Tag(BaseModel):
     tag_name = models.CharField(default="", max_length=500)
+    possible_folders = models.CharField(default="", max_length=500)
+    dash_version = models.CharField(default="", max_length=500)
 
-    @property
-    def dash_version(self):
-        return self.tag_name.replace(' ', '-').replace(',', '-').replace('/', '-').lower()
+    def save(self, **kwargs):
+        self.dash_version = re.sub(r'\W+', '-', self.tag_name).lower()
+        super(Tag, self).save(**kwargs)
 
 
 class Address(BaseModel):
@@ -96,9 +98,7 @@ class Listing(BaseModel):
     def get_unique_url(self):
         string = "/"
         if self.tags.count() != 0:
-            string += self.tags.all().order_by('?')[0].tag_name.replace(' ', '').replace(',', '').replace('-',
-                                                                                                          '').replace(
-                '/', '').lower()
+            string += self.tags.all().order_by('?')[0].dash_version
         else:
             string += "unknown"
         string += "/" + self.unique_url
