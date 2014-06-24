@@ -22,9 +22,9 @@
                             <div class="content">
                                 <p>{{ l.description|safe|truncatewords:30 }}</p>
 
-                                <a href="{% url 'main:individual_listing' l.get_string_tags_no_comma l.get_listing_name l.id %}"
+                                <a href="{% url 'main:individual_listing' l.get_string_tags_no_space l.get_listing_name l.id %}"
                                    class="btn btn-primary btn-block to-listing"
-                                   data-url="{% url 'main:individual_listing' l.get_string_tags_no_comma l.get_listing_name l.id %}">{{ button_name }}</a>
+                                   data-url="{% url 'main:individual_listing' l.get_string_tags_no_space l.get_listing_name l.id %}">{{ button_name }}</a>
                             </div>
                         </div>
                     </div>
