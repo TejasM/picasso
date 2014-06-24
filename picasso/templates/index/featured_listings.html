@@ -20,7 +20,8 @@
             <!-- Room -->
             <div class="isotope gallery">
                 {% for l in listings %}
-                    <div class="col-sm-12 col-lg-4 isotope-item {{ l.get_string_tags_no_comma}}" style="margin-top: 2em">
+                    <div class="col-sm-12 col-lg-4 isotope-item {{ l.get_string_tags_no_comma }}"
+                         style="margin-top: 2em">
                         <div class="room-thumb"><img src="http://placehold.it/140x100" alt="room 1"
                                                      class="img-responsive"/>
 
@@ -33,7 +34,8 @@
                                 <div class="content">
                                     <p>{{ l.description|safe|truncatewords:30 }}</p>
 
-                                    <a href="javascript:void (0);" class="btn btn-primary btn-block to-listing"
+                                    <a href="{% url 'main:individual_listing' l.id %}"
+                                       class="btn btn-primary btn-block to-listing"
                                        data-url="{% url 'main:detail_listing' l.id %}">Read
                                         More</a>
                                 </div>

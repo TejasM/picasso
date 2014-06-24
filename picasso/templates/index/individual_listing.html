@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load mathfilters %}
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -70,89 +71,6 @@
     </div>
 </header>
 
-<!-- Revolution Slider -->
-<section class="revolution-slider">
-    <div class="bannercontainer">
-        <div class="banner">
-            <ul>
-                <!-- Slide 1 -->
-                <li data-transition="fade" data-slotamount="7" data-masterspeed="1500">
-                    <!-- Main Image -->
-                    <img src="{% static 'images/slides/1700x449.gif' %}" style="opacity:0;" alt="slidebg1"
-                         data-bgfit="cover"
-                         data-bgposition="left bottom" data-bgrepeat="no-repeat">
-                    <!-- Layers -->
-                    <!-- Layer 1 -->
-                    <div class="caption sft revolution-starhotel bigtext"
-                         data-x="505"
-                         data-y="30"
-                         data-speed="700"
-                         data-start="1700"
-                         data-easing="easeOutBack">
-                        <span><i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i
-                                class="fa fa-star-o"></i> <i class="fa fa-star-o"></i></span> Best Piano Teachers <span><i
-                            class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i
-                            class="fa fa-star-o"></i> <i class="fa fa-star-o"></i></span></div>
-                    <!-- Layer 2 -->
-                    <div class="caption sft revolution-starhotel smalltext"
-                         data-x="605"
-                         data-y="105"
-                         data-speed="800"
-                         data-start="1700"
-                         data-easing="easeOutBack">
-                        <span>And we like to keep it that way!</span></div>
-                    <!-- Layer 3 -->
-                    <div class="caption sft"
-                         data-x="775"
-                         data-y="175"
-                         data-speed="1000"
-                         data-start="1900"
-                         data-easing="easeOutBack">
-                        <a href="#" class="button btn btn-purple btn-lg">See More Teachers</a>
-                    </div>
-                </li>
-                <!-- Slide 2 -->
-                <li data-transition="boxfade" data-slotamount="7" data-masterspeed="1000">
-                    <!-- Main Image -->
-                    <img src="{% static 'images/slides/1700x449.gif' %}" alt="darkblurbg" data-bgfit="cover"
-                         data-bgposition="left top"
-                         data-bgrepeat="no-repeat">
-                    <!-- Layers -->
-                    <!-- Layer 1 -->
-                    <div class="caption sft revolution-starhotel bigtext"
-                         data-x="585"
-                         data-y="30"
-                         data-speed="700"
-                         data-start="1700"
-                         data-easing="easeOutBack">
-                        <span><i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i
-                                class="fa fa-star-o"></i> <i class="fa fa-star-o"></i></span> Top Mandarin
-                        Tutor <span><i
-                            class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i
-                            class="fa fa-star-o"></i> <i class="fa fa-star-o"></i></span></div>
-                    <!-- Layer 2 -->
-                    <div class="caption sft revolution-starhotel smalltext"
-                         data-x="682"
-                         data-y="105"
-                         data-speed="800"
-                         data-start="1700"
-                         data-easing="easeOutBack">
-                        <span></span></div>
-                    <!-- Layer 3 -->
-                    <div class="caption sft"
-                         data-x="785"
-                         data-y="175"
-                         data-speed="1000"
-                         data-start="1900"
-                         data-easing="easeOutBack">
-                        <a href="#" class="button btn btn-purple btn-lg">See Details</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-</section>
-
 <!-- Reservation form -->
 <section id="reservation-form">
     <div class="container">
@@ -185,8 +103,113 @@
 </section>
 
 <div id="main-section">
+    <div class="container mt50" id="listing-detail">
+        <div class="row">
+            <!-- Slider -->
+            <div class="col-sm-12">
+                <h2 class="lined-heading"><span>{{ listing.listing_name }}</span></h2>
+            </div>
+            <section class="standard-slider room-slider">
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                    <div class="item"><a href="{% static 'images/rooms/slider/750x481.gif' %}"><img
+                            src="{% static 'images/rooms/slider/750x481.gif' %}" alt="Image 2"
+                            class="img-responsive"></a>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    <div class="tab-pane fade in active" id="overview">
+                        <div class="tp-leftarrow tparrows default detail-back"></div>
+                        <h3>
+                            Overview
+                        </h3>
 
+                        <p><strong>Subjects: </strong>{{ listing.get_string_tags }}</p>
+
+                        <p>{{ listing.description|safe }}</p>
+
+                        <p><strong>Address: </strong>{{ listing.address|safe }}</p>
+
+                        {% if listing.active %}<p><strong>Active: </strong><i class="fa fa-2x fa-check-circle"></i>
+                            </p>{% endif %}
+
+                        {% if listing.phone != "" %}<p><strong>Phone:</strong>{{ listing.phone }}</p>{% endif %}
+                        <p><strong>Rating:</strong> {{ listing.get_rating }}</p>
+
+                        {% if listing.owner == user or listing.created_by == user %}
+                            <button type="button" class="btn btn-primary btn-block" id="edit-listing-button"
+                                    data-url="{% url 'profile:edit_listing' listing.id %}">Edit
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+        </div>
+        {% if not reviewed and listing.owner != user %}
+            <div class="row mt20">
+                <div class="col-sm-12">
+                    <button type="button" class="btn btn-primary btn-block" id="review-button">Review</button>
+                </div>
+            </div>
+            <div class="row" id="review_form" style="display: none">
+                <form class="clearfix mt50" role="form" method="post"
+                      action="{% url 'main:review_listing' listing.id %}"
+                      id="reviewform" onsubmit="javascript:void(0)">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="review-comment" accesskey="S"><span class="required">*</span>Comment</label>
+                        <textarea name="comment" id="review-comment" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="review-rating" accesskey="S"><span class="required">*</span>Rating</label>
+                        <input id="review-rating" name="rating" class="form-control">
+                    </div>
+                    <div class="error_message">
+
+                    </div>
+                    <button type="button" class="btn  btn-lg btn-primary" id="cancel-review-button">Cancel</button>
+                    <button type="button" class="btn  btn-lg btn-primary" id="review-submit"
+                            data-url="{% url 'main:review_listing' listing.id %}">
+                        Submit Review
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+        <div class="row" {% if listing.review_set.count == 0 %}style="display:none;"{% endif %} id="reviews-box">
+            <!-- Testimonials -->
+            <section class="testimonials mt50">
+                <div class="col-md-12 col-sm-12">
+                    <h3 class="lined-heading"><span>Testimonials</span></h3>
+
+                    <div id="owl-reviews" class="owl-carousel mt30 owl-theme" style="display: block; opacity: 1;">
+                        <div class="owl-wrapper-outer">
+                            <div class="owl-wrapper"
+                                 style="width: 2440px; left: 0px; display: block; transition: all 1000ms ease; -webkit-transition: all 1000ms ease; -webkit-transform: translate3d(0px, 0px, 0px);">
+                                {% for review in listing.review_set.all %}
+                                    {% if forloop.counter0|mod:2 == 0 %}
+                                        <div class="owl-item" style="width: 610px;">
+                                    {% endif %}
+                                {% include 'index/review.html' with review=review count=forloop.counter %}
+                                {% if forloop.counter0|mod:2 == 1 %}
+                                    </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% if listing.review_set.count >= 3 %}
+                            <div class="owl-controls clickable">
+                                <div class="owl-buttons">
+                                    <div class="owl-prev"><i class="fa fa-angle-left fa-3x"></i></div>
+                                    <div class="owl-next"><i class="fa fa-angle-right fa-3x"></i></div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
 </div>
+
 <div id="sign-in-lightbox" style="display: none">
     <div class="container">
         <div class="row mt50">
@@ -285,102 +308,46 @@
 <script type="text/javascript" src="{% static 'js/custom.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/star-rating.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/bootstrap-switch.min.js' %}"></script>
-<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
 <script>
-    $(function () {
-        var $main = $('#main-section');
-        $.get('{% url 'main:featured' %}', function (data) {
+    var $main = $('#main-section');
+    var $my_listings = $('#listing-detail');
+
+    $main.on('click', '#edit-listing-button', function () {
+        var url = $(this).data('url');
+        $.get(url, function (data) {
+            $('#listing-detail').hide();
             $main.append(data);
-            loadFilters();
+            $("#are-owner").bootstrapSwitch();
+            $("#are-active").bootstrapSwitch();
         });
-        $('#reservationform').submit(function (e) {
-            e.preventDefault();
-            $.get('{% url 'main:get_listings' %}', {'term': $('#search-text').val()}, function (data) {
-                $('.revolution-slider').hide();
-                $main.empty();
-                $main.append(data);
-            });
-            return false;
-        });
+    });
 
-        $main.on('click', '.detail-back', function () {
-            $('.revolution-slider').hide();
-            $main.find('> div:last-child').remove();
-            $main.find('> section').show();
-        });
+    $main.on('click', '#cancel-edit-listing', function () {
+        $('#edit-listing-div').remove();
+        $('#listing-detail').show();
+    });
 
-        $('#sign-up').click(function () {
-            $('#main-section').hide();
-            $('#sign-in-lightbox').show();
-            $('#sign-up-stuff').show();
-            $('#type-signin').val('sign-up');
-            $('#signin-heading').text('Sign Up');
-            $('#sign-in-button').text('Sign Up');
-        });
+    $main.on('click', '.detail-back', function () {
+        window.location.href = '/';
+    });
 
-        $('#login').click(function () {
-            $('#main-section').hide();
-            $('#sign-in-lightbox').show();
-            $('#sign-up-stuff').hide();
-            $('#type-signin').val('login');
-            $('#signin-heading').text('Login');
-            $('#sign-in-button').text('Login');
-        });
-
-        $('#sign-in-button').click(function () {
-            $.post('{% url 'main:signup' %}', {'first-name': $('#first-name').val(),
-                'last-name': $('#last-name').val(), 'type': $('#type-signin').val(),
-                'email': $('#email').val(), 'password': $('#password').val(),
-                'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
-                if (parseInt(data['success']) == 0) {
-                    $('.error_message').text(data['error']);
-                } else {
-                    document.location.href = '/';
-                }
-            });
-        });
-
-        $main.on('click', '#review-button', function () {
-            {% if user.is_authenticated %}
-                $('#review_form').show();
-                $("#review-rating").rating({'min': 0, 'max': 5, 'step': 1});
-            {% else %}
-                $('#main-section').hide();
-                $('#sign-in-lightbox').show();
-                $('#sign-up-stuff').show();
-                $('#signin-heading').text('Sign Up');
-                $('#type-signin').val('sign-up');
-                $('#sign-in-button').text('Sign Up');
-            {% endif %}
-        });
-        $main.on('click', '#cancel-review-button', function () {
-            $('#review_form').hide();
-        });
-        $main.on('click', '#review-submit', function () {
-            var url = $(this).data('url');
-            $.post(url, {'comment': $('#review-comment').val(), 'rating': $('#review-rating').val(),
-                'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
-                var $owls = $('.owl-item');
-                var $items = $owls.find('.item');
-                if ($owls.length == 0) {
-                    $('.owl-wrapper').append('<div class="owl-item" style="width: 610px;">' + data + '</div>');
-                } else {
-                    if ($items.length % 2 == 1) {
-                        $($owls[$owls.length - 1]).append(data);
-                    } else {
-                        $('.owl-wrapper').append('<div class="owl-item" style="width: 610px;">' + data + '</div>');
-                    }
-                }
-                $('#review_form').remove();
-                $('#review-button').remove();
-                $('#reviews-box').show();
-            });
-        });
+    $main.on('click', '#save-edit-listing', function () {
+        var url = $(this).data('url');
+        $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
+                    'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
+                    'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
+                    'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
+                    'active': $('#are-active').is(':checked'),
+                    'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
+                function (data) {
+                    $('#edit-listing-div').remove();
+                    $my_listings.find('#listing-' + data['id']).remove();
+                    $('#listing-detail').remove();
+                    $.get('/main/detail-listing/' + data['id'], function (data2) {
+                        $main.prepend(data2);
+                    });
+                    $my_listings.show();
+                });
     });
 </script>
 </html>
