@@ -21,9 +21,9 @@
                             <div class="content">
                                 <p>{{ l.description|safe|truncatewords:30 }}</p>
 
-                                <a href="/{{ l.get_string_tags_no_space }}/{{ l.unique_url }}"
+                                <a href="{{ l.get_unique_url }}"
                                    class="btn btn-primary btn-block to-listing"
-                                   data-url="/{{ l.get_string_tags_no_space }}/{{ l.unique_url }}">{{ button_name }}</a>
+                                   data-url="{{ l.get_unique_url }}">{{ button_name }}</a>
                             </div>
                         </div>
                     </div>

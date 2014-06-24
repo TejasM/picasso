@@ -92,6 +92,18 @@ class Listing(BaseModel):
             return "Unknown"
 
     @property
+    def get_unique_url(self):
+        string = "/"
+        if self.tags.count() != 0:
+            string += self.tags.all().order_by('?')[0].tag_name.replace(' ', '').replace(',', '').replace('-',
+                                                                                                          '').replace(
+                '/', '').lower()
+        else:
+            string += "unknown"
+        string += "/" + self.unique_url
+        return string
+
+    @property
     def get_listing_name(self):
         return self.listing_name.replace(' ', '').replace(',', '').replace('-', '').replace('/', '')
 
