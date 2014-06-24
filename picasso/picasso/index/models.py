@@ -109,16 +109,16 @@ class Listing(BaseModel):
         return self.listing_name.replace(' ', '').replace(',', '').replace('-', '').replace('/', '')
 
     def save(self, **kwargs):
-        # count = Listing.objects.filter(listing_name=self.listing_name).count()
-        # if count == 1:
-        #     self.unique_url = re.sub(r'\W+', '-', self.listing_name) + "-" + self.address.city.split(',')[0]
-        # else:
-        #     count = 0
-        #     for l in Listing.objects.filter(listing_name=self.listing_name):
-        #         if l.unique_url != '':
-        #             count += 1
-        #     self.unique_url = re.sub(r'\W+', '-', self.listing_name) + "-" + self.address.city.split(',')[
-        #         0] + "-" + str(count)
+        count = Listing.objects.filter(listing_name=self.listing_name).count()
+        if count == 1:
+            self.unique_url = re.sub(r'\W+', '-', self.listing_name) + "-" + self.address.city.split(',')[0]
+        else:
+            count = 0
+            for l in Listing.objects.filter(listing_name=self.listing_name):
+                if l.unique_url != '':
+                    count += 1
+            self.unique_url = re.sub(r'\W+', '-', self.listing_name) + "-" + self.address.city.split(',')[
+                0] + "-" + str(count)
         super(Listing, self).save(**kwargs)
 
 
