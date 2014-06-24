@@ -15,7 +15,7 @@ class Tag(BaseModel):
 
     @property
     def dash_version(self):
-        return self.tag_name.replace(' ', '-').replace(',', '-').replace('/', '-')
+        return self.tag_name.replace(' ', '-').replace(',', '-').replace('/', '-').lower()
 
 
 class Address(BaseModel):
