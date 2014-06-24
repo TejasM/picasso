@@ -106,7 +106,6 @@ def user_logout(request):
     return redirect('/')
 
 
-@login_required()
 def individual_listing(request, list_tags, list_name, list_id):
     if request.method == "GET":
         listing = Listing.objects.get(pk=int(list_id))

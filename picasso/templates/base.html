@@ -175,7 +175,8 @@
                             </div>
                         </div>
                         <div class="col-sm-2">
-                            <button type="submit" class="btn btn-primary btn-block">Search Now</button>
+                            <button type="button" class="btn btn-primary btn-block" id="search-submisson">Search Now
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -298,8 +299,7 @@
             $main.append(data);
             loadFilters();
         });
-        $('#reservationform').submit(function (e) {
-            e.preventDefault();
+        $('#search-submisson').click(function (e) {
             $.get('{% url 'main:get_listings' %}', {'term': $('#search-text').val()}, function (data) {
                 $('.revolution-slider').hide();
                 $main.empty();
