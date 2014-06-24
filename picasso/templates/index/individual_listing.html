@@ -246,7 +246,7 @@
         $('#add-teacher').click(function () {
             $.post('{% url 'profile:add_teacher' listing.id %}', function () {
                 $('#add-teacher').remove();
-            }
+            });
         });
     </script>
 {% endblock %}
