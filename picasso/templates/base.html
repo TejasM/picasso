@@ -1,386 +1,264 @@
+{% extends 'main_template.html' %}
 {% load staticfiles %}
-<!DOCTYPE HTML>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Picasso | Personal Teachers Near You</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description"
-          content="Reviews and Recommendations of Top Teachers, Tutors, Trainers, and Coaches near You.">
-    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
-
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
-    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
-    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
-    <link rel="stylesheet" href="{% static 'css/owl.theme.css' %}">
-    <link rel="stylesheet" href="{% static 'css/prettyPhoto.css' %}">
-    <link rel="stylesheet" href="{% static 'css/smoothness/jquery-ui-1.10.4.custom.min.css' %}">
-    <link rel="stylesheet" href="{% static 'rs-plugin/css/settings.css' %}">
-    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
-    <link rel="stylesheet" href="{% static 'css/colors/turquoise.css' %}">
-    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600,700">
-    <script type="text/javascript" src="{% static 'js/jquery-1.11.0.min.js' %}"></script>
-    <link href="{% static 'css/star-rating.min.css' %}" media="all" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'css/bootstrap-switch.min.css' %}" media="all" rel="stylesheet" type="text/css"/>
-</head>
-
-<body>
-<!-- Header -->
-<header>
-    <!-- Navigation -->
-    <div class="navbar yamm navbar-default" id="sticky">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" data-toggle="collapse" data-target="#navbar-collapse-grid" class="navbar-toggle">
-                    <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
-                </button>
-                <a href="/" class="navbar-brand">
-                    <!-- Logo -->
-                    <div id="logo"><img id="default-logo" src="{% static 'images/logo.png' %}" alt="Picasso"
-                                        style="height:44px;">
-                        <img id="retina-logo" src="{% static 'images/logo-retina.png' %}" alt="Picasso"
-                             style="height:44px;"></div>
-                </a></div>
-            <div id="navbar-collapse-grid" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="/">Home</a>
+{% block content %}
+    <!-- Revolution Slider -->
+    <section class="revolution-slider">
+        <div class="bannercontainer">
+            <div class="banner">
+                <ul>
+                    <!-- Slide 1 -->
+                    <li data-transition="fade" data-slotamount="7" data-masterspeed="1500">
+                        <!-- Main Image -->
+                        <img src="{% static 'images/slides/1700x449.gif' %}" style="opacity:0;" alt="slidebg1"
+                             data-bgfit="cover"
+                             data-bgposition="left bottom" data-bgrepeat="no-repeat">
+                        <!-- Layers -->
+                        <!-- Layer 1 -->
+                        <div class="caption sft revolution-starhotel bigtext"
+                             data-x="505"
+                             data-y="30"
+                             data-speed="700"
+                             data-start="1700"
+                             data-easing="easeOutBack">
+                        <span><i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i
+                                class="fa fa-star-o"></i> <i class="fa fa-star-o"></i></span> Best Piano Teachers <span><i
+                                class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i
+                                class="fa fa-star-o"></i> <i class="fa fa-star-o"></i></span></div>
+                        <!-- Layer 2 -->
+                        <div class="caption sft revolution-starhotel smalltext"
+                             data-x="605"
+                             data-y="105"
+                             data-speed="800"
+                             data-start="1700"
+                             data-easing="easeOutBack">
+                            <span>And we like to keep it that way!</span></div>
+                        <!-- Layer 3 -->
+                        <div class="caption sft"
+                             data-x="775"
+                             data-y="175"
+                             data-speed="1000"
+                             data-start="1900"
+                             data-easing="easeOutBack">
+                            <a href="#" class="button btn btn-purple btn-lg">See More Teachers</a>
+                        </div>
                     </li>
-                    {% if not user.is_authenticated %}
-                        <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle js-activated">Sign
-                            In <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#" id="sign-up">Sign Up</a></li>
-                                <li><a href="#" id="login">Login</a></li>
-                            </ul>
-                        </li>
-                    {% else %}
-                        <li class=""><a href="{% url 'profile:my_listings' %}">My Listings</a>
-                        </li>
-                        <li class=""><a href="{% url 'profile:profile' %}">Profile</a>
-                        </li>
-                        <li class=""><a href="{% url 'main:logout' %}">Logout</a>
-                        </li>
-                    {% endif %}
+                    <!-- Slide 2 -->
+                    <li data-transition="boxfade" data-slotamount="7" data-masterspeed="1000">
+                        <!-- Main Image -->
+                        <img src="{% static 'images/slides/1700x449.gif' %}" alt="darkblurbg" data-bgfit="cover"
+                             data-bgposition="left top"
+                             data-bgrepeat="no-repeat">
+                        <!-- Layers -->
+                        <!-- Layer 1 -->
+                        <div class="caption sft revolution-starhotel bigtext"
+                             data-x="585"
+                             data-y="30"
+                             data-speed="700"
+                             data-start="1700"
+                             data-easing="easeOutBack">
+                        <span><i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i
+                                class="fa fa-star-o"></i> <i class="fa fa-star-o"></i></span> Top Mandarin
+                            Tutor <span><i
+                                class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i
+                                class="fa fa-star-o"></i> <i class="fa fa-star-o"></i></span></div>
+                        <!-- Layer 2 -->
+                        <div class="caption sft revolution-starhotel smalltext"
+                             data-x="682"
+                             data-y="105"
+                             data-speed="800"
+                             data-start="1700"
+                             data-easing="easeOutBack">
+                            <span></span></div>
+                        <!-- Layer 3 -->
+                        <div class="caption sft"
+                             data-x="785"
+                             data-y="175"
+                             data-speed="1000"
+                             data-start="1900"
+                             data-easing="easeOutBack">
+                            <a href="#" class="button btn btn-purple btn-lg">See Details</a>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
-    </div>
-</header>
+    </section>
 
-<!-- Revolution Slider -->
-<section class="revolution-slider">
-    <div class="bannercontainer">
-        <div class="banner">
-            <ul>
-                <!-- Slide 1 -->
-                <li data-transition="fade" data-slotamount="7" data-masterspeed="1500">
-                    <!-- Main Image -->
-                    <img src="{% static 'images/slides/1700x449.gif' %}" style="opacity:0;" alt="slidebg1"
-                         data-bgfit="cover"
-                         data-bgposition="left bottom" data-bgrepeat="no-repeat">
-                    <!-- Layers -->
-                    <!-- Layer 1 -->
-                    <div class="caption sft revolution-starhotel bigtext"
-                         data-x="505"
-                         data-y="30"
-                         data-speed="700"
-                         data-start="1700"
-                         data-easing="easeOutBack">
-                        <span><i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i
-                                class="fa fa-star-o"></i> <i class="fa fa-star-o"></i></span> Best Piano Teachers <span><i
-                            class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i
-                            class="fa fa-star-o"></i> <i class="fa fa-star-o"></i></span></div>
-                    <!-- Layer 2 -->
-                    <div class="caption sft revolution-starhotel smalltext"
-                         data-x="605"
-                         data-y="105"
-                         data-speed="800"
-                         data-start="1700"
-                         data-easing="easeOutBack">
-                        <span>And we like to keep it that way!</span></div>
-                    <!-- Layer 3 -->
-                    <div class="caption sft"
-                         data-x="775"
-                         data-y="175"
-                         data-speed="1000"
-                         data-start="1900"
-                         data-easing="easeOutBack">
-                        <a href="#" class="button btn btn-purple btn-lg">See More Teachers</a>
-                    </div>
-                </li>
-                <!-- Slide 2 -->
-                <li data-transition="boxfade" data-slotamount="7" data-masterspeed="1000">
-                    <!-- Main Image -->
-                    <img src="{% static 'images/slides/1700x449.gif' %}" alt="darkblurbg" data-bgfit="cover"
-                         data-bgposition="left top"
-                         data-bgrepeat="no-repeat">
-                    <!-- Layers -->
-                    <!-- Layer 1 -->
-                    <div class="caption sft revolution-starhotel bigtext"
-                         data-x="585"
-                         data-y="30"
-                         data-speed="700"
-                         data-start="1700"
-                         data-easing="easeOutBack">
-                        <span><i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i
-                                class="fa fa-star-o"></i> <i class="fa fa-star-o"></i></span> Top Mandarin
-                        Tutor <span><i
-                            class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i
-                            class="fa fa-star-o"></i> <i class="fa fa-star-o"></i></span></div>
-                    <!-- Layer 2 -->
-                    <div class="caption sft revolution-starhotel smalltext"
-                         data-x="682"
-                         data-y="105"
-                         data-speed="800"
-                         data-start="1700"
-                         data-easing="easeOutBack">
-                        <span></span></div>
-                    <!-- Layer 3 -->
-                    <div class="caption sft"
-                         data-x="785"
-                         data-y="175"
-                         data-speed="1000"
-                         data-start="1900"
-                         data-easing="easeOutBack">
-                        <a href="#" class="button btn btn-purple btn-lg">See Details</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-</section>
-
-<!-- Reservation form -->
-<section id="reservation-form">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <form class="form-inline reservation-horizontal clearfix" role="form" method="post"
-                      action="" name="reservationform" id="reservationform" onsubmit="javascript:void (0);">
-                    <div id="message"></div>
-                    <!-- Error message display -->
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <h1 style="float: right;">I am looking for a:</h1>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <input type="text" name="search" id="search-text" placeholder="Piano Teacher"
-                                       class="form-control" style="font-size: 36px; height: 100%">
-                            </div>
-                        </div>
-                        <div class="col-sm-2">
-                            <button type="button" class="btn btn-primary btn-block" id="search-submisson">Search Now
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
-
-<div id="main-section">
-
-</div>
-<div id="sign-in-lightbox" style="display: none">
-    <div class="container">
-        <div class="row mt50">
-            <div class="col-sm-12">
-                <h2 class="lined-heading"><span id="signin-heading">Sign Up</span></h2>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <form class="clearfix" role="form" method="post" action="{% url 'main:signup' %}"
-                      id="signupform" onsubmit="javascript:void(0)">
-                    {% csrf_token %}
-                    <input type="hidden" value="sign-up" id="type-signin" name="type">
-
-                    <div class="row" id="sign-up-stuff">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="first-name" accesskey="U"><span class="required">*</span>First Name</label>
-                                <input name="first-name" type="text" id="first-name" class="form-control" value="">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="last-name" accesskey="E"><span class="required">*</span>Last Name</label>
-                                <input name="last-name" type="text" id="last-name" value="" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="email" accesskey="S"><span class="required">*</span>Email</label>
-                        <input name="email" id="email" class="form-control" type="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="password" accesskey="S"><span class="required">*</span>Password</label>
-                        <input name="password" id="password" class="form-control" type="password">
-                    </div>
-                    <div class="error_message">
-
-                    </div>
-                    <button type="button" class="btn  btn-lg btn-primary" id="sign-in-button">Sign Up</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Footer -->
-<footer style="margin-top: 20px;">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 col-sm-4">
-                <h4>About Starhotel</h4>
-
-            </div>
-            <div class="col-md-4 col-sm-4">
-                <h4>Recieve our newsletter</h4>
-
-            </div>
-            <div class="col-md-4 col-sm-4">
-                <h4>From our blog</h4>
-            </div>
-        </div>
-    </div>
-    <div class="footer-bottom">
+    <!-- Reservation form -->
+    <section id="reservation-form">
         <div class="container">
             <div class="row">
-                <div class="col-xs-6"> &copy; 2014 Picasso All Rights Reserved</div>
-                <div class="col-xs-6 text-right">
-                    <ul>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
+                <div class="col-md-12">
+                    <form class="form-inline reservation-horizontal clearfix" role="form" method="post"
+                          action="" name="reservationform" id="reservationform" onsubmit="javascript:void (0);">
+                        <div id="message"></div>
+                        <!-- Error message display -->
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <h1 style="float: right;">I am looking for a:</h1>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <input type="text" name="search" id="search-text" placeholder="Piano Teacher"
+                                           class="form-control" style="font-size: 36px; height: 100%">
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="button" class="btn btn-primary btn-block" id="search-submisson">Search Now
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="main-section">
+
+    </div>
+
+    <div id="sign-in-lightbox" style="display: none">
+        <div class="container">
+            <div class="row mt50">
+                <div class="col-sm-12">
+                    <h2 class="lined-heading"><span id="signin-heading">Sign Up</span></h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="clearfix" role="form" method="post" action="{% url 'main:signup' %}"
+                          id="signupform" onsubmit="javascript:void(0)">
+                        {% csrf_token %}
+                        <input type="hidden" value="sign-up" id="type-signin" name="type">
+
+                        <div class="row" id="sign-up-stuff">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="first-name" accesskey="U"><span class="required">*</span>First
+                                        Name</label>
+                                    <input name="first-name" type="text" id="first-name" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="last-name" accesskey="E"><span class="required">*</span>Last
+                                        Name</label>
+                                    <input name="last-name" type="text" id="last-name" value="" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" accesskey="S"><span class="required">*</span>Email</label>
+                            <input name="email" id="email" class="form-control" type="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="password" accesskey="S"><span class="required">*</span>Password</label>
+                            <input name="password" id="password" class="form-control" type="password">
+                        </div>
+                        <div class="error_message">
+
+                        </div>
+                        <button type="button" class="btn  btn-lg btn-primary" id="sign-in-button">Sign Up</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</footer>
+{% endblock %}
 
-<!-- Go-top Button -->
-<div id="go-top"><i class="fa fa-angle-up fa-2x"></i></div>
-</body>
-<!-- Javascripts -->
-<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/bootstrap-hover-dropdown.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/owl.carousel.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery.parallax-1.1.3.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery.nicescroll.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery.prettyPhoto.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery-ui-1.10.4.custom.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery.jigowatt.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery.sticky.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/waypoints.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery.isotope.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery.gmap.min.js' %}"></script>
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-<script type="text/javascript" src="{% static 'rs-plugin/js/jquery.themepunch.plugins.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'rs-plugin/js/jquery.themepunch.revolution.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/custom.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/star-rating.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/bootstrap-switch.min.js' %}"></script>
-<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-<script>
-    $(function () {
-        var $main = $('#main-section');
-        $.get('{% url 'main:featured' %}', function (data) {
-            $main.append(data);
-            loadFilters();
-        });
-        $('#search-submisson').click(function (e) {
-            $.get('{% url 'main:get_listings' %}', {'term': $('#search-text').val()}, function (data) {
-                $('.revolution-slider').hide();
-                $main.empty();
+{% block scripts %}
+    <script>
+        $(function () {
+            var $main = $('#main-section');
+            $.get('{% url 'main:featured' %}', function (data) {
                 $main.append(data);
+                loadFilters();
             });
-            return false;
-        });
-
-        $main.on('click', '.detail-back', function () {
-            $('.revolution-slider').hide();
-            $main.find('> div:last-child').remove();
-            $main.find('> section').show();
-        });
-
-        $('#sign-up').click(function () {
-            $('#main-section').hide();
-            $('#sign-in-lightbox').show();
-            $('#sign-up-stuff').show();
-            $('#type-signin').val('sign-up');
-            $('#signin-heading').text('Sign Up');
-            $('#sign-in-button').text('Sign Up');
-        });
-
-        $('#login').click(function () {
-            $('#main-section').hide();
-            $('#sign-in-lightbox').show();
-            $('#sign-up-stuff').hide();
-            $('#type-signin').val('login');
-            $('#signin-heading').text('Login');
-            $('#sign-in-button').text('Login');
-        });
-
-        $('#sign-in-button').click(function () {
-            $.post('{% url 'main:signup' %}', {'first-name': $('#first-name').val(),
-                'last-name': $('#last-name').val(), 'type': $('#type-signin').val(),
-                'email': $('#email').val(), 'password': $('#password').val(),
-                'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
-                if (parseInt(data['success']) == 0) {
-                    $('.error_message').text(data['error']);
-                } else {
-                    document.location.href = '/';
-                }
+            $('#search-submisson').click(function (e) {
+                $.get('{% url 'main:get_listings' %}', {'term': $('#search-text').val()}, function (data) {
+                    $('.revolution-slider').hide();
+                    $main.empty();
+                    $main.append(data);
+                });
+                return false;
             });
-        });
 
-        $main.on('click', '#review-button', function () {
-            {% if user.is_authenticated %}
-                $('#review_form').show();
-                $("#review-rating").rating({'min': 0, 'max': 5, 'step': 1});
-            {% else %}
+            $main.on('click', '.detail-back', function () {
+                $('.revolution-slider').hide();
+                $main.find('> div:last-child').remove();
+                $main.find('> section').show();
+            });
+
+            $('#sign-up').click(function () {
                 $('#main-section').hide();
                 $('#sign-in-lightbox').show();
                 $('#sign-up-stuff').show();
-                $('#signin-heading').text('Sign Up');
                 $('#type-signin').val('sign-up');
+                $('#signin-heading').text('Sign Up');
                 $('#sign-in-button').text('Sign Up');
-            {% endif %}
-        });
-        $main.on('click', '#cancel-review-button', function () {
-            $('#review_form').hide();
-        });
-        $main.on('click', '#review-submit', function () {
-            var url = $(this).data('url');
-            $.post(url, {'comment': $('#review-comment').val(), 'rating': $('#review-rating').val(),
-                'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
-                var $owls = $('.owl-item');
-                var $items = $owls.find('.item');
-                if ($owls.length == 0) {
-                    $('.owl-wrapper').append('<div class="owl-item" style="width: 610px;">' + data + '</div>');
-                } else {
-                    if ($items.length % 2 == 1) {
-                        $($owls[$owls.length - 1]).append(data);
+            });
+
+            $('#login').click(function () {
+                $('#main-section').hide();
+                $('#sign-in-lightbox').show();
+                $('#sign-up-stuff').hide();
+                $('#type-signin').val('login');
+                $('#signin-heading').text('Login');
+                $('#sign-in-button').text('Login');
+            });
+
+            $('#sign-in-button').click(function () {
+                $.post('{% url 'main:signup' %}', {'first-name': $('#first-name').val(),
+                    'last-name': $('#last-name').val(), 'type': $('#type-signin').val(),
+                    'email': $('#email').val(), 'password': $('#password').val(),
+                    'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
+                    if (parseInt(data['success']) == 0) {
+                        $('.error_message').text(data['error']);
                     } else {
-                        $('.owl-wrapper').append('<div class="owl-item" style="width: 610px;">' + data + '</div>');
+                        document.location.href = '/';
                     }
-                }
-                $('#review_form').remove();
-                $('#review-button').remove();
-                $('#reviews-box').show();
+                });
+            });
+
+            $main.on('click', '#review-button', function () {
+                {% if user.is_authenticated %}
+                    $('#review_form').show();
+                    $("#review-rating").rating({'min': 0, 'max': 5, 'step': 1});
+                {% else %}
+                    $('#main-section').hide();
+                    $('#sign-in-lightbox').show();
+                    $('#sign-up-stuff').show();
+                    $('#signin-heading').text('Sign Up');
+                    $('#type-signin').val('sign-up');
+                    $('#sign-in-button').text('Sign Up');
+                {% endif %}
+            });
+            $main.on('click', '#cancel-review-button', function () {
+                $('#review_form').hide();
+            });
+            $main.on('click', '#review-submit', function () {
+                var url = $(this).data('url');
+                $.post(url, {'comment': $('#review-comment').val(), 'rating': $('#review-rating').val(),
+                    'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
+                    var $owls = $('.owl-item');
+                    var $items = $owls.find('.item');
+                    if ($owls.length == 0) {
+                        $('.owl-wrapper').append('<div class="owl-item" style="width: 610px;">' + data + '</div>');
+                    } else {
+                        if ($items.length % 2 == 1) {
+                            $($owls[$owls.length - 1]).append(data);
+                        } else {
+                            $('.owl-wrapper').append('<div class="owl-item" style="width: 610px;">' + data + '</div>');
+                        }
+                    }
+                    $('#review_form').remove();
+                    $('#review-button').remove();
+                    $('#reviews-box').show();
+                });
             });
         });
-    });
-</script>
-</html>
+    </script>
+{% endblock %}

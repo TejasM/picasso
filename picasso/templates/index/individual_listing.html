@@ -1,353 +1,252 @@
+{% extends 'main_template.html' %}
 {% load staticfiles %}
 {% load mathfilters %}
-<!DOCTYPE HTML>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Picasso | {{ listing.listing_name }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description"
-          content="{{ listing.get_string_tags }} {{ listing.address.city }} {{ listing.description }}">
-    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
-
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
-    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
-    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
-    <link rel="stylesheet" href="{% static 'css/owl.theme.css' %}">
-    <link rel="stylesheet" href="{% static 'css/prettyPhoto.css' %}">
-    <link rel="stylesheet" href="{% static 'css/smoothness/jquery-ui-1.10.4.custom.min.css' %}">
-    <link rel="stylesheet" href="{% static 'rs-plugin/css/settings.css' %}">
-    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
-    <link rel="stylesheet" href="{% static 'css/colors/turquoise.css' %}">
-    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600,700">
-    <script type="text/javascript" src="{% static 'js/jquery-1.11.0.min.js' %}"></script>
-    <link href="{% static 'css/star-rating.min.css' %}" media="all" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'css/bootstrap-switch.min.css' %}" media="all" rel="stylesheet" type="text/css"/>
-</head>
-
-<body>
-<!-- Header -->
-<header>
-    <!-- Navigation -->
-    <div class="navbar yamm navbar-default" id="sticky">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" data-toggle="collapse" data-target="#navbar-collapse-grid" class="navbar-toggle">
-                    <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
-                </button>
-                <a href="/" class="navbar-brand">
-                    <!-- Logo -->
-                    <div id="logo"><img id="default-logo" src="{% static 'images/logo.png' %}" alt="Picasso"
-                                        style="height:44px;">
-                        <img id="retina-logo" src="{% static 'images/logo-retina.png' %}" alt="Picasso"
-                             style="height:44px;"></div>
-                </a></div>
-            <div id="navbar-collapse-grid" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="/">Home</a>
-                    </li>
-                    {% if not user.is_authenticated %}
-                        <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle js-activated">Sign
-                            In <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#" id="sign-up">Sign Up</a></li>
-                                <li><a href="#" id="login">Login</a></li>
-                            </ul>
-                        </li>
-                    {% else %}
-                        <li class=""><a href="{% url 'profile:my_listings' %}">My Listings</a>
-                        </li>
-                        <li class=""><a href="{% url 'profile:profile' %}">Profile</a>
-                        </li>
-                        <li class=""><a href="{% url 'main:logout' %}">Logout</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-    </div>
-</header>
-
-<!-- Reservation form -->
-<section id="reservation-form">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <form class="form-inline reservation-horizontal clearfix" role="form" method="post"
-                      action="" name="reservationform" id="reservationform" onsubmit="javascript:void (0);">
-                    <div id="message"></div>
-                    <!-- Error message display -->
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <h1 style="float: right;">I am looking for a:</h1>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <input type="text" name="search" id="search-text" placeholder="Piano Teacher"
-                                       class="form-control" style="font-size: 36px; height: 100%">
-                            </div>
-                        </div>
-                        <div class="col-sm-2">
-                            <button type="submit" class="btn btn-primary btn-block">Search Now</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
-
-<div id="main-section">
-    <div class="container mt50" id="listing-detail">
-        <div class="row">
-            <!-- Slider -->
-            <div class="col-sm-12">
-                <h2 class="lined-heading"><span>{{ listing.listing_name }}</span></h2>
-            </div>
-            <section class="standard-slider room-slider">
-                <div class="col-sm-12 col-md-8 col-lg-8">
-                    <div class="item"><a href="{% static 'images/rooms/slider/750x481.gif' %}"><img
-                            src="{% static 'images/rooms/slider/750x481.gif' %}" alt="Image 2"
-                            class="img-responsive"></a>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-4 col-lg-4">
-                    <div class="tab-pane fade in active" id="overview">
-                        <div class="tp-leftarrow tparrows default detail-back"></div>
-                        <h3>
-                            Overview
-                        </h3>
-
-                        <p><strong>Subjects: </strong>{{ listing.get_string_tags }}</p>
-
-                        <p>{{ listing.description|safe }}</p>
-
-                        <p><strong>Address: </strong>{{ listing.address|safe }}</p>
-
-                        {% if listing.active %}<p><strong>Active: </strong><i class="fa fa-2x fa-check-circle"></i>
-                            </p>{% endif %}
-
-                        {% if listing.phone != "" %}<p><strong>Phone:</strong>{{ listing.phone }}</p>{% endif %}
-                        <p><strong>Rating:</strong> {{ listing.get_rating }}</p>
-
-                        {% if listing.owner == user or listing.created_by == user %}
-                            <button type="button" class="btn btn-primary btn-block" id="edit-listing-button"
-                                    data-url="{% url 'profile:edit_listing' listing.id %}">Edit
-                            </button>
-                        {% endif %}
-                    </div>
-                </div>
-            </section>
-        </div>
-        {% if not reviewed and listing.owner != user %}
-            <div class="row mt20">
-                <div class="col-sm-12">
-                    <button type="button" class="btn btn-primary btn-block" id="review-button">Review</button>
-                </div>
-            </div>
-            <div class="row" id="review_form" style="display: none">
-                <form class="clearfix mt50" role="form" method="post"
-                      action="{% url 'main:review_listing' listing.id %}"
-                      id="reviewform" onsubmit="javascript:void(0)">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="review-comment" accesskey="S"><span class="required">*</span>Comment</label>
-                        <textarea name="comment" id="review-comment" class="form-control"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="review-rating" accesskey="S"><span class="required">*</span>Rating</label>
-                        <input id="review-rating" name="rating" class="form-control">
-                    </div>
-                    <div class="error_message">
-
-                    </div>
-                    <button type="button" class="btn  btn-lg btn-primary" id="cancel-review-button">Cancel</button>
-                    <button type="button" class="btn  btn-lg btn-primary" id="review-submit"
-                            data-url="{% url 'main:review_listing' listing.id %}">
-                        Submit Review
-                    </button>
-                </form>
-            </div>
-        {% endif %}
-        <div class="row" {% if listing.review_set.count == 0 %}style="display:none;"{% endif %} id="reviews-box">
-            <!-- Testimonials -->
-            <section class="testimonials mt50">
-                <div class="col-md-12 col-sm-12">
-                    <h3 class="lined-heading"><span>Testimonials</span></h3>
-
-                    <div id="owl-reviews" class="owl-carousel mt30 owl-theme" style="display: block; opacity: 1;">
-                        <div class="owl-wrapper-outer">
-                            <div class="owl-wrapper"
-                                 style="width: 2440px; left: 0px; display: block; transition: all 1000ms ease; -webkit-transition: all 1000ms ease; -webkit-transform: translate3d(0px, 0px, 0px);">
-                                {% for review in listing.review_set.all %}
-                                    {% if forloop.counter0|mod:2 == 0 %}
-                                        <div class="owl-item" style="width: 610px;">
-                                    {% endif %}
-                                {% include 'index/review.html' with review=review count=forloop.counter %}
-                                {% if forloop.counter0|mod:2 == 1 %}
-                                    </div>
-                                {% endif %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% if listing.review_set.count >= 3 %}
-                            <div class="owl-controls clickable">
-                                <div class="owl-buttons">
-                                    <div class="owl-prev"><i class="fa fa-angle-left fa-3x"></i></div>
-                                    <div class="owl-next"><i class="fa fa-angle-right fa-3x"></i></div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
-</div>
-
-<div id="sign-in-lightbox" style="display: none">
-    <div class="container">
-        <div class="row mt50">
-            <div class="col-sm-12">
-                <h2 class="lined-heading"><span id="signin-heading">Sign Up</span></h2>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <form class="clearfix" role="form" method="post" action="{% url 'main:signup' %}"
-                      id="signupform" onsubmit="javascript:void(0)">
-                    {% csrf_token %}
-                    <input type="hidden" value="sign-up" id="type-signin" name="type">
-
-                    <div class="row" id="sign-up-stuff">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="first-name" accesskey="U"><span class="required">*</span>First Name</label>
-                                <input name="first-name" type="text" id="first-name" class="form-control" value="">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="last-name" accesskey="E"><span class="required">*</span>Last Name</label>
-                                <input name="last-name" type="text" id="last-name" value="" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="email" accesskey="S"><span class="required">*</span>Email</label>
-                        <input name="email" id="email" class="form-control" type="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="password" accesskey="S"><span class="required">*</span>Password</label>
-                        <input name="password" id="password" class="form-control" type="password">
-                    </div>
-                    <div class="error_message">
-
-                    </div>
-                    <button type="button" class="btn  btn-lg btn-primary" id="sign-in-button">Sign Up</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Footer -->
-<footer style="margin-top: 20px;">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 col-sm-4">
-                <h4>About Starhotel</h4>
-
-            </div>
-            <div class="col-md-4 col-sm-4">
-                <h4>Recieve our newsletter</h4>
-
-            </div>
-            <div class="col-md-4 col-sm-4">
-                <h4>From our blog</h4>
-            </div>
-        </div>
-    </div>
-    <div class="footer-bottom">
+%{% block content %}
+    <!-- Reservation form -->
+    <section id="reservation-form">
         <div class="container">
             <div class="row">
-                <div class="col-xs-6"> &copy; 2014 Picasso All Rights Reserved</div>
-                <div class="col-xs-6 text-right">
-                    <ul>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
+                <div class="col-md-12">
+                    <form class="form-inline reservation-horizontal clearfix" role="form" method="post"
+                          action="" name="reservationform" id="reservationform" onsubmit="javascript:void (0);">
+                        <div id="message"></div>
+                        <!-- Error message display -->
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <h1 style="float: right;">I am looking for a:</h1>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <input type="text" name="search" id="search-text" placeholder="Piano Teacher"
+                                           class="form-control" style="font-size: 36px; height: 100%">
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="submit" class="btn btn-primary btn-block">Search Now</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="main-section">
+        <div class="container mt50" id="listing-detail">
+            <div class="row">
+                <!-- Slider -->
+                <div class="col-sm-12">
+                    <h2 class="lined-heading"><span>{{ listing.listing_name }}</span></h2>
+                </div>
+                <section class="standard-slider room-slider">
+                    <div class="col-sm-12 col-md-8 col-lg-8">
+                        <div class="item"><a href="{% static 'images/rooms/slider/750x481.gif' %}"><img
+                                src="{% static 'images/rooms/slider/750x481.gif' %}" alt="Image 2"
+                                class="img-responsive"></a>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4 col-lg-4">
+                        <div class="tab-pane fade in active" id="overview">
+                            <div class="tp-leftarrow tparrows default detail-back"></div>
+                            <h3>
+                                Overview
+                            </h3>
+
+                            <p><strong>Subjects: </strong>{{ listing.get_string_tags }}</p>
+
+                            <p>{{ listing.description|safe }}</p>
+
+                            <p><strong>Address: </strong>{{ listing.address|safe }}</p>
+
+                            {% if listing.active %}<p><strong>Active: </strong><i class="fa fa-2x fa-check-circle"></i>
+                                </p>{% endif %}
+
+                            {% if listing.phone != "" %}<p><strong>Phone:</strong>{{ listing.phone }}</p>{% endif %}
+                            <p><strong>Rating:</strong> {{ listing.get_rating }}</p>
+
+                            {% if listing.owner == user or listing.created_by == user %}
+                                <button type="button" class="btn btn-primary btn-block" id="edit-listing-button"
+                                        data-url="{% url 'profile:edit_listing' listing.id %}">Edit
+                                </button>
+                            {% endif %}
+
+                            {% if user.is_authenticated %}
+                                {% if listing not in user.profile %}
+                                    <button type="button" class="btn btn-primary btn-block mt20" id="add-teacher">Add as
+                                        a
+                                        Teacher
+                                    </button>
+                                {% endif %}
+
+                                <button type="button" class="mt20 btn btn-primary btn-block" id="review-button">Review
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </section>
+            </div>
+            {% if not reviewed and listing.owner != user %}
+                <div class="row mt20">
+                    <div class="col-sm-12">
+                    </div>
+                </div>
+                <div class="row" id="review_form" style="display: none">
+                    <form class="clearfix mt50" role="form" method="post"
+                          action="{% url 'main:review_listing' listing.id %}"
+                          id="reviewform" onsubmit="javascript:void(0)">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="review-comment" accesskey="S"><span class="required">*</span>Comment</label>
+                            <textarea name="comment" id="review-comment" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="review-rating" accesskey="S"><span class="required">*</span>Rating</label>
+                            <input id="review-rating" name="rating" class="form-control">
+                        </div>
+                        <div class="error_message">
+
+                        </div>
+                        <button type="button" class="btn  btn-lg btn-primary" id="cancel-review-button">Cancel</button>
+                        <button type="button" class="btn  btn-lg btn-primary" id="review-submit"
+                                data-url="{% url 'main:review_listing' listing.id %}">
+                            Submit Review
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+            <div class="row" {% if listing.review_set.count == 0 %}style="display:none;"{% endif %} id="reviews-box">
+                <!-- Testimonials -->
+                <section class="testimonials mt50">
+                    <div class="col-md-12 col-sm-12">
+                        <h3 class="lined-heading"><span>Testimonials</span></h3>
+
+                        <div id="owl-reviews" class="owl-carousel mt30 owl-theme" style="display: block; opacity: 1;">
+                            <div class="owl-wrapper-outer">
+                                <div class="owl-wrapper"
+                                     style="width: 2440px; left: 0px; display: block; transition: all 1000ms ease; -webkit-transition: all 1000ms ease; -webkit-transform: translate3d(0px, 0px, 0px);">
+                                    {% for review in listing.review_set.all %}
+                                        {% if forloop.counter0|mod:2 == 0 %}
+                                            <div class="owl-item" style="width: 610px;">
+                                        {% endif %}
+                                    {% include 'index/review.html' with review=review count=forloop.counter %}
+                                    {% if forloop.counter0|mod:2 == 1 %}
+                                        </div>
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% if listing.review_set.count >= 3 %}
+                                <div class="owl-controls clickable">
+                                    <div class="owl-buttons">
+                                        <div class="owl-prev"><i class="fa fa-angle-left fa-3x"></i></div>
+                                        <div class="owl-next"><i class="fa fa-angle-right fa-3x"></i></div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <div id="sign-in-lightbox" style="display: none">
+        <div class="container">
+            <div class="row mt50">
+                <div class="col-sm-12">
+                    <h2 class="lined-heading"><span id="signin-heading">Sign Up</span></h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="clearfix" role="form" method="post" action="{% url 'main:signup' %}"
+                          id="signupform" onsubmit="javascript:void(0)">
+                        {% csrf_token %}
+                        <input type="hidden" value="sign-up" id="type-signin" name="type">
+
+                        <div class="row" id="sign-up-stuff">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="first-name" accesskey="U"><span class="required">*</span>First
+                                        Name</label>
+                                    <input name="first-name" type="text" id="first-name" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="last-name" accesskey="E"><span class="required">*</span>Last
+                                        Name</label>
+                                    <input name="last-name" type="text" id="last-name" value="" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" accesskey="S"><span class="required">*</span>Email</label>
+                            <input name="email" id="email" class="form-control" type="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="password" accesskey="S"><span class="required">*</span>Password</label>
+                            <input name="password" id="password" class="form-control" type="password">
+                        </div>
+                        <div class="error_message">
+
+                        </div>
+                        <button type="button" class="btn  btn-lg btn-primary" id="sign-in-button">Sign Up</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</footer>
+{% endblock %}
+{% block scripts %}
+    <script>
+        var $main = $('#main-section');
+        var $my_listings = $('#listing-detail');
 
-<!-- Go-top Button -->
-<div id="go-top"><i class="fa fa-angle-up fa-2x"></i></div>
-</body>
-<!-- Javascripts -->
-<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/bootstrap-hover-dropdown.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/owl.carousel.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery.parallax-1.1.3.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery.nicescroll.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery.prettyPhoto.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery-ui-1.10.4.custom.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery.jigowatt.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery.sticky.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/waypoints.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery.isotope.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery.gmap.min.js' %}"></script>
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-<script type="text/javascript" src="{% static 'rs-plugin/js/jquery.themepunch.plugins.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'rs-plugin/js/jquery.themepunch.revolution.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/custom.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/star-rating.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/bootstrap-switch.min.js' %}"></script>
-<script>
-    var $main = $('#main-section');
-    var $my_listings = $('#listing-detail');
-
-    $main.on('click', '#edit-listing-button', function () {
-        var url = $(this).data('url');
-        $.get(url, function (data) {
-            $('#listing-detail').hide();
-            $main.append(data);
-            $("#are-owner").bootstrapSwitch();
-            $("#are-active").bootstrapSwitch();
+        $main.on('click', '#edit-listing-button', function () {
+            var url = $(this).data('url');
+            $.get(url, function (data) {
+                $('#listing-detail').hide();
+                $main.append(data);
+                $("#are-owner").bootstrapSwitch();
+                $("#are-active").bootstrapSwitch();
+            });
         });
-    });
 
-    $main.on('click', '#cancel-edit-listing', function () {
-        $('#edit-listing-div').remove();
-        $('#listing-detail').show();
-    });
+        $main.on('click', '#cancel-edit-listing', function () {
+            $('#edit-listing-div').remove();
+            $('#listing-detail').show();
+        });
 
-    $main.on('click', '.detail-back', function () {
-        window.location.href = '/';
-    });
+        $main.on('click', '.detail-back', function () {
+            window.location.href = '/';
+        });
 
-    $main.on('click', '#save-edit-listing', function () {
-        var url = $(this).data('url');
-        $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
-                    'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
-                    'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
-                    'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
-                    'active': $('#are-active').is(':checked'),
-                    'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
-                function (data) {
-                    $('#edit-listing-div').remove();
-                    $my_listings.find('#listing-' + data['id']).remove();
-                    $('#listing-detail').remove();
-                    $.get('/main/detail-listing/' + data['id'], function (data2) {
-                        $main.prepend(data2);
+        $main.on('click', '#save-edit-listing', function () {
+            var url = $(this).data('url');
+            $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
+                        'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
+                        'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
+                        'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
+                        'active': $('#are-active').is(':checked'),
+                        'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
+                    function (data) {
+                        $('#edit-listing-div').remove();
+                        $my_listings.find('#listing-' + data['id']).remove();
+                        $('#listing-detail').remove();
+                        $.get('/main/detail-listing/' + data['id'], function (data2) {
+                            $main.prepend(data2);
+                        });
+                        $my_listings.show();
                     });
-                    $my_listings.show();
-                });
-    });
-</script>
-</html>
+        });
+
+        $('#add-teacher').click(function () {
+            $.post('{% url 'profile:add_teacher' listing.id %}', function () {
+                $('#add-teacher').remove();
+            }
+        });
+    </script>
+{% endblock %}

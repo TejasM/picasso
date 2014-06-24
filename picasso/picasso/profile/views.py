@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
+from django.views.decorators.csrf import csrf_exempt
 from picasso.index.models import Listing, Address
 
 
@@ -29,6 +30,15 @@ def add_listing(request):
         return HttpResponse(json.dumps({'id': listing.id}), content_type='application/json')
     else:
         return render(request, 'profile/create_listing.html')
+
+
+@csrf_exempt
+@login_required
+def add_teacher(request, list_id):
+    if request.method == "POST":
+        listing = Listing.objects.get(pk=list_id)
+        request.user.profile.teachers.add(listing)
+        return HttpResponse(json.dumps({}), content_type='application/json')
 
 
 @login_required
