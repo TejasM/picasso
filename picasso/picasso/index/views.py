@@ -107,7 +107,7 @@ def user_logout(request):
 
 
 @login_required()
-def individual_listing(request, list_id):
+def individual_listing(request, list_tags, list_name, list_id):
     if request.method == "GET":
         listing = Listing.objects.get(pk=int(list_id))
         if request.user.is_authenticated():

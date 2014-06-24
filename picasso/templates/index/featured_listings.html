@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load spaceless %}
 <!-- Rooms -->
 <section class="rooms mt50">
     <div class="container">
@@ -34,9 +35,9 @@
                                 <div class="content">
                                     <p>{{ l.description|safe|truncatewords:30 }}</p>
 
-                                    <a href="{% url 'main:individual_listing' l.id %}"
+                                    <a href="{% url 'main:individual_listing' l.get_string_tags_no_comma l.get_listing_name l.id %}"
                                        class="btn btn-primary btn-block to-listing"
-                                       data-url="{% url 'main:detail_listing' l.id %}">Read
+                                       data-url="{% url 'main:individual_listing' l.get_string_tags_no_comma l.get_listing_name l.id %}">Read
                                         More</a>
                                 </div>
                             </div>
