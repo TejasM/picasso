@@ -71,9 +71,7 @@ class Listing(BaseModel):
     @property
     def get_string_tags_no_space(self):
         if self.tags.count() != 0:
-            return "".join(self.tags.values_list('tag_name', flat=True)).replace(' ', '').replace(',', '').replace('-',
-                                                                                                                   '').replace(
-                '/', '')
+            return self.tags.all()[0].replace(' ', '').replace(',', '').replace('-', '').replace('/', '')
         else:
             return "Unknown"
 
