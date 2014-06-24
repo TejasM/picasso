@@ -110,15 +110,24 @@ class Listing(BaseModel):
 
     def save(self, **kwargs):
         count = Listing.objects.filter(listing_name=self.listing_name).count()
+        if self.address:
+            address = self.address.city.split(',')[0]
+        else:
+            address = ''
         if count == 1:
-            self.unique_url = re.sub(r'\W+', '-', self.listing_name) + "-" + self.address.city.split(',')[0]
+            if address != '':
+                self.unique_url = re.sub(r'\W+', '-', self.listing_name) + "-" + address
+            else:
+                self.unique_url = re.sub(r'\W+', '-', self.listing_name) + "-" + str(count)
         else:
             count = 0
             for l in Listing.objects.filter(listing_name=self.listing_name):
                 if l.unique_url != '':
                     count += 1
-            self.unique_url = re.sub(r'\W+', '-', self.listing_name) + "-" + self.address.city.split(',')[
-                0] + "-" + str(count)
+            if address != '':
+                self.unique_url = re.sub(r'\W+', '-', self.listing_name) + "-" + address + "-" + str(count)
+            else:
+                self.unique_url = re.sub(r'\W+', '-', self.listing_name) + "-" + str(count)
         super(Listing, self).save(**kwargs)
 
 
