@@ -63,7 +63,7 @@ class Listing(BaseModel):
         ('Pri', 'Private'),
         ('Sch', 'School'),
     )
-    place = models.CharField(max_length=1, choices=PLACE_CHOICES, default='Pri')
+    place = models.CharField(max_length=3, choices=PLACE_CHOICES, default='Pri')
 
     @property
     def get_price(self):
