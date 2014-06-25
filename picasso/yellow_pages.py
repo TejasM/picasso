@@ -1,5 +1,8 @@
 import json
+import re
 import requests
+# from picasso.index.models import Tag
+from picasso.index.models import Address, Listing, Tag
 
 __author__ = 'tmehta'
 
@@ -9,10 +12,63 @@ url = 'http://www.yellowpages.ca/ajax/search/music+teachers/Toronto%2C+ON?sType=
 base_url = 'http://www.yellowpages.ca/bus/'
 city = 'Toronto'
 
+
+def extract_cats(p):
+    try:
+        p_s = p.split('Products and Services</h3>')[1].split('</span>')[0].replace('<span>', '')
+    except IndexError:
+        return []
+    p_s = p_s.split("'>")[1:]
+    cats = []
+    for line in p_s:
+        cats.append(line.split('</li>')[0])
+    return cats
+
+
+def extract_phone(p):
+    try:
+        phone = p.split('class="phone"')[1].split('<span >')[1].split('</span>')[0]
+    except IndexError:
+        phone = ''
+    return phone
+
+
 r = requests.get(url)
 listings = json.loads(r.text)['listings']
 for l in listings:
     name = l['name']
-    page = requests.get(base_url + str(l['id']) + '.html').text
+    scraped_url = base_url + str(l['id']) + '.html'
+    try:
+        Listing.objects.get(scraped_url=scraped_url)
+    except Listing.DoesNotExist:
+        active = True
+        place = 'Sch'
+        email = ''
+        page = requests.get(scraped_url).text
+        categories = extract_cats(page)
+        tags = []
+        for cat in categories:
+            t = Tag.objects.get_or_create(tag_name=cat)
+        phone_number = extract_phone(page)
+        try:
+            location = page.split('itemprop="streetAddress">')[1].split('</span>')[0]
+        except IndexError:
+            location = ''
+        try:
+            postalCode = page.split('itemprop="postalCode">')[1].split('</span>')[0]
+        except IndexError:
+            postalCode = ''
+        try:
+            description = page.split('itemprop="description">')[1].split('</article>')[0].split('<a href')[0].replace(
+                '<span', '').replace('</span>', '')
+        except IndexError:
+            description = ''
+        add = Address.objects.create(location=location, postal_code=postalCode, city=city)
+        l = Listing.objects.create(address=add, listing_name=name, scraped_url=scraped_url, description=description,
+                                   phone=phone_number)
+        for t in tags:
+            l.tags.add(t)
+        l.save()
+
 
 
