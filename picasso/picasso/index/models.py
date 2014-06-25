@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 import re
+import watson
 
 
 class BaseModel(models.Model):
@@ -141,3 +142,9 @@ class Review(BaseModel):
     rating = models.FloatField(default=-1)
     user = models.ForeignKey(User, default=None, null=True)
     listing = models.ForeignKey(Listing)
+
+
+watson.register(Listing)
+watson.register(Tag)
+watson.register(Review)
+watson.register(Address)
