@@ -1,21 +1,19 @@
 {% extends 'main_template.html' %}
 {% load staticfiles %}
 {% block content %}
-    <div id="main-section">
-        <div id="my-listings">
-            <div class="container">
-                <div class="row mt20">
-                    <div class="col-lg-3 col-md-6 col-md-offset-6 col-lg-offset-9 col-sm-12">
-                        <div class="right">
-                            <button type="button" id="create-listing-button" class="btn btn-primary btn-block">Add
-                                Listing
-                            </button>
-                        </div>
+    <div id="my-listings">
+        <div class="container">
+            <div class="row mt20">
+                <div class="col-lg-3 col-md-6 col-md-offset-6 col-lg-offset-9 col-sm-12">
+                    <div class="right">
+                        <button type="button" id="create-listing-button" class="btn btn-primary btn-block">Add
+                            Listing
+                        </button>
                     </div>
                 </div>
             </div>
-            {% include 'index/listings.html' %}
         </div>
+        {% include 'index/listings.html' %}
     </div>
 {% endblock %}
 {% block scripts %}

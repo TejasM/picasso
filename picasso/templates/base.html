@@ -1,59 +1,5 @@
 {% extends 'main_template.html' %}
 {% load staticfiles %}
-{% block content %}
-    <div id="main-section">
-
-    </div>
-
-    <div id="sign-in-lightbox" style="display: none">
-        <div class="container">
-            <div class="row mt50">
-                <div class="col-sm-12">
-                    <h2 class="lined-heading"><span id="signin-heading">Sign Up</span></h2>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <form class="clearfix" role="form" method="post" action="{% url 'main:signup' %}"
-                          id="signupform" onsubmit="javascript:void(0)">
-                        {% csrf_token %}
-                        <input type="hidden" value="sign-up" id="type-signin" name="type">
-
-                        <div class="row" id="sign-up-stuff">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="first-name" accesskey="U"><span class="required">*</span>First
-                                        Name</label>
-                                    <input name="first-name" type="text" id="first-name" class="form-control" value="">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="last-name" accesskey="E"><span class="required">*</span>Last
-                                        Name</label>
-                                    <input name="last-name" type="text" id="last-name" value="" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="email" accesskey="S"><span class="required">*</span>Email</label>
-                            <input name="email" id="email" class="form-control" type="email">
-                        </div>
-                        <div class="form-group">
-                            <label for="password" accesskey="S"><span class="required">*</span>Password</label>
-                            <input name="password" id="password" class="form-control" type="password">
-                        </div>
-                        <div class="error_message">
-
-                        </div>
-                        <button type="button" class="btn  btn-lg btn-primary" id="sign-in-button">Sign Up</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-{% endblock %}
-
 {% block scripts %}
     <script>
         $(function () {
@@ -75,37 +21,6 @@
                 $('.revolution-slider').hide();
                 $main.find('> div:last-child').remove();
                 $main.find('> section').show();
-            });
-
-            $('#sign-up').click(function () {
-                $('#main-section').hide();
-                $('#sign-in-lightbox').show();
-                $('#sign-up-stuff').show();
-                $('#type-signin').val('sign-up');
-                $('#signin-heading').text('Sign Up');
-                $('#sign-in-button').text('Sign Up');
-            });
-
-            $('#login').click(function () {
-                $('#main-section').hide();
-                $('#sign-in-lightbox').show();
-                $('#sign-up-stuff').hide();
-                $('#type-signin').val('login');
-                $('#signin-heading').text('Login');
-                $('#sign-in-button').text('Login');
-            });
-
-            $('#sign-in-button').click(function () {
-                $.post('{% url 'main:signup' %}', {'first-name': $('#first-name').val(),
-                    'last-name': $('#last-name').val(), 'type': $('#type-signin').val(),
-                    'email': $('#email').val(), 'password': $('#password').val(),
-                    'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
-                    if (parseInt(data['success']) == 0) {
-                        $('.error_message').text(data['error']);
-                    } else {
-                        document.location.href = '/';
-                    }
-                });
             });
 
             $main.on('click', '#review-button', function () {

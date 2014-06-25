@@ -102,3 +102,7 @@ def review_listing(request, list_id):
 def user_logout(request):
     logout(request)
     return redirect('/')
+
+
+def about(request):
+    return render(request, 'about.html')

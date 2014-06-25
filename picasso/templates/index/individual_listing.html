@@ -29,11 +29,12 @@
 
                             <p><strong>Address: </strong>{{ listing.address|safe }}</p>
 
-                            {% if listing.active %}<p><strong>Active: </strong><i class="fa fa-2x fa-check-circle"></i>
+                            {% if listing.active %}<p>
+                                <strong>Currently Accepting Students: </strong><i class="fa fa-2x fa-check-circle"></i>
                                 </p>{% endif %}
 
                             {% if listing.phone != "" %}<p><strong>Phone:</strong>{{ listing.phone }}</p>{% endif %}
-                            <p><strong>Rating:</strong> {{ listing.get_rating }}</p>
+                            <p><strong>Rating:</strong> {{ listing.get_rating }}/5</p>
 
                             {% if listing.owner == user or listing.created_by == user %}
                                 <button type="button" class="btn btn-primary btn-block" id="edit-listing-button"
