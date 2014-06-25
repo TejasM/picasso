@@ -20,6 +20,9 @@ urlpatterns = patterns('',
                        url(r'^google46c8e47a069f43cd\.html$',
                            lambda r: HttpResponse("google-site-verification: google46c8e47a069f43cd.html",
                                                   mimetype="text/plain")),
+                       url(r'^google085706dc2e6c8637\.html$',
+                           lambda r: HttpResponse("google-site-verification: google085706dc2e6c8637.html",
+                                                  mimetype="text/plain")),
                        url(r'BingSiteAuth\.xml', TemplateView.as_view(template_name='BingSiteAuth.xml')),
 
                        # Examples:
