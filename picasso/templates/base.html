@@ -94,14 +94,25 @@
                         <div id="message"></div>
                         <!-- Error message display -->
                         <div class="row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <div class="form-group">
-                                    <h1 style="float: right;">I am looking for a:</h1>
+                                    <h1 style="float: right; font-size: 2em">I am looking for a:</h1>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                                 <div class="form-group">
                                     <input type="text" name="search" id="search-text" placeholder="Piano Teacher"
+                                           class="form-control" style="font-size: 36px; height: 100%">
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <h1 style="float: right; font-size: 2em">Near:</h1>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <input type="text" name="location" id="location-text" value="Toronto"
                                            class="form-control" style="font-size: 36px; height: 100%">
                                 </div>
                             </div>
@@ -178,7 +189,7 @@
                 loadFilters();
             });
             $('#search-submisson').click(function (e) {
-                $.get('{% url 'main:get_listings' %}', {'term': $('#search-text').val()}, function (data) {
+                $.get('{% url 'main:get_listings' %}', {'term': $('#search-text').val() + ' ' + $('#location-text').val()}, function (data) {
                     $('.revolution-slider').hide();
                     $main.empty();
                     $main.append(data);
