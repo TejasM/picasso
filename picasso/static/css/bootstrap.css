@@ -3403,6 +3403,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 }
 
 .nav-pills > li {
+  width: 100%;
   float: left;
 }
 

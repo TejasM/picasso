@@ -15,8 +15,8 @@ from picasso.index.models import Listing, Tag, Review
 def featured(request):
     if request.method == "GET":
         featured_listings = Listing.objects.order_by('?')[:6]
-        context = {'listings': featured_listings}
-        return render(request, 'index/featured_listings.html', context)
+        context = {'listings': featured_listings, 'title': 'Feature Listings', 'button_name': 'Read More'}
+        return render(request, 'index/listings.html', context)
 
 
 def get_listings(request):
