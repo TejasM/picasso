@@ -1,22 +1,31 @@
 import json
-from django.contrib import messages
+
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core import serializers
 from django.db import IntegrityError
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext
+from django.template.loader import get_template
 import watson
 
-from picasso.index.models import Listing, Tag, Review
+from picasso.index.models import Listing, Review
 
 
 def featured(request):
     if request.method == "GET":
         featured_listings = Listing.objects.order_by('?')[:6]
         context = {'listings': featured_listings, 'title': 'Feature Listings', 'button_name': 'Read More'}
-        return render(request, 'index/listings.html', context)
+        context = RequestContext(request, context)
+        t = get_template('index/listings.html')
+        addresses = [x.address for x in featured_listings if x.address is not None]
+        names = [x.listing_name for x in featured_listings if x.address is not None]
+        return HttpResponse(
+            json.dumps({'html': t.render(context),
+                        'addresses': serializers.serialize('json', addresses), 'names': names}),
+            content_type='application/json')
 
 
 def get_listings(request):

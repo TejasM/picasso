@@ -2,15 +2,64 @@
 {% load staticfiles %}
 {% block scripts %}
     <script>
+        function initialize() {
+            var mapOptions = {
+                zoom: 8,
+                center: new google.maps.LatLng(-34.397, 150.644)
+            };
+
+            var map = new google.maps.Map(document.getElementById('map-canvas'),
+                    mapOptions);
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    map.setCenter(initialLocation);
+                });
+            }
+            geocoder = new google.maps.Geocoder();
+            var json = locations;
+            for (var i = 0; i < json.length; i++) {
+                if (json[i] != 'None' && json[i]['fields']['location'] != '') {
+                    var address = json[i]['fields']['postal_code'] + ' ' + json[i]['fields']['country'];
+                    geocoder.geocode({ 'address': address}, function (results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            var marker = new google.maps.Marker({
+                                map: map,
+                                position: results[0].geometry.location,
+                                title: names[0],
+                                visible: true
+                            });
+                        } else {
+                            console.log("Geocode was not successful for the following reason: " + status);
+                        }
+                    });
+                }
+            }
+        }
+
+        function loadScript() {
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&' +
+                    'callback=initialize';
+            document.body.appendChild(script);
+        }
+        var locations = [];
+        var names = [];
+        var geocoder = null;
+
         $(function () {
             var $main = $('#main-section');
             $.get('{% url 'main:featured' %}', function (data) {
-                $main.append(data);
+                $main.append(data['html']);
+                locations = $.parseJSON(data['addresses']);
+                names = data['names'];
+                loadScript();
                 loadFilters();
             });
             $('#search-submisson').click(function (e) {
                 $.get('{% url 'main:get_listings' %}', {'term': $('#search-text').val() + ' ' + $('#location-text').val()}, function (data) {
-                    $('.revolution-slider').hide();
                     $main.empty();
                     $main.append(data);
                 });
