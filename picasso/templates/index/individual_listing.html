@@ -10,13 +10,22 @@
                     <h2 class="lined-heading"><span>{{ listing.listing_name }}</span></h2>
                 </div>
                 <section class="standard-slider room-slider">
-                    <div class="col-sm-12 col-md-8 col-lg-8">
-                        <div class="item"><a href="{% static 'images/rooms/slider/750x481.gif' %}"><img
-                                src="{% static 'images/rooms/slider/750x481.gif' %}" alt="Image 2"
-                                class="img-responsive"></a>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="item"><a href="{% static 'images/rooms/slider/750x481.gif' %}"><img
+                                        src="{% static 'images/rooms/slider/750x481.gif' %}" alt="Image 2"
+                                        class="img-responsive"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt20">
+                            <div class="col-sm-12">
+                                <div id="map-canvas" style="width: 100%; min-height: 300px"></div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-4 col-lg-4">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
                         <div class="tab-pane fade in active" id="overview">
                             <div class="tp-leftarrow tparrows default detail-back"></div>
                             <h3>
@@ -121,102 +130,120 @@
             </div>
         </div>
     </div>
-
-    <div id="sign-in-lightbox" style="display: none">
-        <div class="container">
-            <div class="row mt50">
-                <div class="col-sm-12">
-                    <h2 class="lined-heading"><span id="signin-heading">Sign Up</span></h2>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <form class="clearfix" role="form" method="post" action="{% url 'main:signup' %}"
-                          id="signupform" onsubmit="javascript:void(0)">
-                        {% csrf_token %}
-                        <input type="hidden" value="sign-up" id="type-signin" name="type">
-
-                        <div class="row" id="sign-up-stuff">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="first-name" accesskey="U"><span class="required">*</span>First
-                                        Name</label>
-                                    <input name="first-name" type="text" id="first-name" class="form-control" value="">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="last-name" accesskey="E"><span class="required">*</span>Last
-                                        Name</label>
-                                    <input name="last-name" type="text" id="last-name" value="" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="email" accesskey="S"><span class="required">*</span>Email</label>
-                            <input name="email" id="email" class="form-control" type="email">
-                        </div>
-                        <div class="form-group">
-                            <label for="password" accesskey="S"><span class="required">*</span>Password</label>
-                            <input name="password" id="password" class="form-control" type="password">
-                        </div>
-                        <div class="error_message">
-
-                        </div>
-                        <button type="button" class="btn  btn-lg btn-primary" id="sign-in-button">Sign Up</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 {% endblock %}
 {% block scripts %}
     <script>
-        var $main = $('#main-section');
-        var $my_listings = $('#listing-detail');
+        $(function () {
+            var $main = $('#main-section');
+            var $my_listings = $('#listing-detail');
 
-        $main.on('click', '#edit-listing-button', function () {
-            var url = $(this).data('url');
-            $.get(url, function (data) {
-                $('#listing-detail').hide();
-                $main.append(data);
-                $("#are-owner").bootstrapSwitch();
-                $("#are-active").bootstrapSwitch();
+            $main.on('click', '#edit-listing-button', function () {
+                var url = $(this).data('url');
+                $.get(url, function (data) {
+                    $('#listing-detail').hide();
+                    $main.append(data);
+                    $("#are-owner").bootstrapSwitch();
+                    $("#are-active").bootstrapSwitch();
+                });
             });
-        });
 
-        $main.on('click', '#cancel-edit-listing', function () {
-            $('#edit-listing-div').remove();
-            $('#listing-detail').show();
-        });
+            $main.on('click', '#cancel-edit-listing', function () {
+                $('#edit-listing-div').remove();
+                $('#listing-detail').show();
+            });
 
-        $main.on('click', '.detail-back', function () {
-            window.location.href = '/';
-        });
+            $main.on('click', '.detail-back', function () {
+                window.location.href = '/';
+            });
 
-        $main.on('click', '#save-edit-listing', function () {
-            var url = $(this).data('url');
-            $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
-                        'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
-                        'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
-                        'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
-                        'active': $('#are-active').is(':checked'),
-                        'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
-                    function (data) {
-                        $('#edit-listing-div').remove();
-                        $my_listings.find('#listing-' + data['id']).remove();
-                        $('#listing-detail').remove();
-                        $.get('/main/detail-listing/' + data['id'], function (data2) {
-                            $main.prepend(data2);
+            $main.on('click', '#save-edit-listing', function () {
+                var url = $(this).data('url');
+                $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
+                            'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
+                            'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
+                            'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
+                            'active': $('#are-active').is(':checked'),
+                            'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
+                        function (data) {
+                            $('#edit-listing-div').remove();
+                            $my_listings.find('#listing-' + data['id']).remove();
+                            $('#listing-detail').remove();
+                            $.get('/main/detail-listing/' + data['id'], function (data2) {
+                                $main.prepend(data2);
+                            });
+                            $my_listings.show();
                         });
-                        $my_listings.show();
-                    });
-        });
-
-        $('#add-teacher').click(function () {
-            $.post('{% url 'profile:add_teacher' listing.id %}', function () {
-                $('#add-teacher').remove();
             });
+
+            $('#add-teacher').click(function () {
+                $.post('{% url 'profile:add_teacher' listing.id %}', function () {
+                    $('#add-teacher').remove();
+                });
+            });
+
+            function loadScript() {
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&' +
+                        'callback=initialize';
+                document.body.appendChild(script);
+            }
+
+            loadScript();
         });
+        var geocoder = null;
+        var directionsDisplay = null;
+        var initialLocation = null;
+        var directionsService = null;
+        function initialize() {
+            directionsDisplay = new google.maps.DirectionsRenderer();
+            directionsService = new google.maps.DirectionsService();
+
+            var mapOptions = {
+                zoom: 15,
+                center: new google.maps.LatLng(-34.397, 150.644)
+            };
+
+            var map = new google.maps.Map(document.getElementById('map-canvas'),
+                    mapOptions);
+            directionsDisplay.setMap(map);
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    map.setCenter(initialLocation);
+                });
+            }
+            geocoder = new google.maps.Geocoder();
+            {% if listing.address != None and listing.address.postal_code != '' %}
+                var address = '{{ listing.address.postal_code }}' + ' ' + '{{ listing.address.country }}';
+                geocoder.geocode({ 'address': address}, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        var marker = new google.maps.Marker({
+                            map: map,
+                            position: results[0].geometry.location,
+                            title: '{{ listing.listing_name }}',
+                            visible: true
+                        });
+                        map.setCenter(results[0].geometry.location);
+                        if (initialLocation != null) {
+                            var request = {
+                                origin: initialLocation,
+                                destination: results[0].geometry.location,
+                                travelMode: google.maps.TravelMode.DRIVING
+                            };
+                            directionsService.route(request, function (result, status) {
+                                if (status == google.maps.DirectionsStatus.OK) {
+                                    directionsDisplay.setDirections(result);
+                                }
+                            });
+                        }
+                        console.log(results[0]);
+                    } else {
+                        console.log("Geocode was not successful for the following reason: " + status);
+                    }
+                });
+            {% endif %}
+        }
     </script>
 {% endblock %}

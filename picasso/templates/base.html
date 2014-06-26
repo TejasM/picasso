@@ -20,7 +20,7 @@
             geocoder = new google.maps.Geocoder();
             var json = locations;
             for (var i = 0; i < json.length; i++) {
-                if (json[i] != 'None' && json[i]['fields']['location'] != '') {
+                if (json[i] != 'None' && json[i]['fields']['postal_code'] != '') {
                     var address = json[i]['fields']['postal_code'] + ' ' + json[i]['fields']['country'];
                     geocoder.geocode({ 'address': address}, function (results, status) {
                         if (status == google.maps.GeocoderStatus.OK) {
@@ -30,6 +30,7 @@
                                 title: names[0],
                                 visible: true
                             });
+                            console.log(results[0]);
                         } else {
                             console.log("Geocode was not successful for the following reason: " + status);
                         }
