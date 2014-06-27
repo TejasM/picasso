@@ -1471,6 +1471,7 @@ aside .widget .news-content span a {
 /* Nav Pills */
 .nav-pills {
 	margin-top: 30px;
+    padding: 10px;
 }
 .nav-pills > li > a {
 	color: #5e5e5e;

@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-sm-2">
                 <div class="widget">
-                    <h3>Filters</h3>
+                    <h3 style="padding: 10px">Filters</h3>
                     <ul class="nav nav-pills list-unstyled arrow" id="filters">
                         <li class="active"><a href="#" data-filter="*">All</a></li>
                         <li><a href="#" data-filter=".Piano">Piano</a></li>
@@ -22,30 +22,25 @@
             <div class="col-sm-5">
                 <div class="isotope gallery">
                     {% for l in listings %}
-                        <div class="row row-xs-height isotope-item {{ l.get_string_tags_no_comma }}"
+                        <div class="row row-lg-height isotope-item {{ l.get_string_tags_no_comma }}"
                              style="margin-top: 2em; width: 100%">
-                            <div class="col-sm-12 col-lg-height col-lg-4 col-middle">
+                            <div class="col-sm-12 col-lg-6 col-middle">
                                 <img src="http://placehold.it/140x100" alt="{{ l.listing_name }}"/>
+
+                                <h5>{{ l.listing_name }}<br><span>{{ l.get_string_tags }}</span></h5>
+
+                                <div class="price"><span>Rating: </span>{{ l.get_rating }}</div>
                             </div>
-                            <div class="col-sm-12 col-lg-height col-lg-8">
-                                <div class="mask">
-                                    <div class="main">
-                                        <h5>{{ l.listing_name }}<br><span>{{ l.get_string_tags }}</span></h5>
+                            <div class="col-sm-12 col-lg-6">
+                                <p>{{ l.address|safe }}</p>
 
-                                        <div class="price"><span>Rating: </span>{{ l.get_rating }}</div>
-                                    </div>
-                                    <div class="content">
-                                        <p>{{ l.address|safe }}</p>
+                                <p>{{ l.phone }}</p>
 
-                                        <p>{{ l.phone }}</p>
+                                <p>{{ l.email }}</p>
 
-                                        <p>{{ l.email }}</p>
-
-                                        <a href="{{ l.get_unique_url }}" style="float: right"
-                                           class="btn btn-primary btn-block to-listing"
-                                           data-url="{{ l.get_unique_url }}">{{ button_name }}</a>
-                                    </div>
-                                </div>
+                                <p><a href="{{ l.get_unique_url }}"
+                                      class="btn btn-primary btn-block to-listing"
+                                      data-url="{{ l.get_unique_url }}">{{ button_name }}</a></p>
                             </div>
                         </div>
                     {% endfor %}
