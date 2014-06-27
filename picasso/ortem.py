@@ -70,6 +70,9 @@ for info, id_member in zip(names, ids):
             print postal
     for t in tags:
         l.tags.add(t)
-    l.save()
+    try:
+        l.save()
+    except:
+        print phone
 
 
