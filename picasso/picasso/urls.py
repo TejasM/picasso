@@ -39,10 +39,11 @@ urlpatterns = patterns('',
 # Uncomment the next line to serve media files in dev.
 # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += patterns('',
-                        url(r'^unknown/(?P<list_name>.*)/$', view=views.individual_listing))
+                        url(r'^unknown/(?P<list_name>.*)/$', view=views.individual_listing, name='unknown'))
 for t in Tag.objects.all():
     urlpatterns += patterns('',
-                            url(r'^' + t.dash_version + '/(?P<list_name>.*)/$', view=views.individual_listing), )
+                            url(r'^' + t.dash_version + '/(?P<list_name>.*)/$', view=views.individual_listing,
+                                name=t.dash_version), )
 
 if settings.DEBUG:
     import debug_toolbar

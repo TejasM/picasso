@@ -136,13 +136,11 @@ class Listing(BaseModel):
 
     @permalink
     def get_absolute_url(self):
-        string = "/"
         if self.tags.count() != 0:
-            string += self.tags.all().order_by('?')[0].dash_version
+            string = self.tags.all().order_by('?')[0].dash_version
         else:
-            string += "unknown"
-        string += "/" + self.unique_url
-        return string
+            string = "unknown"
+        return (string, [self.unique_url])
 
     def save(self, **kwargs):
         count = Listing.objects.filter(listing_name=self.listing_name).count()
