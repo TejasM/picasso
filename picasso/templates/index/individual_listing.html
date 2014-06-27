@@ -13,9 +13,9 @@
                     <div class="col-sm-12 col-md-6 col-lg-6">
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="item"><a href="{% static 'images/rooms/slider/750x481.gif' %}"><img
-                                        src="{% static 'images/rooms/slider/750x481.gif' %}" alt="Image 2"
-                                        class="img-responsive"></a>
+                                <div class="item"><img
+                                        src="{{ listing.get_photo_url }}" alt="{{ listing.get_string_tags }}"
+                                        class="img-responsive">
                                 </div>
                             </div>
                         </div>

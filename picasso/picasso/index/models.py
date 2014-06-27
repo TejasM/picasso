@@ -1,11 +1,23 @@
+import random
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Avg
+from django.db.models import Avg, permalink
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 import re
 import watson
+
+
+STATIC_IMAGE_URLS = {
+    'music': ['/static/images/photos/music/music_0.jpg', '/static/images/photos/music/music_1.jpg',
+              '/static/images/photos/music/music_2.jpg'],
+    'piano': ['/static/images/photos/piano/piano_0.jpg', '/static/images/photos/piano/piano_1.jpg',
+              '/static/images/photos/piano/piano_2.jpg', '/static/images/photos/piano/piano_3.jpg',
+              '/static/images/photos/piano/piano_4.jpg', '/static/images/photos/piano/piano_5.jpg'],
+    'brass': ['/static/images/photos/brass/brass_0.png'],
+    'drums': ['/static/images/photos/drums/drums_0.jpg', '/static/images/photos/drums/drums_1.png'],
+}
 
 
 class BaseModel(models.Model):
@@ -96,7 +108,7 @@ class Listing(BaseModel):
     def get_string_tags_no_space(self):
         if self.tags.count() != 0:
             return self.tags.all().order_by('?')[0].tag_name.replace(' ', '').replace(',', '').replace('-', '').replace(
-                '/', '').lower()
+                '/', '').lower().strip()
         else:
             return "Unknown"
 
@@ -113,6 +125,24 @@ class Listing(BaseModel):
     @property
     def get_listing_name(self):
         return self.listing_name.replace(' ', '').replace(',', '').replace('-', '').replace('/', '')
+
+    @property
+    def get_photo_url(self):
+        if self.tags.count() != 0:
+            for tag in self.tags.all():
+                if tag.tag_name.strip().lower() in STATIC_IMAGE_URLS:
+                    return random.choice(STATIC_IMAGE_URLS[tag.tag_name.strip().lower()])
+        return random.choice(STATIC_IMAGE_URLS['music'])
+
+    @permalink
+    def get_absolute_url(self):
+        string = "/"
+        if self.tags.count() != 0:
+            string += self.tags.all().order_by('?')[0].dash_version
+        else:
+            string += "unknown"
+        string += "/" + self.unique_url
+        return string
 
     def save(self, **kwargs):
         count = Listing.objects.filter(listing_name=self.listing_name).count()
