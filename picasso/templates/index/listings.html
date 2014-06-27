@@ -37,6 +37,10 @@
                                     <div class="content">
                                         <p>{{ l.address|safe }}</p>
 
+                                        <p>{{ l.phone }}</p>
+
+                                        <p>{{ l.email }}</p>
+
                                         <a href="{{ l.get_unique_url }}" style="float: right"
                                            class="btn btn-primary btn-block to-listing"
                                            data-url="{{ l.get_unique_url }}">{{ button_name }}</a>
