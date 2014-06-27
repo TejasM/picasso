@@ -1,5 +1,58 @@
 {% extends 'main_template.html' %}
-{% load staticfiles %}
+{% load staticfiles %}<!-- Revolution Slider -->
+{% block above_content %}
+    <section class="revolution-slider">
+        <div class="bannercontainer">
+            <div class="banner">
+                <ul>
+                    <!-- Slide 1 -->
+                    <li data-transition="fade" data-slotamount="7" data-masterspeed="1500">
+                        <!-- Main Image -->
+                        <img src="{% static 'images/musician-349790_1280.jpg' %}"
+                             style="opacity:0;" alt="slidebg1"
+                             data-bgfit="cover"
+                             data-bgposition="left bottom" data-bgrepeat="no-repeat">
+                        <!-- Layers -->
+                        <!-- Layer 1 -->
+                        <div class="caption sft revolution-starhotel bigtext"
+                             data-x="505"
+                             data-y="30"
+                             data-speed="700"
+                             data-start="1700"
+                             data-easing="easeOutBack">
+                            <span><i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i
+                                    class="fa fa-star-o"></i> <i class="fa fa-star-o"></i></span> Let Picasso help <br> &#09;&#09; find
+                            the best hobby <br>&#09;&#09;teachers near you. <span><i class="fa fa-star-o"></i> <i
+                                class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i
+                                class="fa fa-star-o"></i> <i class="fa fa-star-o"></i></span></div>
+                    </li>
+                    <!-- Slide 2 -->
+                    <li data-transition="boxfade" data-slotamount="7" data-masterspeed="1000">
+                        <!-- Main Image -->
+                        <img src="http://martialartsmtpleasant.com/files/2011/06/iStock_000016095819_Small.jpg"
+                             alt="darkblurbg" data-bgfit="cover"
+                             data-bgposition="left top"
+                             data-bgrepeat="no-repeat">
+                        <!-- Layers -->
+                        <!-- Layer 1 -->
+                        <div class="caption sft revolution-starhotel bigtext"
+                             data-x="400"
+                             data-y="100"
+                             data-speed="700"
+                             data-start="1700"
+                             data-easing="easeOutBack">
+                        <span><i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i
+                                class="fa fa-star-o"></i> <i class="fa fa-star-o"></i></span> Great instructors lead
+                            <br>to
+                            great results <span><i
+                                class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i
+                                class="fa fa-star-o"></i> <i class="fa fa-star-o"></i></span></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+{% endblock %}
 {% block scripts %}
     <script>
         function initialize() {
@@ -61,6 +114,7 @@
             });
             $('#search-submisson').click(function (e) {
                 $.get('{% url 'main:get_listings' %}', {'term': $('#search-text').val() + ' ' + $('#location-text').val()}, function (data) {
+                    $('.revolution-slider').hide();
                     $main.empty();
                     $main.append(data);
                 });
