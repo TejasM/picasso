@@ -27,16 +27,16 @@
                             <div class="col-sm-12 col-lg-6 col-middle">
                                 <img src="http://placehold.it/140x100" alt="{{ l.listing_name }}"/>
 
-                                <h5>{{ l.listing_name }}<br><span>{{ l.get_string_tags }}</span></h5>
+                                <h4>{{ l.listing_name }}<br><span>{{ l.get_string_tags }}</span></h4>
 
-                                <div class="price"><span>Rating: </span>{{ l.get_rating }}</div>
+                                <div class="price"><strong>Rating: {{ l.get_rating }}</strong></div>
                             </div>
                             <div class="col-sm-12 col-lg-6">
-                                <p>{{ l.address|safe }}</p>
+                                <p><strong>Address: </strong>{{ l.address|safe }}</p>
 
-                                <p>{{ l.phone }}</p>
+                                <p><strong>Contact: </strong>{{ l.phone }}</p>
 
-                                <p>{{ l.email }}</p>
+                                <p><strong>Email: </strong>{{ l.email }}</p>
 
                                 <p><a href="{{ l.get_unique_url }}"
                                       class="btn btn-primary btn-block to-listing"
