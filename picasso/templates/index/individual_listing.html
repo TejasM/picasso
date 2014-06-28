@@ -53,7 +53,11 @@
 
                             {% if user.is_authenticated %}
                                 {% if listing not in user.profile.teachers.all %}
-                                    <button type="button" class="btn btn-primary btn-block mt20" id="add-teacher">Add to Favourites
+                                    <button type="button" class="btn btn-primary btn-block mt20" id="add-teacher">Add to
+                                        Favourites
+                                    </button>
+                                {% else %}
+                                    <button type="button" class="btn btn-primary btn-block mt20" disabled>Favourite
                                     </button>
                                 {% endif %}
 
@@ -175,7 +179,9 @@
 
             $('#add-teacher').click(function () {
                 $.post('{% url 'profile:add_teacher' listing.id %}', function () {
-                    $('#add-teacher').remove();
+                    var $add = $('#add-teacher');
+                    $add.text('Favourite');
+                    $add.prop('disabled', true);
                 });
             });
 
@@ -186,6 +192,43 @@
                         'callback=initialize';
                 document.body.appendChild(script);
             }
+
+            $main.on('click', '#review-button', function () {
+                {% if user.is_authenticated %}
+                    $('#review_form').show();
+                    $("#review-rating").rating({'min': 0, 'max': 5, 'step': 1});
+                {% else %}
+                    $('#main-section').hide();
+                    $('#sign-in-lightbox').show();
+                    $('#sign-up-stuff').show();
+                    $('#signin-heading').text('Sign Up');
+                    $('#type-signin').val('sign-up');
+                    $('#sign-in-button').text('Sign Up');
+                {% endif %}
+            });
+            $main.on('click', '#cancel-review-button', function () {
+                $('#review_form').hide();
+            });
+            $main.on('click', '#review-submit', function () {
+                var url = $(this).data('url');
+                $.post(url, {'comment': $('#review-comment').val(), 'rating': $('#review-rating').val(),
+                    'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
+                    var $owls = $('.owl-item');
+                    var $items = $owls.find('.item');
+                    if ($owls.length == 0) {
+                        $('.owl-wrapper').append('<div class="owl-item" style="width: 610px;">' + data + '</div>');
+                    } else {
+                        if ($items.length % 2 == 1) {
+                            $($owls[$owls.length - 1]).append(data);
+                        } else {
+                            $('.owl-wrapper').append('<div class="owl-item" style="width: 610px;">' + data + '</div>');
+                        }
+                    }
+                    $('#review_form').remove();
+                    $('#review-button').remove();
+                    $('#reviews-box').show();
+                });
+            });
 
             loadScript();
         });
