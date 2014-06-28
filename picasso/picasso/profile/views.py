@@ -88,6 +88,6 @@ def my_teachers(request):
 
 
 def my_reviews(request):
-    reviews = request.user.review_set.all().values_list('listing', 'rating', 'comment')
+    reviews = request.user.review_set.all()
     return render(request, 'my_reviews.html',
                   {'reviews': reviews})

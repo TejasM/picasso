@@ -3846,7 +3846,8 @@ textarea.input-group-sm > .form-control, textarea.input-group-sm > .input-group-
 }
 
 .nav-pills > li {
-    float: left
+    float: left;
+    width: 100%;
 }
 
 .nav-pills > li > a {
