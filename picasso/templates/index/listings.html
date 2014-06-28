@@ -19,35 +19,74 @@
                 </div>
             </div>
             <!-- Room -->
-            <div class="col-sm-5">
-                <div class="isotope gallery">
-                    {% for l in listings %}
-                        <div class="row row-lg-height isotope-item {{ l.get_string_tags_no_comma }}"
-                             style="margin-top: 2em; width: 100%">
-                            <div class="col-sm-12 col-lg-6 col-middle">
-                                <img src="{{ l.get_photo_url }}" alt="{{ l.listing_name }}" width="140px" height="100"/>
+            {% if not reviews %}
+                <div class="col-sm-5">
+                    <div class="isotope gallery">
+                        {% for l in listings %}
+                            <div class="row row-lg-height isotope-item {{ l.get_string_tags_no_comma }}"
+                                 style="margin-top: 2em; width: 100%">
+                                <div class="col-sm-12 col-lg-6 col-middle">
+                                    <img src="{{ l.get_photo_url }}" alt="{{ l.listing_name }}" width="140px"
+                                         height="100"/>
 
-                                <a href="{{ l.get_unique_url }}"><h4 style="font-size: 1.3em"><strong>{{ l.listing_name }}</strong>
-                                    <br><span>{{ l.get_string_tags }}</span></h4></a>
+                                    <a href="{{ l.get_unique_url }}"><h4 style="font-size: 1.3em">
+                                        <strong>{{ l.listing_name }}</strong>
+                                        <br><span>{{ l.get_string_tags }}</span></h4></a>
 
-                                <div class="price"><strong>Rating: {{ l.get_rating }}</strong></div>
+                                    <div class="price"><strong>Rating: {{ l.get_rating }}</strong></div>
+                                </div>
+                                <div class="col-sm-12 col-lg-6">
+                                    <a href="{{ l.get_unique_url }}" style="color: #333">
+                                        <p><strong>Address: </strong>{{ l.address|safe }}</p>
+
+                                        <p><strong>Contact: </strong>{{ l.phone }}</p>
+
+                                        <p><strong>Email: </strong>{{ l.email }}</p>
+                                    </a>
+                                </div>
                             </div>
-                            <div class="col-sm-12 col-lg-6">
-                                <a href="{{ l.get_unique_url }}" style="color: #333">
-                                    <p><strong>Address: </strong>{{ l.address|safe }}</p>
-
-                                    <p><strong>Contact: </strong>{{ l.phone }}</p>
-
-                                    <p><strong>Email: </strong>{{ l.email }}</p>
-                                </a>
-                            </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
-            <div class="col-sm-5">
-                <div id="map-canvas" style="width: 100%; min-height: 600px"></div>
-            </div>
+                <div class="col-sm-5">
+                    <div id="map-canvas" style="width: 100%; min-height: 600px"></div>
+                </div>
+            {% else %}
+                <div class="col-sm-10">
+                    <div class="isotope gallery">
+                        {% for l, r, c in reviews %}
+                            <div class="row row-lg-height isotope-item {{ l.get_string_tags_no_comma }}"
+                                 style="margin-top: 2em; width: 100%">
+                                <div class="col-sm-12 col-lg-4 col-middle">
+                                    <img src="{{ l.get_photo_url }}" alt="{{ l.listing_name }}" width="140px"
+                                         height="100"/>
+
+                                    <a href="{{ l.get_unique_url }}"><h4 style="font-size: 1.3em">
+                                        <strong>{{ l.listing_name }}</strong>
+                                        <br><span>{{ l.get_string_tags }}</span></h4></a>
+
+                                    <div class="price"><strong>Rating: {{ l.get_rating }}</strong></div>
+                                </div>
+                                <div class="col-sm-12 col-lg-4">
+                                    <a href="{{ l.get_unique_url }}" style="color: #333">
+                                        <p><strong>Address: </strong>{{ l.address|safe }}</p>
+
+                                        <p><strong>Contact: </strong>{{ l.phone }}</p>
+
+                                        <p><strong>Email: </strong>{{ l.email }}</p>
+                                    </a>
+                                </div>
+                                <div class="col-sm-12 col-lg-4">
+                                    <a href="{{ l.get_unique_url }}" style="color: #333">
+                                        <p><strong>Rating: </strong><input class="rating"></p>
+                                        <p><strong>Comment: </strong>{{ c }}</p>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>

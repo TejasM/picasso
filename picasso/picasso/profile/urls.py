@@ -17,4 +17,5 @@ urlpatterns = patterns('',
 
                        #Teachers
                        url(r'^my_teachers/$', views.my_teachers, name='my_teachers'),
+                       url(r'^my_reviews/$', views.my_reviews, name='my_reviews'),
 )

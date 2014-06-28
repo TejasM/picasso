@@ -11,7 +11,7 @@
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="{% static 'css/animate.css' %}">
-    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
     <link rel="stylesheet" href="{% static 'css/owl.theme.css' %}">
@@ -80,6 +80,8 @@
                                 {% endif %}
                                 <li><a href="{% url 'profile:my_teachers' %}" id="login">Favourite Teachers</a></li>
                             </ul>
+                        </li>
+                        <li class=""><a href="{% url 'profile:my_reviews' %}">Reviews</a>
                         </li>
                         <li class=""><a href="{% url 'profile:profile' %}">Profile</a>
                         </li>

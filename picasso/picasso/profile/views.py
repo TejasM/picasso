@@ -85,3 +85,9 @@ def my_teachers(request):
     listings = request.user.profile.teachers.all()
     return render(request, 'my_teachers.html',
                   {'listings': listings, 'title': 'Favourite Teachers', 'button_name': 'View'})
+
+
+def my_reviews(request):
+    reviews = request.user.review_set.all().values_list('listing', 'rating', 'comment')
+    return render(request, 'my_reviews.html',
+                  {'reviews': reviews})
