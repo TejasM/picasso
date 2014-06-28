@@ -6,11 +6,16 @@ from django.views.generic import TemplateView
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 from picasso import index
+from picasso.index.sitemaps import ListingSitemap
 import views
 from django.http import HttpResponse
 from picasso.index.models import Tag
 
 admin.autodiscover()
+
+sitemaps = {
+    'listings': ListingSitemap,
+}
 
 urlpatterns = patterns('',
                        url(r'^$', TemplateView.as_view(template_name='base.html')),
@@ -24,6 +29,7 @@ urlpatterns = patterns('',
                            lambda r: HttpResponse("google-site-verification: google085706dc2e6c8637.html",
                                                   mimetype="text/plain")),
                        url(r'BingSiteAuth\.xml', TemplateView.as_view(template_name='BingSiteAuth.xml')),
+                       (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
 
                        # Examples:
                        # url(r'^$', 'picasso.views.home', name='home'),

@@ -182,6 +182,8 @@ DJANGO_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
+    'django.contrib.sites',
 
     # Useful template tags:
     # 'django.contrib.humanize',
@@ -252,3 +254,8 @@ INSTALLED_APPS += (
 # Don't need to use South when setting up a test database.
 SOUTH_TESTS_MIGRATE = False
 ########## END SOUTH CONFIGURATION
+
+
+########## SITE FRAMEWORK CONFIGURATION
+SITE_ID = 1
+########## END SITE FRAMEWORK CONFIGURATION
