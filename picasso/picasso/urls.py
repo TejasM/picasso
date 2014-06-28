@@ -6,7 +6,7 @@ from django.views.generic import TemplateView
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 from picasso import index
-from picasso.index.sitemaps import ListingSitemap
+from picasso.index.sitemaps import ListingSitemap, StaticViewSitemap
 import views
 from django.http import HttpResponse
 from picasso.index.models import Tag
@@ -15,6 +15,7 @@ admin.autodiscover()
 
 sitemaps = {
     'listings': ListingSitemap,
+    'static': StaticViewSitemap,
 }
 
 urlpatterns = patterns('',
