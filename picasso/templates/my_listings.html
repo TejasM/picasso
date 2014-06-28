@@ -67,9 +67,9 @@
                                 $my_listings.find('.rooms').append(data2);
                             });
                             $my_listings.show();
-                            if (window.location.search.replace("?", "").trim() != '') {
+                            {% if user.owner.count == 0 %}
                                 window.location.href = '/';
-                            }
+                            {% endif %}
                         });
             });
 
@@ -104,9 +104,9 @@
                         });
             });
 
-            if (window.location.search.replace("?", "").trim() != '') {
+            {% if user.owner.count == 0 %}
                 $('#create-listing-button').trigger('click');
-            }
+            {% endif %}
         });
     </script>
 {% endblock %}

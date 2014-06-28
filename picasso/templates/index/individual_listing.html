@@ -43,7 +43,7 @@
                                 </p>{% endif %}
 
                             {% if listing.phone != "" %}<p><strong>Phone:</strong>{{ listing.phone }}</p>{% endif %}
-                            <p><strong>Rating:</strong> {{ listing.get_rating }}/5</p>
+                            <p><strong>Rating:</strong><input id="static-rating"></p>
 
                             {% if listing.owner == user or listing.created_by == user %}
                                 <button type="button" class="btn btn-primary btn-block" id="edit-listing-button"
@@ -229,7 +229,8 @@
                     $('#reviews-box').show();
                 });
             });
-
+            $("#static-rating").rating({'min': 0, 'max': 5, 'step': 0.5, disabled: true, readonly: true});
+            $("#static-rating").rating('update', {{ listing.rating }});
             loadScript();
         });
         var geocoder = null;
