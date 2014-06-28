@@ -81,4 +81,5 @@ def profile(request):
 @login_required
 def my_teachers(request):
     listings = request.user.profile.teachers.all()
-    return render(request, 'my_teachers.html', {'listings': listings, 'title': 'My Teachers', 'button_name': 'View'})
+    return render(request, 'my_teachers.html',
+                  {'listings': listings, 'title': 'Favourite Teachers', 'button_name': 'View'})
