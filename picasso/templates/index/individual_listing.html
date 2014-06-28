@@ -52,7 +52,7 @@
                             {% endif %}
 
                             {% if user.is_authenticated %}
-                                {% if listing not in user.profile %}
+                                {% if listing not in user.profile.teachers.all %}
                                     <button type="button" class="btn btn-primary btn-block mt20" id="add-teacher">Add as
                                         a
                                         Teacher

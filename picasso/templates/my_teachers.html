@@ -1,0 +1,92 @@
+{% extends 'main_template.html' %}
+{% load staticfiles %}
+{% block content %}
+    <div id="my-listings">
+        {% include 'index/listings.html' %}
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(function () {
+            var $main = $('#main-section');
+            var $my_listings = $('#my-listings');
+            $('#create-listing-button').click(function () {
+                $.get('{% url 'profile:add_listing' %}', function (data) {
+                    $my_listings.hide();
+                    $main.append(data);
+                    $("#are-owner").bootstrapSwitch();
+                    $("#are-active").bootstrapSwitch();
+                });
+            });
+
+            $main.on('click', '.to-listing', function () {
+                var url = $(this).data('url');
+                $.get(url, function (data) {
+                    $my_listings.hide();
+                    $main.append(data);
+                });
+            });
+
+            $main.on('click', '.detail-back', function () {
+                $('#listing-detail').remove();
+                $my_listings.show();
+            });
+
+            $main.on('click', '#edit-listing-button', function () {
+                var url = $(this).data('url');
+                $.get(url, function (data) {
+                    $('#listing-detail').remove();
+                    $main.append(data);
+                    $("#are-owner").bootstrapSwitch();
+                    $("#are-active").bootstrapSwitch();
+                });
+            });
+
+            $main.on('click', '#submit-create-listing', function () {
+                var url = $(this).data('url');
+                $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
+                            'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
+                            'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
+                            'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
+                            'active': $('#are-active').is(':checked'),
+                            'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
+                        function (data) {
+                            $('#create-listing-div').remove();
+                            $.get('/main/get-listing/' + data['id'], function (data2) {
+                                $my_listings.find('.rooms').append(data2);
+                            });
+                            $my_listings.show();
+                        });
+            });
+
+            $main.on('click', '#cancel-create-listing', function () {
+                $('#create-listing-div').remove();
+                $my_listings.show();
+            });
+
+            $main.on('click', '#cancel-edit-listing', function () {
+                $('#edit-listing-div').remove();
+                $my_listings.show();
+            });
+
+            $main.on('click', '#save-edit-listing', function () {
+                var url = $(this).data('url');
+                $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
+                            'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
+                            'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
+                            'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
+                            'active': $('#are-active').is(':checked'),
+                            'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
+                        function (data) {
+                            $('#edit-listing-div').remove();
+                            $my_listings.find('#listing-' + data['id']).remove();
+                            $.get('/main/get-listing/' + data['id'], function (data2) {
+                                $my_listings.find('.rooms .row').append(data2);
+                            });
+                            $my_listings.show();
+                        });
+            });
+
+        });
+    </script>
+{% endblock %}

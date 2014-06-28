@@ -74,7 +74,12 @@
                             </ul>
                         </li>
                     {% else %}
-                        <li class=""><a href="{% url 'profile:my_listings' %}">Listings</a>
+                        <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle js-activated">
+                            Listings <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'profile:my_listings' %}" id="sign-up">My Listings</a></li>
+                                <li><a href="{% url 'profile:my_teachers' %}" id="login">My Teachers</a></li>
+                            </ul>
                         </li>
                         <li class=""><a href="{% url 'profile:profile' %}">Profile</a>
                         </li>
