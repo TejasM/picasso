@@ -77,7 +77,11 @@
                         <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle js-activated">
                             Listings <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="{% url 'profile:my_listings' %}" id="sign-up">My Listings</a></li>
+                                {% if user.owner.count != 0 %}
+                                    <li><a href="{% url 'profile:my_listings' %}" id="sign-up">My Listings</a></li>
+                                {% else %}
+                                    <li><a href="{% url 'profile:my_listings' %}?add=add" id="sign-up">Add Listing</a></li>
+                                {% endif %}
                                 <li><a href="{% url 'profile:my_teachers' %}" id="login">Favourite Teachers</a></li>
                             </ul>
                         </li>

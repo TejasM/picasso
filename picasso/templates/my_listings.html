@@ -67,10 +67,16 @@
                                 $my_listings.find('.rooms').append(data2);
                             });
                             $my_listings.show();
+                            if (window.location.search.replace("?", "").trim() != '') {
+                                window.location.href = '/';
+                            }
                         });
             });
 
             $main.on('click', '#cancel-create-listing', function () {
+                if (window.location.search.replace("?", "").trim() != '') {
+                    window.location.href = '/';
+                }
                 $('#create-listing-div').remove();
                 $my_listings.show();
             });
@@ -98,6 +104,9 @@
                         });
             });
 
+            if (window.location.search.replace("?", "").trim() != '') {
+                $('#create-listing-button').trigger('click');
+            }
         });
     </script>
 {% endblock %}
