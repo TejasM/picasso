@@ -1,4 +1,5 @@
 import random
+from django.contrib import admin
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Avg, permalink
@@ -165,6 +166,8 @@ class Listing(BaseModel):
             else:
                 self.unique_url = re.sub(r'\W+', '-', self.listing_name) + "-" + str(count)
         super(Listing, self).save(**kwargs)
+
+admin.site.register(Listing)
 
 
 class Review(BaseModel):
