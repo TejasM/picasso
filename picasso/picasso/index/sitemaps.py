@@ -4,7 +4,7 @@ from picasso.index.models import Listing
 
 
 class ListingSitemap(Sitemap):
-    changefreq = "monthly"
+    changefreq = "daily"
     priority = 0.5
 
     def items(self):
