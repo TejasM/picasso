@@ -196,7 +196,7 @@
             $main.on('click', '#review-button', function () {
                 {% if user.is_authenticated %}
                     $('#review_form').show();
-                    $("#review-rating").rating({'min': 0, 'max': 5, 'step': 1});
+                    $("#review-rating").rating({'min': 0, 'max': 5, 'step': 0.5});
                 {% else %}
                     $('#main-section').hide();
                     $('#sign-in-lightbox').show();

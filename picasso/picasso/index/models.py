@@ -72,6 +72,7 @@ class Listing(BaseModel):
     created_by = models.ForeignKey(User, null=True, default=None, related_name='creator')
     owner = models.ForeignKey(User, null=True, default=None, related_name='owner')
     unique_url = models.CharField(max_length=1000, default="")
+    last_modified = models.DateTimeField(default=timezone.now())
 
     PLACE_CHOICES = (
         ('Pri', 'Private'),

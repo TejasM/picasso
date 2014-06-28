@@ -1,4 +1,5 @@
 import json
+from time import timezone
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponse
@@ -59,6 +60,7 @@ def edit_listing(request, list_id):
             listing.active = True
         else:
             listing.active = False
+        listing.last_modified = timezone.now()
         listing.save()
         return HttpResponse(json.dumps({'id': listing.id}), content_type='application/json')
     else:
