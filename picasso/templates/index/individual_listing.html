@@ -267,7 +267,7 @@
                 });
             }
             {% if listing.address != None %}
-                var pos = new google.maps.LatLng({{ listing.address.lat }}, -{{ listing.address.lon }});
+                var pos = new google.maps.LatLng({{ listing.address.lat }}, {{ listing.address.lon }});
                 var marker = new google.maps.Marker({
                     map: map,
                     position: pos,
