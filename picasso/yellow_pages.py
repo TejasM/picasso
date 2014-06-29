@@ -41,7 +41,7 @@ for l in listings:
     name = l['properties']['name']
     scraped_url = base_url + str(l['properties']['id']) + '.html'
     try:
-        l = Listing.objects.get(scraped_url=scraped_url)
+        lst = Listing.objects.get(scraped_url=scraped_url)
         page = requests.get(scraped_url).text
         try:
             location = page.split('itemprop="streetAddress">')[1].split('</span>')[0]
@@ -54,8 +54,8 @@ for l in listings:
         lat = l["geometry"]["coordinates"][0]
         lon = l["geometry"]["coordinates"][1]
         point = "POINT(%s %s)" % (lon, lat)
-        l.address.point = point
-        l.save()
+        lst.address.point = point
+        lst.save()
     except Listing.DoesNotExist:
         active = True
         place = 'Sch'
@@ -83,11 +83,11 @@ for l in listings:
         lon = l["geometry"]["coordinates"][1]
         point = "POINT(%s %s)" % (lon, lat)
         add = Address.objects.create(location=location, postal_code=postalCode, city=city, point=point)
-        l = Listing.objects.create(address=add, listing_name=name, scraped_url=scraped_url, description=description,
+        lst = Listing.objects.create(address=add, listing_name=name, scraped_url=scraped_url, description=description,
                                    phone=phone_number)
         for t in tags:
-            l.tags.add(t)
-        l.save()
+            lst.tags.add(t)
+        lst.save()
 
 
 
