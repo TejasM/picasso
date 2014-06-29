@@ -1,5 +1,6 @@
 import json
 import re
+from pygeocoder import Geocoder
 import requests
 # from picasso.index.models import Tag
 from picasso.index.models import Address, Listing, Tag
@@ -39,7 +40,26 @@ for l in listings:
     name = l['name']
     scraped_url = base_url + str(l['id']) + '.html'
     try:
-        Listing.objects.get(scraped_url=scraped_url)
+        l = Listing.objects.get(scraped_url=scraped_url)
+        page = requests.get(scraped_url).text
+        try:
+            location = page.split('itemprop="streetAddress">')[1].split('</span>')[0]
+        except IndexError:
+            location = ''
+        try:
+            postalCode = page.split('itemprop="postalCode">')[1].split('</span>')[0]
+        except IndexError:
+            postalCode = ''
+        results = Geocoder.geocode(str(location + ' Toronto ' + postalCode))
+        try:
+            lat, lon = results[0].coordinates
+            print lat, lon
+        except IndexError:
+            lat, lon = 43.7, 79.4
+        if l.address is not None:
+            l.address.lon = lon
+            l.address.lat = lat
+            l.save()
     except Listing.DoesNotExist:
         active = True
         place = 'Sch'

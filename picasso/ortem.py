@@ -1,4 +1,5 @@
 import json
+from pygeocoder import Geocoder
 from picasso.index.models import Tag, Listing, Address
 import requests
 
@@ -17,7 +18,7 @@ for info, id_member in zip(names, ids):
     temp_url = url + str(id_member)
     # try:
     # Listing.objects.get(listing_name=name, scraped_url=temp_url)
-    #     continue
+    # continue
     # except Listing.DoesNotExist:
     #     pass
     r = requests.get(temp_url)
@@ -47,6 +48,12 @@ for info, id_member in zip(names, ids):
     except:
         pass
     tags = []
+    results = Geocoder.geocode(str(address + ' ' + cities.split(',')[0] + ' ' + postal))
+    try:
+        lat, lon = results[0].coordinates
+        print lat, lon
+    except IndexError:
+        lat, lon = 43.7, 79.4
     for s in skills:
         if Tag.objects.filter(tag_name=s).count() == 0:
             t = Tag.objects.create(tag_name=s)
@@ -64,10 +71,14 @@ for info, id_member in zip(names, ids):
     l.active = active
     if l.address is None:
         try:
-            add = Address.objects.create(city=cities, location=address, postal_code=postal)
+            add = Address.objects.create(city=cities, location=address, postal_code=postal, lat=lat, lon=lon)
             l.address = add
         except Exception as e:
             print postal
+    else:
+        l.address.lon = lon
+        l.address.lat = lat
+        l.address.save()
     for t in tags:
         l.tags.add(t)
     try:

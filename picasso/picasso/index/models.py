@@ -40,6 +40,8 @@ class Address(BaseModel):
     country = models.CharField(default="Canada", max_length=100)
     location = models.CharField(default="", max_length=1000)
     postal_code = models.CharField(default="", max_length=100)
+    lat = models.FloatField(default=43.7)
+    lon = models.FloatField(default=79.4)
 
     def __unicode__(self):
         string = ""
@@ -166,6 +168,7 @@ class Listing(BaseModel):
             else:
                 self.unique_url = re.sub(r'\W+', '-', self.listing_name) + "-" + str(count)
         super(Listing, self).save(**kwargs)
+
 
 admin.site.register(Listing)
 
