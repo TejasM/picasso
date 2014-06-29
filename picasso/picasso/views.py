@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.core.urlresolvers import reverse
+from django.shortcuts import render, redirect
 from picasso.index.models import Listing, Review, Tag
 
 __author__ = 'tmehta'
@@ -22,12 +23,16 @@ def individual_listing(request, list_name):
 
 def category_listings(request, tag_name):
     if request.method == "GET":
-        if tag_name != "unknown":
-            possible_tag = Tag.objects.get(dash_version=tag_name)
-            listings = Listing.objects.filter(tags__in=[possible_tag.id])
-            context = {'listings': listings, 'title': possible_tag.tag_name, 'button_name': 'Read More'}
-            return render(request, 'index/category_listings.html', context)
-        else:
-            listings = Listing.objects.filter(tags=None)
-            context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More'}
-            return render(request, 'index/category_listings.html', context)
+        try:
+            if tag_name != "unknown":
+                possible_tag = Tag.objects.get(dash_version=tag_name)
+                listings = Listing.objects.filter(tags__in=[possible_tag.id])
+                context = {'listings': listings, 'title': possible_tag.tag_name, 'button_name': 'Read More'}
+                return render(request, 'index/category_listings.html', context)
+            else:
+                listings = Listing.objects.filter(tags=None)
+                context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More'}
+                return render(request, 'index/category_listings.html', context)
+        except Tag.DoesNotExist:
+            return redirect(reverse('profile:my_reviews'))
+    return redirect(reverse('profile:my_reviews'))

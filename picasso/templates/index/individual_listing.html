@@ -75,7 +75,7 @@
                 </div>
                 <div class="row" id="review_form" style="display: none">
                     <form class="clearfix mt50" role="form" method="post"
-                          action="{% url 'main:review_listing' listing.id %}"
+                          action="{% url 'review_listing' listing.id %}"
                           id="reviewform" onsubmit="javascript:void(0)">
                         {% csrf_token %}
                         <div class="form-group">
@@ -91,7 +91,7 @@
                         </div>
                         <button type="button" class="btn  btn-lg btn-primary" id="cancel-review-button">Cancel</button>
                         <button type="button" class="btn  btn-lg btn-primary" id="review-submit"
-                                data-url="{% url 'main:review_listing' listing.id %}">
+                                data-url="{% url 'review_listing' listing.id %}">
                             Submit Review
                         </button>
                     </form>

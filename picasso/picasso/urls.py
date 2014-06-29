@@ -10,6 +10,7 @@ from picasso.index.sitemaps import ListingSitemap, StaticViewSitemap
 import views
 from django.http import HttpResponse
 from picasso.index.models import Tag
+from picasso.index.views import *
 from django.views.generic import TemplateView
 
 admin.autodiscover()
@@ -21,7 +22,21 @@ sitemaps = {
 
 urlpatterns = patterns('',
                        url(r'^$', TemplateView.as_view(template_name='base.html'), name='index'),
-                       url(r'^main/', include('picasso.index.urls', namespace='main')),
+
+                       #main
+                       url(r'^logout$', user_logout, name='logout'),
+                       url(r'^about$', about, name='about'),
+                       url(r'^privacy$', privacy, name='privacy'),
+                       url(r'^terms$', terms, name='terms'),
+                       url(r'^content$', content, name='content'),
+                       url(r'^featured$', featured, name='featured'),
+                       url(r'^get-listings$', get_listings, name='get_listings'),
+                       url(r'^get-listing/(?P<list_id>\w+)$', get_listing, name='get_listing'),
+                       url(r'^detail-listing/(?P<list_id>\w+)$', detail_listing, name='detail_listing'),
+                       url(r'^sign-in/$', signin, name='signup'),
+                       url(r'^review-listing/(?P<list_id>\w+)/$', review_listing, name='review_listing'),
+
+                       #Others
                        url(r'^user/', include('picasso.profile.urls', namespace='profile')),
                        url(r'^admin/', include(admin.site.urls)),
                        url(r'^(?P<tag_name>[^/]*)/$', view=views.category_listings),

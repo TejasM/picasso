@@ -91,7 +91,7 @@
 
         $(function () {
             var $main = $('#main-section');
-            $.get('{% url 'main:featured' %}', function (data) {
+            $.get('{% url 'featured' %}', function (data) {
                 $main.append(data['html']);
                 lons = $.parseJSON(data['lons']);
                 lats = $.parseJSON(data['lats']);

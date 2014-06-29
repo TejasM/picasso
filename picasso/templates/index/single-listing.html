@@ -12,7 +12,7 @@
                 <p>{{ l.description|safe|truncatewords:30 }}</p>
 
                 <a href="javascript:void (0);" class="btn btn-primary btn-block to-listing"
-                   data-url="{% url 'main:detail_listing' l.id %}">{{ button_name }}</a>
+                   data-url="{% url 'detail_listing' l.id %}">{{ button_name }}</a>
             </div>
         </div>
     </div>

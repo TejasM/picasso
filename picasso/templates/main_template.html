@@ -85,7 +85,7 @@
                         </li>
                         <li class=""><a href="{% url 'profile:profile' %}">Profile</a>
                         </li>
-                        <li class=""><a href="{% url 'main:logout' %}">Logout</a>
+                        <li class=""><a href="{% url 'logout' %}">Logout</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -148,7 +148,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <form class="clearfix" role="form" method="post" action="{% url 'main:signup' %}"
+                    <form class="clearfix" role="form" method="post" action="{% url 'signup' %}"
                           id="signupform" onsubmit="javascript:void(0)">
                         {% csrf_token %}
                         <input type="hidden" value="sign-up" id="type-signin" name="type">
@@ -192,16 +192,16 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-sm-3">
-                <h4><a href="{% url 'main:about' %}">About Picasso</a></h4>
+                <h4><a href="{% url 'about' %}">About Picasso</a></h4>
             </div>
             <div class="col-md-3 col-sm-3">
-                <h4><a href="{% url 'main:content' %}">Content Guidelines</a></h4>
+                <h4><a href="{% url 'content' %}">Content Guidelines</a></h4>
             </div>
             <div class="col-md-3 col-sm-3">
-                <h4><a href="{% url 'main:privacy' %}">Privacy Policy</a></h4>
+                <h4><a href="{% url 'privacy' %}">Privacy Policy</a></h4>
             </div>
             <div class="col-md-3 col-sm-3">
-                <h4><a href="{% url 'main:terms' %}">Terms of Agreement</a></h4>
+                <h4><a href="{% url 'terms' %}">Terms of Agreement</a></h4>
             </div>
         </div>
     </div>
@@ -248,7 +248,7 @@
         $('#search-submisson').click(function (e) {
             $main.empty();
             $main.append('<div class="container mt50" style="text-align: center; margin-bottom: 50px"><img src="{% static 'images/ui/AjaxLoader.gif' %}" alt="loading"></div>');
-            $.get('{% url 'main:get_listings' %}', {'term': $('#search-text').val() + '----' + $('#location-text').val()}, function (data) {
+            $.get('{% url 'get_listings' %}', {'term': $('#search-text').val() + '----' + $('#location-text').val()}, function (data) {
                 $main.empty();
                 $main.append(data);
             });
@@ -274,7 +274,7 @@
             });
 
             $('#sign-in-button').click(function () {
-                $.post('{% url 'main:signup' %}', {'first-name': $('#first-name').val(),
+                $.post('{% url 'signup' %}', {'first-name': $('#first-name').val(),
                     'last-name': $('#last-name').val(), 'type': $('#type-signin').val(),
                     'email': $('#email').val(), 'password': $('#password').val(),
                     'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
