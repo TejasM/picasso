@@ -38,7 +38,7 @@ def extract_phone(p):
 r = requests.get(url)
 listings = json.loads(r.text)['features']
 for l in listings:
-    name = l['name']
+    name = l['properties']['name']
     scraped_url = base_url + str(l['id']) + '.html'
     try:
         l = Listing.objects.get(scraped_url=scraped_url)
