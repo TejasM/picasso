@@ -66,25 +66,14 @@
                     map.setCenter(initialLocation);
                 });
             }
-            geocoder = new google.maps.Geocoder();
-            var json = locations;
-            for (var i = 0; i < json.length; i++) {
-                if (json[i] != 'None' && json[i]['fields']['postal_code'] != '') {
-                    var address = json[i]['fields']['postal_code'] + ' ' + json[i]['fields']['country'];
-                    geocoder.geocode({ 'address': address}, function (results, status) {
-                        if (status == google.maps.GeocoderStatus.OK) {
-                            var marker = new google.maps.Marker({
-                                map: map,
-                                position: results[0].geometry.location,
-                                title: names[0],
-                                visible: true
-                            });
-                            console.log(results[0]);
-                        } else {
-                            console.log("Geocode was not successful for the following reason: " + status);
-                        }
-                    });
-                }
+
+            for (var i = 0; i < lats.length; i++) {
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: new google.maps.LatLng(lats[i], -lons[i]),
+                    title: names[i],
+                    visible: true
+                });
             }
         }
 
@@ -95,7 +84,8 @@
                     'callback=initialize';
             document.body.appendChild(script);
         }
-        var locations = [];
+        var lats = [];
+        var lons = [];
         var names = [];
         var geocoder = null;
 
@@ -103,7 +93,8 @@
             var $main = $('#main-section');
             $.get('{% url 'main:featured' %}', function (data) {
                 $main.append(data['html']);
-                locations = $.parseJSON(data['addresses']);
+                lons = $.parseJSON(data['lons']);
+                lats = $.parseJSON(data['lats']);
                 names = data['names'];
                 loadScript();
                 loadFilters();

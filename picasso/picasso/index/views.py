@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core import serializers
 from django.db import IntegrityError
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext
@@ -16,15 +17,16 @@ from picasso.index.models import Listing, Review
 
 def featured(request):
     if request.method == "GET":
-        featured_listings = Listing.objects.order_by('?')[:6]
+        featured_listings = Listing.objects.filter(~Q(address=None)).order_by('?')[:6]
         context = {'listings': featured_listings, 'title': 'Feature Listings', 'button_name': 'Read More'}
         context = RequestContext(request, context)
         t = get_template('index/listings.html')
-        addresses = [x.address for x in featured_listings if x.address is not None]
-        names = [x.listing_name for x in featured_listings if x.address is not None]
+        lons = featured_listings.values_list('address__lon', flat=True)
+        lats = featured_listings.values_list('address__lat', flat=True)
+        names = [str(x) for x in featured_listings.values_list('listing_name', flat=True)]
         return HttpResponse(
             json.dumps({'html': t.render(context),
-                        'addresses': serializers.serialize('json', addresses), 'names': names}),
+                        'lons': str(lons), 'lats': str(lats), 'names': names}),
             content_type='application/json')
 
 

@@ -229,12 +229,7 @@
                     $('#reviews-box').show();
                 });
             });
-{#            $("#static-rating").rating({'min': 0, 'max': 5, 'step': 0.5, disabled: true, readonly: true});#}
-{#            {% if listing.get_rating != 'N/A' %}#}
-{#                $("#static-rating").rating('update', {{ listing.get_rating }});#}
-{#            {% else %}#}
-{#                $("#static-rating").rating('update', 0);#}
-{#            {% endif %}#}
+
             loadScript();
         });
         var geocoder = null;
@@ -257,38 +252,29 @@
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function (position) {
                     initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                    map.setCenter(initialLocation);
-                });
-            }
-            geocoder = new google.maps.Geocoder();
-            {% if listing.address != None and listing.address.postal_code != '' %}
-                var address = '{{ listing.address.postal_code }}' + ' ' + '{{ listing.address.country }}';
-                geocoder.geocode({ 'address': address}, function (results, status) {
-                    if (status == google.maps.GeocoderStatus.OK) {
-                        var marker = new google.maps.Marker({
-                            map: map,
-                            position: results[0].geometry.location,
-                            title: '{{ listing.listing_name }}',
-                            visible: true
+                    if (initialLocation != null) {
+                        var request = {
+                            origin: initialLocation,
+                            destination: pos,
+                            travelMode: google.maps.TravelMode.DRIVING
+                        };
+                        directionsService.route(request, function (result, status) {
+                            if (status == google.maps.DirectionsStatus.OK) {
+                                directionsDisplay.setDirections(result);
+                            }
                         });
-                        map.setCenter(results[0].geometry.location);
-                        if (initialLocation != null) {
-                            var request = {
-                                origin: initialLocation,
-                                destination: results[0].geometry.location,
-                                travelMode: google.maps.TravelMode.DRIVING
-                            };
-                            directionsService.route(request, function (result, status) {
-                                if (status == google.maps.DirectionsStatus.OK) {
-                                    directionsDisplay.setDirections(result);
-                                }
-                            });
-                        }
-                        console.log(results[0]);
-                    } else {
-                        console.log("Geocode was not successful for the following reason: " + status);
                     }
                 });
+            }
+            {% if listing.address != None %}
+                var pos = new google.maps.LatLng({{ listing.address.lat }}, -{{ listing.address.lon }});
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: pos,
+                    title: '{{ listing.listing_name }}',
+                    visible: true
+                });
+                map.setCenter(pos);
             {% endif %}
         }
     </script>
