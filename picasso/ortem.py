@@ -1,5 +1,6 @@
 import json
 from pygeocoder import Geocoder
+from pygeolib import GeocoderError
 from picasso.index.models import Tag, Listing, Address
 import requests
 
@@ -48,12 +49,14 @@ for info, id_member in zip(names, ids):
     except:
         pass
     tags = []
-    results = Geocoder.geocode(str(address + ' ' + cities.split(',')[0] + ' ' + postal))
+    results = Geocoder.geocode(str(address + ' ' + postal + ' Canada'))
     try:
         lat, lon = results[0].coordinates
         print lat, lon
     except IndexError:
         lat, lon = 43.7, 79.4
+    except GeocoderError:
+            lat, lon = 43.7, 79.4
     for s in skills:
         if Tag.objects.filter(tag_name=s).count() == 0:
             t = Tag.objects.create(tag_name=s)

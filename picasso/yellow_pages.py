@@ -1,6 +1,7 @@
 import json
 import re
 from pygeocoder import Geocoder
+from pygeolib import GeocoderError
 import requests
 # from picasso.index.models import Tag
 from picasso.index.models import Address, Listing, Tag
@@ -50,11 +51,13 @@ for l in listings:
             postalCode = page.split('itemprop="postalCode">')[1].split('</span>')[0]
         except IndexError:
             postalCode = ''
-        results = Geocoder.geocode(str(location + ' Toronto ' + postalCode))
+        results = Geocoder.geocode(str(location + ' Toronto ' + postalCode + ' Canada'))
         try:
             lat, lon = results[0].coordinates
             print lat, lon
         except IndexError:
+            lat, lon = 43.7, 79.4
+        except GeocoderError:
             lat, lon = 43.7, 79.4
         if l.address is not None:
             l.address.lon = lon
