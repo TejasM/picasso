@@ -42,7 +42,7 @@ def get_listings(request):
             results = Geocoder.geocode(str(location + ' Canada'))
             lat, lon = results[0].coordinates
             current_point = geos.fromstr("POINT(%s %s)" % (lon, lat))
-            listings = listings.address.distance(current_point).order_by('distance')
+            listings = listings.distance(current_point, field_name='address__point').order_by('distance')
             context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More'}
             return render(request, 'index/listings.html', context)
         except Geocoder:

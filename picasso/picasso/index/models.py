@@ -44,8 +44,7 @@ class Address(BaseModel):
     point = gis_models.PointField(u"longitude/latitude",
                                   geography=True, blank=True, null=True)
 
-    gis = gis_models.GeoManager()
-    objects = models.Manager()
+    objects = gis_models.GeoManager()
 
     def __unicode__(self):
         string = ""
@@ -81,6 +80,7 @@ class Listing(BaseModel):
     unique_url = models.CharField(max_length=1000, default="")
     last_modified = models.DateTimeField(default=timezone.now())
 
+    objects = gis_models.GeoManager()
     PLACE_CHOICES = (
         ('Pri', 'Private'),
         ('Sch', 'School'),
