@@ -1,13 +1,14 @@
 import random
+import re
+
 from django.contrib import admin
 from django.contrib.auth.models import User
+from django.contrib.gis import geos
 from django.db import models
 from django.db.models import Avg, permalink
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.utils import timezone
-import re
 import watson
+from django.contrib.gis.db import models as gis_models
 
 
 STATIC_IMAGE_URLS = {
@@ -40,8 +41,11 @@ class Address(BaseModel):
     country = models.CharField(default="Canada", max_length=100)
     location = models.CharField(default="", max_length=1000)
     postal_code = models.CharField(default="", max_length=100)
-    lat = models.FloatField(default=43.7)
-    lon = models.FloatField(default=79.4)
+    point = gis_models.PointField(u"longitude/latitude",
+                                  geography=True, blank=True, null=True)
+
+    gis = gis_models.GeoManager()
+    objects = models.Manager()
 
     def __unicode__(self):
         string = ""

@@ -3,6 +3,7 @@ import json
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.gis import geos
 from django.core import serializers
 from django.db import IntegrityError
 from django.db.models import Q
@@ -10,6 +11,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext
 from django.template.loader import get_template
+from pygeocoder import Geocoder
 import watson
 
 from picasso.index.models import Listing, Review
@@ -17,12 +19,12 @@ from picasso.index.models import Listing, Review
 
 def featured(request):
     if request.method == "GET":
-        featured_listings = Listing.objects.filter(~Q(address=None)).order_by('?')[:6]
+        featured_listings = Listing.objects.filter(~Q(address=None)).filter(~Q(address__point=None)).order_by('?')[:6]
         context = {'listings': featured_listings, 'title': 'Feature Listings', 'button_name': 'Read More'}
         context = RequestContext(request, context)
         t = get_template('index/listings.html')
-        lons = featured_listings.values_list('address__lon', flat=True)
-        lats = featured_listings.values_list('address__lat', flat=True)
+        lons = [x.address.point.x for x in featured_listings]
+        lats = [x.address.point.y for x in featured_listings]
         names = [str(x) for x in featured_listings.values_list('listing_name', flat=True)]
         return HttpResponse(
             json.dumps({'html': t.render(context),
@@ -33,9 +35,19 @@ def featured(request):
 def get_listings(request):
     if request.method == "GET":
         search = request.GET.get('term', '')
+        location = search.split('----')[1]
+        search = search.split('----')[0]
         listings = watson.filter(Listing, search)
-        context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More'}
-        return render(request, 'index/listings.html', context)
+        try:
+            results = Geocoder.geocode(str(location + ' Canada'))
+            lat, lon = results[0].coordinates
+            current_point = geos.fromstr("POINT(%s %s)" % (lon, lat))
+            listings = listings.address.distance(current_point).order_by('distance')
+            context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More'}
+            return render(request, 'index/listings.html', context)
+        except Geocoder:
+            context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More'}
+            return render(request, 'index/listings.html', context)
 
 
 def detail_listing(request, list_id):

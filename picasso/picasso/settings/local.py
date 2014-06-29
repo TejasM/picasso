@@ -34,8 +34,9 @@ DATABASES = {
         'PORT': '',
     }
 }
-########## END DATABASE CONFIGURATION
 
+########## END DATABASE CONFIGURATION
+DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.spatialite'
 
 ########## CACHE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#caches
