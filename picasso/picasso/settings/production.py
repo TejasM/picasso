@@ -65,7 +65,7 @@ DATABASES = {
     }
 }
 ########## END DATABASE CONFIGURATION
-
+DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
 ########## CACHE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#caches

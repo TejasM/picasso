@@ -246,7 +246,7 @@
     $(function () {
         var $main = $('#main-section');
         $('#search-submisson').click(function (e) {
-            $.get('{% url 'main:get_listings' %}', {'term': $('#search-text').val() + ' ' + $('#location-text').val()}, function (data) {
+            $.get('{% url 'main:get_listings' %}', {'term': $('#search-text').val() + '----' + $('#location-text').val()}, function (data) {
                 $main.empty();
                 $main.append(data);
             });

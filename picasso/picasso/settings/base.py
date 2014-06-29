@@ -184,6 +184,7 @@ DJANGO_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
     'django.contrib.sites',
+    'django.contrib.gis',
 
     # Useful template tags:
     # 'django.contrib.humanize',

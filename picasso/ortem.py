@@ -1,4 +1,5 @@
 import json
+from django.contrib.gis import geos
 from pygeocoder import Geocoder
 from pygeolib import GeocoderError
 from picasso.index.models import Tag, Listing, Address
@@ -21,7 +22,7 @@ for info, id_member in zip(names, ids):
     # Listing.objects.get(listing_name=name, scraped_url=temp_url)
     # continue
     # except Listing.DoesNotExist:
-    #     pass
+    # pass
     r = requests.get(temp_url)
     postal = ""
     address = ""
@@ -56,7 +57,7 @@ for info, id_member in zip(names, ids):
     except IndexError:
         lat, lon = 43.7, 79.4
     except GeocoderError:
-            lat, lon = 43.7, 79.4
+        lat, lon = 43.7, 79.4
     for s in skills:
         if Tag.objects.filter(tag_name=s).count() == 0:
             t = Tag.objects.create(tag_name=s)
@@ -74,13 +75,15 @@ for info, id_member in zip(names, ids):
     l.active = active
     if l.address is None:
         try:
-            add = Address.objects.create(city=cities, location=address, postal_code=postal, lat=lat, lon=lon)
+            point = "POINT(%s %s)" % (lon, lat)
+            add = Address.objects.create(city=cities, location=address, postal_code=postal,
+                                         point=geos.fromstr(point))
             l.address = add
         except Exception as e:
             print postal
     else:
-        l.address.lon = lon
-        l.address.lat = lat
+        point = "POINT(%s %s)" % (lon, lat)
+        l.address.point = point
         l.address.save()
     for t in tags:
         l.tags.add(t)

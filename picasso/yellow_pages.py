@@ -59,10 +59,9 @@ for l in listings:
             lat, lon = 43.7, 79.4
         except GeocoderError:
             lat, lon = 43.7, 79.4
-        if l.address is not None:
-            l.address.lon = lon
-            l.address.lat = lat
-            l.save()
+        point = "POINT(%s %s)" % (lon, lat)
+        l.address.point = point
+        l.save()
     except Listing.DoesNotExist:
         active = True
         place = 'Sch'
@@ -86,7 +85,16 @@ for l in listings:
                 '<span', '').replace('</span>', '')
         except IndexError:
             description = ''
-        add = Address.objects.create(location=location, postal_code=postalCode, city=city)
+        try:
+            results = Geocoder.geocode(str(location + ' Toronto ' + postalCode + ' Canada'))
+            lat, lon = results[0].coordinates
+            print lat, lon
+        except IndexError:
+            lat, lon = 43.7, 79.4
+        except GeocoderError:
+            lat, lon = 43.7, 79.4
+        point = "POINT(%s %s)" % (lon, lat)
+        add = Address.objects.create(location=location, postal_code=postalCode, city=city, point=point)
         l = Listing.objects.create(address=add, listing_name=name, scraped_url=scraped_url, description=description,
                                    phone=phone_number)
         for t in tags:
