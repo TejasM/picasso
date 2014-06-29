@@ -51,8 +51,8 @@ for l in listings:
             postalCode = page.split('itemprop="postalCode">')[1].split('</span>')[0]
         except IndexError:
             postalCode = ''
-        results = Geocoder.geocode(str(location + ' Toronto ' + postalCode + ' Canada'))
         try:
+            results = Geocoder.geocode(str(location + ' Toronto ' + postalCode + ' Canada'))
             lat, lon = results[0].coordinates
             print lat, lon
         except IndexError:

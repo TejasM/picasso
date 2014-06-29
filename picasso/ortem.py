@@ -49,8 +49,8 @@ for info, id_member in zip(names, ids):
     except:
         pass
     tags = []
-    results = Geocoder.geocode(str(address + ' ' + postal + ' Canada'))
     try:
+        results = Geocoder.geocode(str(address + ' ' + postal + ' Canada'))
         lat, lon = results[0].coordinates
         print lat, lon
     except IndexError:
