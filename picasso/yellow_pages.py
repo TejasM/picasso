@@ -39,7 +39,7 @@ r = requests.get(url)
 listings = json.loads(r.text)['features']
 for l in listings:
     name = l['properties']['name']
-    scraped_url = base_url + str(l['id']) + '.html'
+    scraped_url = base_url + str(l['properties']['id']) + '.html'
     try:
         l = Listing.objects.get(scraped_url=scraped_url)
         page = requests.get(scraped_url).text
