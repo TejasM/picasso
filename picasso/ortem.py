@@ -89,7 +89,8 @@ for info, id_member in zip(names, ids):
         l.tags.add(t)
     try:
         l.save()
-    except:
+    except Exception as e:
         print phone
+        print e
 
 
