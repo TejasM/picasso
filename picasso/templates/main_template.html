@@ -246,6 +246,8 @@
     $(function () {
         var $main = $('#main-section');
         $('#search-submisson').click(function (e) {
+            $main.empty();
+            $main.append('<div class="container mt50" style="text-align: center; margin-bottom: 50px"><img src="{% static 'images/ui/AjaxLoader.gif' %}" alt="loading"></div>');
             $.get('{% url 'main:get_listings' %}', {'term': $('#search-text').val() + '----' + $('#location-text').val()}, function (data) {
                 $main.empty();
                 $main.append(data);

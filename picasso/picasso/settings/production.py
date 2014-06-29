@@ -11,9 +11,6 @@ from .base import *
 from django.core.exceptions import ImproperlyConfigured
 
 
-DEBUG = True
-
-
 def get_env_setting(setting):
     """ Get the environment setting or return exception """
     try:

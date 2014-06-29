@@ -99,14 +99,6 @@
                 loadScript();
                 loadFilters();
             });
-            $('#search-submisson').click(function (e) {
-                $.get('{% url 'main:get_listings' %}', {'term': $('#search-text').val() + ' ' + $('#location-text').val()}, function (data) {
-                    $('.revolution-slider').hide();
-                    $main.empty();
-                    $main.append(data);
-                });
-                return false;
-            });
 
             $main.on('click', '.detail-back', function () {
                 $('.revolution-slider').hide();
