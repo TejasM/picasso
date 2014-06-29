@@ -48,7 +48,6 @@ urlpatterns = patterns('',
                                                   mimetype="text/plain")),
                        url(r'BingSiteAuth\.xml', TemplateView.as_view(template_name='BingSiteAuth.xml')),
                        (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
-                       (r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', mimetype='text/plain')),
 
                        # Examples:
                        # url(r'^$', 'picasso.views.home', name='home'),
