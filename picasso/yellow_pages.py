@@ -36,7 +36,7 @@ def extract_phone(p):
 
 
 r = requests.get(url)
-listings = json.loads(r.text)['listings']
+listings = json.loads(r.text)['features']
 for l in listings:
     name = l['name']
     scraped_url = base_url + str(l['id']) + '.html'
@@ -51,14 +51,8 @@ for l in listings:
             postalCode = page.split('itemprop="postalCode">')[1].split('</span>')[0]
         except IndexError:
             postalCode = ''
-        try:
-            results = Geocoder.geocode(str(location + ' Toronto ' + postalCode + ' Canada'))
-            lat, lon = results[0].coordinates
-            print lat, lon
-        except IndexError:
-            lat, lon = 43.7, 79.4
-        except GeocoderError:
-            lat, lon = 43.7, 79.4
+        lat = l["geometry"]["coordinates"][0]
+        lon = l["geometry"]["coordinates"][1]
         point = "POINT(%s %s)" % (lon, lat)
         l.address.point = point
         l.save()
@@ -85,14 +79,8 @@ for l in listings:
                 '<span', '').replace('</span>', '')
         except IndexError:
             description = ''
-        try:
-            results = Geocoder.geocode(str(location + ' Toronto ' + postalCode + ' Canada'))
-            lat, lon = results[0].coordinates
-            print lat, lon
-        except IndexError:
-            lat, lon = 43.7, 79.4
-        except GeocoderError:
-            lat, lon = 43.7, 79.4
+        lat = l["geometry"]["coordinates"][0]
+        lon = l["geometry"]["coordinates"][1]
         point = "POINT(%s %s)" % (lon, lat)
         add = Address.objects.create(location=location, postal_code=postalCode, city=city, point=point)
         l = Listing.objects.create(address=add, listing_name=name, scraped_url=scraped_url, description=description,
