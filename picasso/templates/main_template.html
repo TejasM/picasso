@@ -351,11 +351,11 @@
                 'email': $('#contact-email').val(), 'comment': $('#contact-comments').val()
             }, function (res) {
                 $contact_div.empty();
-                $contact_div.append('<div class="mt20" style="text-align=center"><p>Thank you for your message! We will try and get back to you as soon as possible.</p></div>')
+                $contact_div.append('<div class="container mt20" style="text-align: center"><h2>Thank you for your message! We will try and get back to you as soon as possible.</h2></div>');
                 setTimeout(function () {
                     $contact_div.hide();
                     $main.show();
-                }, 1000);
+                }, 5000);
             });
         });
     });
