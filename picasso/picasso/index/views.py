@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.gis import geos
 from django.core import serializers
+from django.core.mail import EmailMessage
 from django.db import IntegrityError
 from django.db.models import Q
 from django.http import HttpResponse
@@ -119,6 +120,20 @@ def review_listing(request, list_id):
         r = Review.objects.create(comment=comment, rating=rating, user=request.user, listing=listing)
         context = {'review': r, 'count': listing.review_set.count()}
         return render(request, 'index/review.html', context)
+
+
+def contact(request):
+    if request.method == "POST":
+        message = request.POST.get('comment', '')
+        email = request.POST.get('email', '')
+        if email != '' and message != '':
+            if len(message) > 10:
+                subject = message[:10]
+            else:
+                subject = message
+            msg = EmailMessage(subject, email + '\n' + message, 'contact@findpicasso.com', ['contact@findpicasso.com'])
+            msg.send()
+        return HttpResponse(json.dumps({}), content_type='application/json')
 
 
 @login_required()

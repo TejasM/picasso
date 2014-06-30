@@ -29,10 +29,12 @@ TEMPLATE_DEBUG = DEBUG
 # ######### END DEBUG CONFIGURATION
 
 
-########## MANAGER CONFIGURATION
+# ######### MANAGER CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
-    ('Your Name', 'your_email@example.com'),
+    ('Tejas Mehta', 'tejasmehta@gmail.com'),
+    ('Cynthia Liao', 'cyliao.hba2014@gmail.com'),
+    ('Cheng Zhao', 'chengzhao41@gmail.com'),
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers

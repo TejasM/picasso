@@ -189,6 +189,32 @@
         </div>
     </div>
 {% endif %}
+<div id="contact-us-div" style="display: none">
+    <section id="contact-form" class="mt50">
+        <div class="col-md-8">
+            <h2 class="lined-heading"><span>Send us a message</span></h2>
+
+            <div id="message"></div>
+            <!-- Error message display -->
+            <form class="clearfix mt50" role="form" method="post" action="#" name="contactform" onsubmit="return false;"
+                  id="contactform">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="contact-email" accesskey="E"><span class="required">*</span> E-mail</label>
+                            <input name="email" type="text" id="contact-email" value="" class="form-control"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="contact-comments" accesskey="C"><span class="required">*</span> Your message</label>
+                    <textarea name="comments" rows="9" id="contact-comments" class="form-control"></textarea>
+                </div>
+                <button type="button" class="btn  btn-lg btn-primary" id="contact-us-submit">Send message</button>
+            </form>
+        </div>
+    </section>
+</div>
 <!-- Footer -->
 <footer style="margin-top: 20px;">
     <div class="container">
@@ -213,7 +239,7 @@
                 <div class="col-xs-6"> &copy; 2014 Picasso All Rights Reserved</div>
                 <div class="col-xs-6 text-right">
                     <ul>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="#contact-us-div" id="contact-us-click">Contact</a></li>
                     </ul>
                 </div>
             </div>
@@ -312,6 +338,23 @@
                     displayKey: 'value',
                     source: tags_blood.ttAdapter()
                 });
+        var $contact_div = $('#contact-us-div');
+        $('#contact-us-click').click(function () {
+            $main.hide();
+            $contact_div.show();
+        });
+        $('#contact-us-submit').click(function () {
+            $.post('{% url 'contact' %}', {'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val(),
+                'email': $('#contact-email').val(), 'comment': $('#contact-comments').val()
+            }, function (res) {
+                $contact_div.empty();
+                $contact_div.append('<div class="mt20" style="text-align=center"><p>Thank you for your message! We will try and get back to you as soon as possible.</p></div>')
+                setTimeout(function () {
+                    $contact_div.hide();
+                    $main.show();
+                }, 1000);
+            });
+        });
     });
 </script>
 {% block scripts %}

@@ -21,7 +21,7 @@ def get_env_setting(setting):
 
 # ######### HOST CONFIGURATION
 # See: https://docs.djangoproject.com/en/1.5/releases/1.5/#allowed-hosts-required-in-production
-ALLOWED_HOSTS = ['findpicasso.com', 'www.findpicasso.com']
+ALLOWED_HOSTS = ['findpicasso.com', 'www.findpicasso.com', '127.0.0.1', 'localhost']
 # ######### END HOST CONFIGURATION
 
 # ######### EMAIL CONFIGURATION
@@ -32,10 +32,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = environ.get('EMAIL_HOST', 'smtp.gmail.com')
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#email-host-password
-EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD', 'Next36Picasso')
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#email-host-user
-EMAIL_HOST_USER = environ.get('EMAIL_HOST_USER', 'your_email@example.com')
+EMAIL_HOST_USER = environ.get('EMAIL_HOST_USER', 'contact@findpicasso.com')
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#email-port
 EMAIL_PORT = environ.get('EMAIL_PORT', 587)
@@ -64,7 +64,7 @@ DATABASES = {
 # ######### END DATABASE CONFIGURATION
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
-########## CACHE CONFIGURATION
+# ######### CACHE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#caches
 CACHES = {
     'default': {
