@@ -175,6 +175,7 @@ class Listing(BaseModel):
 
 
 admin.site.register(Listing)
+admin.site.register(Tag)
 
 
 class Review(BaseModel):
