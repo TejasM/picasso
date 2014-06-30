@@ -35,6 +35,9 @@ class Tag(BaseModel):
         self.dash_version = re.sub(r'\W+', '-', self.tag_name).lower()
         super(Tag, self).save(**kwargs)
 
+    def __unicode__(self):
+        return self.tag_name
+
 
 class Address(BaseModel):
     city = models.CharField(default="Toronto", max_length=1000)
