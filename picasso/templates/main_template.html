@@ -3,10 +3,12 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Picasso | Personal Teachers Near You</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description"
-          content="Reviews and Recommendations of Top Teachers, Tutors, Trainers, and Coaches near You.">
+    {% block seo %}
+        <title>Picasso</title>
+        <meta name="description"
+              content="Reviews and recommendations of top teachers, tutors, trainers, and coaches near you. Looking for a music or art teacher? A language tutor? A fitness coach? Picasso has it all and more.">
+    {% endblock %}
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
 
     <!-- Stylesheets -->

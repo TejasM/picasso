@@ -1,6 +1,11 @@
 {% extends 'main_template.html' %}
 {% load staticfiles %}
 {% load mathfilters %}
+{% block seo %}
+        <title>{{ listing.listing_name }} - {{ listing.get_string_tags }} | Picasso</title>
+        <meta name="description"
+              content="Teacher's Name: {{ listing.listing_name }}. Subjects: {{ listing.get_string_tags }}. Location: {{ listing.address|safe }}">
+{% endblock %}
 %{% block content %}
     <div id="main-section">
         <div class="container mt50" id="listing-detail">
