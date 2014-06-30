@@ -107,17 +107,19 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <i class="fa fa-3x fa-search" style="position: absolute; top: 10px; left: 25px"></i>
+                                <i class="fa fa-3x fa-search"
+                                   style="position: absolute; top: 10px; left: 25px; z-index: 1000;"></i>
                                 <input type="text" name="search" id="search-text"
                                        value="What are you looking for?" onblur="if (this.value == '')
                             this.value = this.defaultValue" onfocus="if (this.value == this.defaultValue)
-                            this.value = ''" class="form-control"
+                            this.value = ''" class="form-control autocomplete"
                                        style="font-size: 36px; height: 100%; padding-left: 55px">
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <i class="fa fa-3x fa-map-marker" style="position: absolute; top: 15px; left: 25px"></i>
+                                <i class="fa fa-3x fa-map-marker"
+                                   style="position: absolute; top: 15px; left: 25px; z-index: 1000;"></i>
                                 <input type="text" name="location" id="location-text" value="Toronto" onblur="if (this.value == '')
                             this.value = this.defaultValue" onfocus="if (this.value == this.defaultValue)
                             this.value = ''" class="form-control" style="font-size: 36px; height: 100%;
@@ -236,6 +238,8 @@
 <script type="text/javascript" src="{% static 'js/custom.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/star-rating.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/bootstrap-switch.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/typehead.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bloodhound.js' %}"></script>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -286,6 +290,28 @@
                 });
             });
         {% endif %}
+        var tags = {{ tags|safe }};
+        // constructs the suggestion engine
+        var tags_blood = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            // `states` is an array of state names defined in "The Basics"
+            local: $.map(tags, function (state) {
+                return { value: state };
+            })
+        });
+        tags_blood.initialize();
+
+        $('.autocomplete').typeahead({
+                    hint: true,
+                    highlight: true,
+                    minLength: 1
+                },
+                {
+                    name: 'tags',
+                    displayKey: 'value',
+                    source: tags_blood.ttAdapter()
+                });
     });
 </script>
 {% block scripts %}

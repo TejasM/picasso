@@ -26,7 +26,7 @@ DEBUG = False
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
 TEMPLATE_DEBUG = DEBUG
-########## END DEBUG CONFIGURATION
+# ######### END DEBUG CONFIGURATION
 
 
 ########## MANAGER CONFIGURATION
@@ -138,6 +138,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.request',
+    'picasso.context_processor.get_current_tags',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
