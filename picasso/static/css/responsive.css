@@ -635,3 +635,10 @@
 .tt-suggestion p {
     margin: 0;
 }
+
+@media (min-width: 992px) {
+    .revolution-slider + #reservation-form {
+        margin-top: -350px;
+        padding-bottom: 150px;
+    }
+}
