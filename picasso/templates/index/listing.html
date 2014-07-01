@@ -7,12 +7,22 @@
             <h2 class="lined-heading"><span>{{ listing.listing_name }}</span></h2>
         </div>
         <section class="standard-slider room-slider">
-            <div class="col-sm-12 col-md-8 col-lg-8">
-                <div class="item"><a href="{% static 'images/rooms/slider/750x481.gif' %}"><img
-                        src="{% static 'images/rooms/slider/750x481.gif' %}" alt="Image 2" class="img-responsive"></a>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="item"><img
+                                src="{{ listing.get_photo_url }}" alt="{{ listing.get_string_tags }}"
+                                class="img-responsive">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt20">
+                    <div class="col-sm-12">
+                        <div id="map-canvas" style="width: 100%; min-height: 300px"></div>
+                    </div>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-4 col-lg-4">
+            <div class="col-sm-12 col-md-6 col-lg-6">
                 <div class="tab-pane fade in active" id="overview">
                     <div class="tp-leftarrow tparrows default detail-back"></div>
                     <h3>
@@ -21,19 +31,44 @@
 
                     <p><strong>Subjects: </strong>{{ listing.get_string_tags }}</p>
 
+                    <p><strong>Teaches: </strong>{{ listing.level_of_expertise|safe }} level Students</p>
+
+                    {% if listing.price_min != 0 and lisiting.price_max != 0 %}
+                        <p><strong>Price Range per Lesson: </strong>${{ listing.price_min|floatformat }}
+                            - {{ listing.price_max }}</p>
+                    {% else %}
+                        <p><strong>Price Range: </strong>Unknown</p>
+                    {% endif %}
+
                     <p>{{ listing.description|safe }}</p>
 
                     <p><strong>Address: </strong>{{ listing.address|safe }}</p>
 
-                    {% if listing.active %}<p><strong>Active: </strong><i class="fa fa-2x fa-check-circle"></i>
+                    {% if listing.active %}<p>
+                        <strong>Currently Accepting Students: </strong><i class="fa fa-2x fa-check-circle"></i>
                         </p>{% endif %}
 
                     {% if listing.phone != "" %}<p><strong>Phone:</strong>{{ listing.phone }}</p>{% endif %}
-                    <p><strong>Rating:</strong> {{ listing.get_rating }}</p>
+                    <p><strong>Rating:</strong>{{ listing.get_rating }}</p>
 
                     {% if listing.owner == user or listing.created_by == user %}
                         <button type="button" class="btn btn-primary btn-block" id="edit-listing-button"
                                 data-url="{% url 'profile:edit_listing' listing.id %}">Edit
+                        </button>
+                    {% endif %}
+
+                    {% if user.is_authenticated %}
+                        {% if listing not in user.profile.teachers.all %}
+                            <button type="button" class="btn btn-primary btn-block mt20" id="add-teacher">Add to
+                                Favourites
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-primary btn-block mt20" disabled>Favourite
+                            </button>
+                        {% endif %}
+
+                        <button type="button" class="mt20 btn btn-primary btn-block" id="review-button">Write a
+                            Review
                         </button>
                     {% endif %}
                 </div>
@@ -41,13 +76,9 @@
         </section>
     </div>
     {% if not reviewed and listing.owner != user %}
-        <div class="row mt20">
-            <div class="col-sm-12">
-                <button type="button" class="btn btn-primary btn-block" id="review-button">Review</button>
-            </div>
-        </div>
-        <div class="row" id="review_form" style="display: none">
-            <form class="clearfix mt50" role="form" method="post" action="{% url 'review_listing' listing.id %}"
+        <div class="row mt20" id="review_form" style="display: none">
+            <form class="clearfix mt50" role="form" method="post"
+                  action="{% url 'review_listing' listing.id %}"
                   id="reviewform" onsubmit="javascript:void(0)">
                 {% csrf_token %}
                 <div class="form-group">
@@ -102,4 +133,4 @@
             </div>
         </section>
     </div>
-</div>
+</div>l

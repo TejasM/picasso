@@ -37,7 +37,10 @@ def featured(request):
 def get_listings(request):
     if request.method == "GET":
         search = request.GET.get('term', '')
-        location = search.split('----')[1]
+        try:
+            location = search.split('----')[1]
+        except IndexError:
+            location = 'Toronto'
         search = search.split('----')[0]
         listings = watson.filter(Listing, search).filter(~Q(address=None)).filter(~Q(address__point=None))
         try:
@@ -117,6 +120,7 @@ def signin(request):
                                         content_type='application/json')
             return HttpResponse(json.dumps({'success': 0, 'error': 'Incorrect Username/Password'}),
                                 content_type='application/json')
+    return render(request, 'base.html')
 
 
 @login_required

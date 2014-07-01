@@ -20,7 +20,31 @@
                         </ul>
                     {% else %}
                         <h3 style="padding: 10px">Filters</h3>
-                        <p>Coming Soon!</p>
+                        <h4 style="padding: 10px">Level of Expertise</h4>
+                        <input type="checkbox" checked>
+                        <label>Beginner</label>
+
+                        <input type="checkbox" checked>
+                        <label>Intermediate</label>
+
+                        <input type="checkbox" checked>
+                        <label>Advanced</label>
+
+                        <h4 style="padding: 10px">Rating</h4>
+                        <input type="radio" checked>
+                        <label>All</label>
+
+                        <input type="radio">
+                        <label>&#9733; +</label>
+
+                        <input type="radio">
+                        <label>&#9733;&#9733; +</label>
+
+                        <input type="radio">
+                        <label>&#9733;&#9733;&#9733; +</label>
+
+                        <input type="radio">
+                        <label>&#9733;&#9733;&#9733;&#9733; +</label>
                     {% endif %}
                 </div>
             </div>
@@ -28,7 +52,7 @@
             {% if not reviews %}
                 <div class="col-sm-5">
                     {% if listings %}
-                        <div class="isotope gallery">
+                        <div class="isotope gallery list">
                             {% for l in listings %}
                                 <div class="row row-lg-height isotope-item {{ l.get_string_tags_no_comma }}"
                                      style="width: 100%;">
@@ -42,7 +66,19 @@
                                     </div>
                                     <div class="col-sm-12 col-lg-6">
                                         <a href="{{ l.get_unique_url }}" style="color: #333">
-                                            <div class="price"><strong>Rating: {{ l.get_rating }}</strong></div>
+                                            <div class="price"><strong>Rating: <span
+                                                    class="review">{{ l.get_rating }}</span></strong></div>
+
+                                            <p><strong>Teaches: </strong><span
+                                                    class="teaches">{{ l.level_of_expertise }}</span> level of students
+                                            </p>
+                                            {% if l.price_min == 0 and l.price_max == 0 %}
+                                                <p><strong>Price per lesson: </strong><span
+                                                        class="price">Unspecified</span></p>
+                                            {% else %}
+                                                <p><strong>Price per lesson: </strong><span
+                                                        class="price">${{ l.price_min }} - {{ l.price_max }}</span></p>
+                                            {% endif %}
 
                                             <p><strong>Address: </strong>{{ l.address.get_obscure|safe }}</p>
 

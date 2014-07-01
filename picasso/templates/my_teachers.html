@@ -52,7 +52,7 @@
                             'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
                         function (data) {
                             $('#create-listing-div').remove();
-                            $.get('/main/get-listing/' + data['id'], function (data2) {
+                            $.get('/get-listing/' + data['id'], function (data2) {
                                 $my_listings.find('.rooms').append(data2);
                             });
                             $my_listings.show();
@@ -80,7 +80,7 @@
                         function (data) {
                             $('#edit-listing-div').remove();
                             $my_listings.find('#listing-' + data['id']).remove();
-                            $.get('/main/get-listing/' + data['id'], function (data2) {
+                            $.get('/get-listing/' + data['id'], function (data2) {
                                 $my_listings.find('.rooms .row').append(data2);
                             });
                             $my_listings.show();

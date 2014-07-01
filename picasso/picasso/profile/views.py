@@ -1,9 +1,9 @@
 import json
-from time import timezone
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from picasso.index.models import Listing, Address
@@ -20,14 +20,22 @@ def add_listing(request):
         country = request.POST['country']
         phone = request.POST['phone']
         owner = request.POST['owner']
+        l_o_e = request.POST.getlist('level_of_expertise')
+        if not l_o_e:
+            l_o_e = "All"
+        else:
+            l_o_e = ", ".join(l_o_e)
+        price_min = request.POST['price_min']
+        price_max = request.POST['price_max']
         active = True if request.POST['active'] == "true" else False
         address = Address.objects.create(city=city, country=country, postal_code=postal, location=address)
         if owner == "true":
-            listing = Listing.objects.create(listing_name=listing_name, description=description, address=address,
-                                             phone=phone, active=active, owner=request.user, created_by=request.user)
+            owner = request.user
         else:
-            listing = Listing.objects.create(listing_name=listing_name, description=description, address=address,
-                                             phone=phone, active=active, created_by=request.user)
+            owner = None
+        listing = Listing.objects.create(listing_name=listing_name, description=description, address=address,
+                                         phone=phone, active=active, owner=owner, created_by=request.user,
+                                         level_of_expertise=l_o_e, price_min=price_min, price_max=price_max)
         return HttpResponse(json.dumps({'id': listing.id}), content_type='application/json')
     else:
         return render(request, 'profile/create_listing.html')
@@ -54,6 +62,13 @@ def edit_listing(request, list_id):
         listing.address.country = request.POST['country']
         listing.address.save()
         listing.phone = request.POST['phone']
+        l_o_e = request.POST.getlist('level_of_expertise')
+        if l_o_e:
+            listing.level_of_expertise = ", ".join(l_o_e)
+        else:
+            listing.level_of_expertise = "All"
+        listing.price_min = request.POST['price_min']
+        listing.price_max = request.POST['price_max']
         if request.POST['owner'] == "true":
             listing.owner = request.user
         if request.POST['active'] == "true":
