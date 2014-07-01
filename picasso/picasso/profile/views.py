@@ -87,6 +87,7 @@ def my_teachers(request):
                   {'listings': listings, 'title': 'Favourite Teachers', 'button_name': 'View'})
 
 
+@login_required
 def my_reviews(request):
     reviews = request.user.review_set.all()
     return render(request, 'my_reviews.html',
