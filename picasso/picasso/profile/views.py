@@ -77,7 +77,7 @@ def my_listings(request):
 
 @login_required
 def profile(request):
-    return None
+    return render(request, 'profile.html')
 
 
 @login_required
