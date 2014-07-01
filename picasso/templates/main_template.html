@@ -429,6 +429,59 @@
                 }, 5000);
             });
         });
+
+        $main.on('ifToggled', '.loe-check', function () {
+            var $checked = $('.loe-check:checked');
+            var $items = $('.isotope-item');
+            if ($checked.length == 0) {
+                $('.loe-check').iCheck('check');
+                $checked = $('.loe-check:checked');
+            }
+            if ($checked.length == 3) {
+                $items.show();
+            } else {
+                $.each($items, function (index) {
+                    var $teach = $(this).find('.teaches');
+                    var t = $teach.text();
+                    if (t == "All") {
+                        $(this).show();
+                    } else {
+                        var done = false;
+                        for (var i = 0; i < $checked.length; i++) {
+                            if (t.contains($checked[i].val())) {
+                                $(this).show();
+                                done = true;
+                                break;
+                            }
+                        }
+                        if (!done) {
+                            $(this).hide();
+                        }
+                    }
+                });
+            }
+        });
+        $main.on('ifChecked', 'input[name="review-radio"]', function () {
+            var val = $(this).val();
+            var $items = $('.isotope-item');
+            if (val == -1) {
+                $items.show();
+            } else {
+                $.each($items, function (index) {
+                    var $r = $(this).find('.review');
+                    var r = parseInt($r.text());
+                    if (!isNaN(r)) {
+                        if (r < val) {
+                            $(this).hide();
+                        } else {
+                            $(this).show();
+                        }
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+        });
     });
 </script>
 {% block scripts %}
