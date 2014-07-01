@@ -26,35 +26,41 @@
             <!-- Room -->
             {% if not reviews %}
                 <div class="col-sm-5">
-                    <div class="isotope gallery">
-                        {% for l in listings %}
-                            <div class="row row-lg-height isotope-item {{ l.get_string_tags_no_comma }}"
-                                 style="width: 100%;">
-                                <div class="col-sm-12 col-lg-6 col-middle">
-                                    <img src="{{ l.get_photo_url }}" alt="{{ l.listing_name }}" width="140px"
-                                         height="100"/>
+                    {% if listings %}
+                        <div class="isotope gallery">
+                            {% for l in listings %}
+                                <div class="row row-lg-height isotope-item {{ l.get_string_tags_no_comma }}"
+                                     style="width: 100%;">
+                                    <div class="col-sm-12 col-lg-6 col-middle">
+                                        <img src="{{ l.get_photo_url }}" alt="{{ l.listing_name }}" width="140px"
+                                             height="100"/>
 
-                                    <a href="{{ l.get_unique_url }}"><h4 style="font-size: 1.3em">
-                                        <strong>{{ forloop.counter }}. {{ l.listing_name }}</strong>
-                                        <br><span>{{ l.get_string_tags }}</span></h4></a>
+                                        <a href="{{ l.get_unique_url }}"><h4 style="font-size: 1.3em">
+                                            <strong>{{ forloop.counter }}. {{ l.listing_name }}</strong>
+                                            <br><span>{{ l.get_string_tags }}</span></h4></a>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-6">
+                                        <a href="{{ l.get_unique_url }}" style="color: #333">
+                                            <div class="price"><strong>Rating: {{ l.get_rating }}</strong></div>
+
+                                            <p><strong>Address: </strong>{{ l.address.get_obscure|safe }}</p>
+
+                                            {% if l.distance %}
+                                                <p><strong>Distance: </strong>{{ l.distance }}</p>
+                                            {% endif %}
+                                            {% if l.description != '' %}
+                                                <p><strong>Description: </strong>{{ l.description|truncatewords:20 }}
+                                                </p>
+                                            {% endif %}
+                                        </a>
+                                    </div>
                                 </div>
-                                <div class="col-sm-12 col-lg-6">
-                                    <a href="{{ l.get_unique_url }}" style="color: #333">
-                                        <div class="price"><strong>Rating: {{ l.get_rating }}</strong></div>
-
-                                        <p><strong>Address: </strong>{{ l.address.get_obscure|safe }}</p>
-
-                                        {% if l.distance %}
-                                            <p><strong>Distance: </strong>{{ l.distance }}</p>
-                                        {% endif %}
-                                        {% if l.description != '' %}
-                                            <p><strong>Description: </strong>{{ l.description|truncatewords:20 }}</p>
-                                        {% endif %}
-                                    </a>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <h2>Sorry your search turned up nothing. We constantly adding new listings so please check back
+                            often!</h2>
+                    {% endif %}
                 </div>
                 <div class="col-sm-5">
                     <div id="map-canvas" style="width: 100%; min-height: 600px"></div>
