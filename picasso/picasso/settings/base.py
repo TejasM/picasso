@@ -32,7 +32,7 @@ TEMPLATE_DEBUG = DEBUG
 # ######### MANAGER CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
-    ('Tejas Mehta', 'tejasmehta@gmail.com'),
+    ('Tejas Mehta', 'tejasmehta0@gmail.com'),
     ('Cynthia Liao', 'cyliao.hba2014@gmail.com'),
     ('Cheng Zhao', 'chengzhao41@gmail.com'),
 )

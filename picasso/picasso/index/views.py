@@ -134,6 +134,7 @@ def contact(request):
             msg = EmailMessage(subject, email + '\n' + message, 'contact@findpicasso.com', ['contact@findpicasso.com'])
             msg.send()
         return HttpResponse(json.dumps({}), content_type='application/json')
+    return HttpResponse(json.dumps({}), content_type='application/json')
 
 
 @login_required()
