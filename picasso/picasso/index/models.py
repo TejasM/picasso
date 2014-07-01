@@ -54,17 +54,24 @@ class Address(BaseModel):
         string += self.location
         if self.location != "":
             string += "<br>"
-        string += self.city + ", " + self.country
+        if self.city != '':
+            string += self.city + ", " + self.country
+        else:
+            string += self.country
         if self.postal_code != "":
             string += "<br>" + self.postal_code
         return string
 
     def get_obscure(self):
         string = ""
-        string += self.city
+        if self.city != '':
+            string += self.city + ", " + self.country
+        else:
+            string += self.country
         if self.postal_code != "":
             string += "<br>" + self.postal_code
         return string
+
 
 def get_unique_url(instance):
     count = Listing.objects.filter(listing_name=instance.listing_name).count()
