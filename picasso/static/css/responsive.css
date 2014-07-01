@@ -650,3 +650,7 @@
 #reservation-form h1, #reservation-form h2 {
     color: #000;
 }
+
+.isotope-item:after {
+    margin-bottom: 2em;
+}

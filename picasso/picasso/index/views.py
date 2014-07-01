@@ -21,7 +21,8 @@ from picasso.index.models import Listing, Review
 def featured(request):
     if request.method == "GET":
         featured_listings = Listing.objects.filter(~Q(address=None)).filter(~Q(address__point=None)).order_by('?')[:6]
-        context = {'listings': featured_listings, 'title': 'Feature Listings', 'button_name': 'Read More'}
+        context = {'listings': featured_listings, 'title': 'Feature Listings', 'button_name': 'Read More',
+                   'categories': True}
         context = RequestContext(request, context)
         t = get_template('index/listings.html')
         lons = [x.address.point.x for x in featured_listings]
@@ -38,17 +39,24 @@ def get_listings(request):
         search = request.GET.get('term', '')
         location = search.split('----')[1]
         search = search.split('----')[0]
-        listings = watson.filter(Listing, search)
+        listings = watson.filter(Listing, search).filter(~Q(address=None)).filter(~Q(address__point=None))
         try:
             results = Geocoder.geocode(str(location + ' Canada'))
             lat, lon = results[0].coordinates
             current_point = geos.fromstr("POINT(%s %s)" % (lon, lat))
             listings = listings.distance(current_point, field_name='address__point').order_by('distance')
             context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More'}
-            return render(request, 'index/listings.html', context)
-        except Geocoder:
-            context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More'}
-            return render(request, 'index/listings.html', context)
+        except:
+            context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More', 'filters': True}
+        context = RequestContext(request, context)
+        t = get_template('index/listings.html')
+        lons = [x.address.point.x for x in listings]
+        lats = [x.address.point.y for x in listings]
+        names = [str(x) for x in listings.values_list('listing_name', flat=True)]
+        return HttpResponse(
+            json.dumps({'html': t.render(context),
+                        'lons': str(lons), 'lats': str(lats), 'names': names}),
+            content_type='application/json')
 
 
 def detail_listing(request, list_id):

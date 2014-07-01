@@ -59,6 +59,12 @@ class Address(BaseModel):
             string += "<br>" + self.postal_code
         return string
 
+    def get_obscure(self):
+        string = ""
+        string += self.city
+        if self.postal_code != "":
+            string += "<br>" + self.postal_code
+        return string
 
 def get_unique_url(instance):
     count = Listing.objects.filter(listing_name=instance.listing_name).count()

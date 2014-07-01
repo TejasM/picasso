@@ -105,6 +105,7 @@
                 <h1 style="margin: 10px 0 20px; color: #fff">Find the best hobby teachers around you.</h1>
 
                 <h2 style="color: #fff; margin-bottom: 20px">Search from over 2000 teachers in Ontario.</h2>
+
                 <form class="form-inline reservation-horizontal clearfix" role="form" method="post"
                       action="" name="reservationform" id="reservationform" onsubmit="javascript:void (0);">
                     <div id="message"></div>
@@ -281,6 +282,47 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
 <script>
+    function initialize() {
+        var mapOptions = {
+            zoom: 10,
+            center: new google.maps.LatLng(43.7, -79.4)
+        };
+
+        var map = new google.maps.Map(document.getElementById('map-canvas'),
+                mapOptions);
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                map.setCenter(initialLocation);
+            });
+        }
+
+        for (var i = 0; i < lats.length; i++) {
+            var marker = new google.maps.Marker({
+                map: map,
+                position: new google.maps.LatLng(lats[i], lons[i]),
+                title: names[i],
+                visible: true,
+                icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (i + 1).toString() + '|FF0000|000000'
+            });
+        }
+    }
+
+    function loadScript() {
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&' +
+                'callback=initialize';
+        document.body.appendChild(script);
+        script_loaded = true;
+    }
+    var lats = [];
+    var lons = [];
+    var names = [];
+    var geocoder = null;
+    var script_loaded = false;
+
     $(function () {
         var $main = $('#main-section');
         $('#search-submisson').click(function (e) {
@@ -288,7 +330,15 @@
             $main.append('<div class="container mt50" style="text-align: center; margin-bottom: 50px"><img src="{% static 'images/ui/AjaxLoader.gif' %}" alt="loading"></div>');
             $.get('{% url 'get_listings' %}', {'term': $('#search-text').val() + '----' + $('#location-text').val()}, function (data) {
                 $main.empty();
-                $main.append(data);
+                $main.append(data['html']);
+                lons = $.parseJSON(data['lons']);
+                lats = $.parseJSON(data['lats']);
+                names = data['names'];
+                if (!script_loaded) {
+                    loadScript();
+                } else {
+                    initialize();
+                }
             });
             return false;
         });

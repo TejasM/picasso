@@ -51,44 +51,6 @@
 {% endblock %}
 {% block scripts %}
     <script>
-        function initialize() {
-            var mapOptions = {
-                zoom: 10,
-                center: new google.maps.LatLng(43.7, -79.4)
-            };
-
-            var map = new google.maps.Map(document.getElementById('map-canvas'),
-                    mapOptions);
-
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                    map.setCenter(initialLocation);
-                });
-            }
-
-            for (var i = 0; i < lats.length; i++) {
-                var marker = new google.maps.Marker({
-                    map: map,
-                    position: new google.maps.LatLng(lats[i], lons[i]),
-                    title: names[i],
-                    visible: true
-                });
-            }
-        }
-
-        function loadScript() {
-            var script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&' +
-                    'callback=initialize';
-            document.body.appendChild(script);
-        }
-        var lats = [];
-        var lons = [];
-        var names = [];
-        var geocoder = null;
-
         $(function () {
             var $main = $('#main-section');
             $.get('{% url 'featured' %}', function (data) {
@@ -96,7 +58,11 @@
                 lons = $.parseJSON(data['lons']);
                 lats = $.parseJSON(data['lats']);
                 names = data['names'];
-                loadScript();
+                if (!script_loaded) {
+                    loadScript();
+                } else {
+                    initialize();
+                }
                 loadFilters();
             });
 
