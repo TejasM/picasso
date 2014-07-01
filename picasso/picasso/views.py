@@ -7,18 +7,21 @@ __author__ = 'tmehta'
 
 def individual_listing(request, list_name):
     if request.method == "GET":
-        listing = Listing.objects.get(unique_url=list_name)
-        if request.user.is_authenticated():
-            try:
-                Review.objects.get(user=request.user, listing=listing)
-                context = {'listing': listing, 'reviewed': True}
-            except Review.DoesNotExist:
+        try:
+            listing = Listing.objects.get(unique_url=list_name)
+            if request.user.is_authenticated():
+                try:
+                    Review.objects.get(user=request.user, listing=listing)
+                    context = {'listing': listing, 'reviewed': True}
+                except Review.DoesNotExist:
+                    context = {'listing': listing}
+                except Review.MultipleObjectsReturned:
+                    context = {'listing': listing, 'reviewed': True}
+            else:
                 context = {'listing': listing}
-            except Review.MultipleObjectsReturned:
-                context = {'listing': listing, 'reviewed': True}
-        else:
-            context = {'listing': listing}
-        return render(request, 'index/individual_listing.html', context)
+            return render(request, 'index/individual_listing.html', context)
+        except Listing.DoesNotExist:
+            return render(request, '404.html')
 
 
 def category_listings(request, tag_name):
