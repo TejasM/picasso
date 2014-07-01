@@ -11,6 +11,33 @@
             <textarea id="listing-description" class="form-control"></textarea>
         </div>
         <div class="row">
+            <div class="col-lg-6 col-sm-12">
+                <div class="form-group">
+                    <label for="listing-level" accesskey="S"><span class="required">*</span>Teach:</label>
+                    <select id="listing-level" multiple>
+                        <option value="All">All</option>
+                        <option value="Beginner">
+                            Beginner
+                        </option>
+                        <option value="Intermediate">Intermediate
+                        </option>
+                        <option value="Advanced">
+                            Advanced
+                        </option>
+                    </select> level Students
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-12">
+                <div class="form-group">
+                    <label for="listing-price" accesskey="S"><span class="required">*</span>Price Range per
+                        Lesson:</label>
+                    <input type="text" id="listing-price" readonly style="border:0; color:#f6931f; font-weight:bold;">
+
+                    <div id="slider-range"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-lg-10 col-sm-12">
                 <div class="form-group">
                     <label for="listing-address" accesskey="S">Address</label>

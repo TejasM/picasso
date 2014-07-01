@@ -27,6 +27,21 @@
                     $main.append(data);
                     $("#are-owner").bootstrapSwitch();
                     $("#are-active").bootstrapSwitch();
+                    $('#listing-level').chosen({width: '200px'});
+                    var $range = $("#slider-range");
+                    var values = [ 10, 100];
+                    {% endif %}
+                    $range.slider({
+                        range: true,
+                        min: 0,
+                        max: 500,
+                        values: values,
+                        slide: function (event, ui) {
+                            $("#listing-price").val("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
+                        }
+                    });
+                    $("#listing-price").val("$" + $range.slider("values", 0) +
+                            " - $" + $range.slider("values", 1));
                 });
             });
 

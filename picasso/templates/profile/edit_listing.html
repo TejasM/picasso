@@ -11,6 +11,35 @@
             <textarea id="listing-description" class="form-control">{{ listing.description }}</textarea>
         </div>
         <div class="row">
+            <div class="col-lg-6 col-sm-12">
+                <div class="form-group">
+                    <label for="listing-level" accesskey="S"><span class="required">*</span>Teach:</label>
+                    <select id="listing-level" multiple>
+                        <option value="All" {% if "All" in listing.level_of_expertise %}selected{% endif %}>All</option>
+                        <option value="Beginner" {% if "Beginner" in listing.level_of_expertise %}selected{% endif %}>
+                            Beginner
+                        </option>
+                        <option value="Intermediate"
+                                {% if "Intermediate" in listing.level_of_expertise %}selected{% endif %}>Intermediate
+                        </option>
+                        <option value="Advanced" {% if "Advanced" in listing.level_of_expertise %}selected{% endif %}>
+                            Advanced
+                        </option>
+                    </select> level Students
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-12">
+                <div class="form-group">
+                    <label for="listing-price" accesskey="S"><span class="required">*</span>Price Range per
+                        Lesson:</label>
+                    <input type="text" id="listing-price" readonly style="border:0; color:#f6931f; font-weight:bold;">
+
+                    <div id="slider-range"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-lg-10 col-sm-12">
                 <div class="form-group">
                     <label for="listing-address" accesskey="S">Address</label>
@@ -50,14 +79,16 @@
                     <label for="are-owner" accesskey="S"><span class="required">*</span>Is this your own
                         listing?</label>
                     <br>
-                    <input id="are-owner" type="checkbox" class="form-control" {% if user == listing.owner %}checked{% endif %}>
+                    <input id="are-owner" type="checkbox" class="form-control"
+                           {% if user == listing.owner %}checked{% endif %}>
                 </div>
             </div>
             <div class="col-lg-6 col-sm-12">
                 <div class="form-group">
                     <label for="are-active" accesskey="S"><span class="required">*</span>Currently Active</label>
                     <br>
-                    <input id="are-active" type="checkbox" class="form-control" {% if user == listing.active %}checked{% endif %}>
+                    <input id="are-active" type="checkbox" class="form-control"
+                           {% if user == listing.active %}checked{% endif %}>
                 </div>
             </div>
         </div>

@@ -27,6 +27,8 @@
     <script type="text/javascript" src="{% static 'js/jquery-1.11.0.min.js' %}"></script>
     <link href="{% static 'css/star-rating.min.css' %}" media="all" rel="stylesheet" type="text/css"/>
     <link href="{% static 'css/bootstrap-switch.min.css' %}" media="all" rel="stylesheet" type="text/css"/>
+    {% block additionalStyles %}
+    {% endblock %}
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -102,9 +104,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1 style="margin: 10px 0 20px; color: #fff">Find the best hobby teachers around you.</h1>
+                <h1 style="margin: 10px 0 20px;">Find the best hobby teachers around you.</h1>
 
-                <h2 style="color: #fff; margin-bottom: 20px">Search from over 2000 teachers in Ontario.</h2>
+                <h2 style="margin-bottom: 20px">Search from over 2000 teachers in Ontario.</h2>
 
                 <form class="form-inline reservation-horizontal clearfix" role="form" method="post"
                       action="" name="reservationform" id="reservationform" onsubmit="javascript:void (0);">

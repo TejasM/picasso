@@ -96,6 +96,10 @@ class Listing(BaseModel):
     unique_url = models.CharField(max_length=1000, default="")
     last_modified = models.DateTimeField(default=timezone.now())
 
+    level_of_expertise = models.CharField(default="All", max_length=100)
+    price_min = models.FloatField(default=0)
+    price_max = models.FloatField(default=0)
+
     objects = gis_models.GeoManager()
     PLACE_CHOICES = (
         ('Pri', 'Private'),
