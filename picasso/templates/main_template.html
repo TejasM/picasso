@@ -326,6 +326,7 @@
     var names = [];
     var geocoder = null;
     var script_loaded = false;
+    var tags = {{ tags|safe }};
 
     $(function () {
         var $main = $('#main-section');
@@ -390,7 +391,6 @@
                 });
             });
         {% endif %}
-        var tags = {{ tags|safe }};
         // constructs the suggestion engine
         var tags_blood = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),

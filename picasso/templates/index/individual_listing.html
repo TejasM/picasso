@@ -150,171 +150,212 @@
     <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
     <script src="{% static 'js/chosen.jquery.min.js' %}"></script>
     <script>
-        $(function () {
-            var $main = $('#main-section');
-            var $my_listings = $('#listing-detail');
+    $(function () {
+        var $main = $('#main-section');
+        var $my_listings = $('#listing-detail');
 
-            $main.on('click', '#edit-listing-button', function () {
-                var url = $(this).data('url');
-                $.get(url, function (data) {
-                    $('#listing-detail').hide();
-                    $main.append(data);
-                    $("#are-owner").bootstrapSwitch();
-                    $("#are-active").bootstrapSwitch();
-                    $('#listing-level').chosen({width: '200px'});
-                    var $range = $("#slider-range");
-                    {% if listing.price_min != 0 and lisiting.price_max != 0 %}
-                        var values = [ {{ listing.price_min }}, {{ listing.price_max }}];
-                    {% else %}
-                        var values = [ 10, 100];
-                    {% endif %}
-                    $range.slider({
-                        range: true,
-                        min: 0,
-                        max: 500,
-                        values: values,
-                        slide: function (event, ui) {
-                            $("#listing-price").val("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
-                        }
-                    });
-                    $("#listing-price").val("$" + $range.slider("values", 0) +
-                            " - $" + $range.slider("values", 1));
-                });
-            });
-
-            $main.on('click', '#cancel-edit-listing', function () {
-                $('#edit-listing-div').remove();
-                $('#listing-detail').show();
-            });
-
-            $main.on('click', '.detail-back', function () {
-                window.location.href = '/';
-            });
-
-            $main.on('click', '#save-edit-listing', function () {
-                var url = $(this).data('url');
+        $main.on('click', '#edit-listing-button', function () {
+            var url = $(this).data('url');
+            $.get(url, function (data) {
+                $('#listing-detail').hide();
+                $main.append(data);
+                $("#are-owner").bootstrapSwitch();
+                $("#are-active").bootstrapSwitch();
+                $('#listing-level').chosen({width: '200px'});
                 var $range = $("#slider-range");
-                $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
-                            'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
-                            'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
-                            'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
-                            'active': $('#are-active').is(':checked'),
-                            'price_min': $range.slider("values", 0), 'price_max': $range.slider("values", 1),
-                            'level_of_expertise[]': $('#listing-level').val() || [],
-                            'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
-                        function (data) {
-                            $('#edit-listing-div').remove();
-                            $my_listings.find('#listing-' + data['id']).remove();
-                            $('#listing-detail').remove();
-                            $.get('/detail-listing/' + data['id'], function (data2) {
-                                $main.prepend(data2);
-                            });
-                            $my_listings.show();
+                {% if listing.price_min != 0 and lisiting.price_max != 0 %}
+                    var values = [ {{ listing.price_min }}, {{ listing.price_max }}];
+                {% else %}
+                    var values = [ 10, 100];
+                {% endif %}
+                $range.slider({
+                    range: true,
+                    min: 0,
+                    max: 500,
+                    values: values,
+                    slide: function (event, ui) {
+                        $("#listing-price").val("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
+                    }
+                });
+                $("#listing-price").val("$" + $range.slider("values", 0) +
+                        " - $" + $range.slider("values", 1));
+
+                $('#listing-categories').bind("keydown", function (event) {
+                    if (event.keyCode === $.ui.keyCode.TAB &&
+                            $(this).autocomplete("instance").menu.active) {
+                        event.preventDefault();
+                    }
+                })
+                        .autocomplete({
+                            minLength: 0,
+                            source: function (request, response) {
+                                // delegate back to autocomplete, but extract the last term
+                                response($.ui.autocomplete.filter(
+                                        tags, extractLast(request.term)));
+                            },
+                            focus: function () {
+                                // prevent value inserted on focus
+                                return false;
+                            },
+                            select: function (event, ui) {
+                                var terms = split(this.value);
+                                // remove the current input
+                                terms.pop();
+                                // add the selected item
+                                terms.push(ui.item.value);
+                                // add placeholder to get the comma-and-space at the end
+                                terms.push("");
+                                this.value = terms.join(", ");
+                                return false;
+                            }
                         });
             });
+        });
 
-            $('#add-teacher').click(function () {
-                $.post('{% url 'profile:add_teacher' listing.id %}', function () {
-                    var $add = $('#add-teacher');
-                    $add.text('Favourite');
-                    $add.prop('disabled', true);
-                });
-            });
+        $main.on('click', '#cancel-edit-listing', function () {
+            $('#edit-listing-div').remove();
+            $('#listing-detail').show();
+        });
 
-            function loadScript() {
-                var script = document.createElement('script');
-                script.type = 'text/javascript';
-                script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&' +
-                        'callback=initialize';
-                document.body.appendChild(script);
-            }
+        $main.on('click', '.detail-back', function () {
+            window.location.href = '/';
+        });
 
-            $main.on('click', '#review-button', function () {
-                {% if user.is_authenticated %}
-                    $('#review_form').show();
-                    var divPosition = $('#review_form').offset();
-                    $('html, body').animate({scrollTop: divPosition.top}, "slow");
-                    $("#review-rating").rating({'min': 0, 'max': 5, 'step': 0.5});
-                {% else %}
-                    $('#main-section').hide();
-                    $('#sign-in-lightbox').show();
-                    $('#sign-up-stuff').show();
-                    $('#signin-heading').text('Sign Up');
-                    $('#type-signin').val('sign-up');
-                    $('#sign-in-button').text('Sign Up');
-                {% endif %}
+        $main.on('click', '#save-edit-listing', function () {
+            var url = $(this).data('url');
+            var $range = $("#slider-range");
+            $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
+                        'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
+                        'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
+                        'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
+                        'active': $('#are-active').is(':checked'),
+                        'price_min': $range.slider("values", 0), 'price_max': $range.slider("values", 1),
+                        'level_of_expertise[]': $('#listing-level').val() || [],
+                        'categories': $('#listing-categories').val(),
+                        'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
+                    function (data) {
+                        $('#edit-listing-div').remove();
+                        $my_listings.find('#listing-' + data['id']).remove();
+                        $('#listing-detail').remove();
+                        $.get('/detail-listing/' + data['id'], function (data2) {
+                            $main.prepend(data2);
+                        });
+                        $my_listings.show();
+                    });
+        });
+
+        $('#add-teacher').click(function () {
+            $.post('{% url 'profile:add_teacher' listing.id %}', function () {
+                var $add = $('#add-teacher');
+                $add.text('Favourite');
+                $add.prop('disabled', true);
             });
-            $main.on('click', '#cancel-review-button', function () {
-                $('#review_form').hide();
-            });
-            $main.on('click', '#review-submit', function () {
-                var url = $(this).data('url');
-                $.post(url, {'comment': $('#review-comment').val(), 'rating': $('#review-rating').val(),
-                    'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
-                    var $owls = $('.owl-item');
-                    var $items = $owls.find('.item');
-                    if ($owls.length == 0) {
-                        $('.owl-wrapper').append('<div class="owl-item" style="width: 610px;">' + data + '</div>');
-                    } else {
-                        if ($items.length % 2 == 1) {
-                            $($owls[$owls.length - 1]).append(data);
-                        } else {
-                            $('.owl-wrapper').append('<div class="owl-item" style="width: 610px;">' + data + '</div>');
-                        }
-                    }
-                    $('#review_form').remove();
-                    $('#review-button').remove();
-                    $('#reviews-box').show();
-                });
-            });
-            {% if listing.address != None and listing.address.point %}
-                loadScript();
+        });
+
+        function loadScript() {
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&' +
+                    'callback=initialize';
+            document.body.appendChild(script);
+        }
+
+        $main.on('click', '#review-button', function () {
+            {% if user.is_authenticated %}
+                $('#review_form').show();
+                var divPosition = $('#review_form').offset();
+                $('html, body').animate({scrollTop: divPosition.top}, "slow");
+                $("#review-rating").rating({'min': 0, 'max': 5, 'step': 0.5});
+            {% else %}
+                $('#main-section').hide();
+                $('#sign-in-lightbox').show();
+                $('#sign-up-stuff').show();
+                $('#signin-heading').text('Sign Up');
+                $('#type-signin').val('sign-up');
+                $('#sign-in-button').text('Sign Up');
             {% endif %}
         });
-        {% if listing.address != None and listing.address.point %}
-            var geocoder = null;
-            var directionsDisplay = null;
-            var initialLocation = null;
-            var directionsService = null;
-            function initialize() {
-                directionsDisplay = new google.maps.DirectionsRenderer();
-                directionsService = new google.maps.DirectionsService();
-
-                var mapOptions = {
-                    zoom: 15,
-                    center: new google.maps.LatLng(-34.397, 150.644)
-                };
-
-                var map = new google.maps.Map(document.getElementById('map-canvas'),
-                        mapOptions);
-                directionsDisplay.setMap(map);
-
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function (position) {
-                        initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                        if (initialLocation != null) {
-                            var request = {
-                                origin: initialLocation,
-                                destination: pos,
-                                travelMode: google.maps.TravelMode.DRIVING
-                            };
-                            directionsService.route(request, function (result, status) {
-                                if (status == google.maps.DirectionsStatus.OK) {
-                                    directionsDisplay.setDirections(result);
-                                }
-                            });
-                        }
-                    });
+        $main.on('click', '#cancel-review-button', function () {
+            $('#review_form').hide();
+        });
+        $main.on('click', '#review-submit', function () {
+            var url = $(this).data('url');
+            $.post(url, {'comment': $('#review-comment').val(), 'rating': $('#review-rating').val(),
+                'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
+                var $owls = $('.owl-item');
+                var $items = $owls.find('.item');
+                if ($owls.length == 0) {
+                    $('.owl-wrapper').append('<div class="owl-item" style="width: 610px;">' + data + '</div>');
+                } else {
+                    if ($items.length % 2 == 1) {
+                        $($owls[$owls.length - 1]).append(data);
+                    } else {
+                        $('.owl-wrapper').append('<div class="owl-item" style="width: 610px;">' + data + '</div>');
+                    }
                 }
-                var pos = new google.maps.LatLng({{ listing.address.point.y }}, {{ listing.address.point.x }});
-                var marker = new google.maps.Marker({
-                    map: map,
-                    position: pos,
-                    title: '{{ listing.listing_name }}',
-                    visible: true
-                });
-                map.setCenter(pos);
-            }
+                $('#review_form').remove();
+                $('#review-button').remove();
+                $('#reviews-box').show();
+            });
+        });
+        {% if listing.address != None and listing.address.point %}
+            loadScript();
         {% endif %}
+
+
+    });
+
+    function split(val) {
+        return val.split(/,\s*/);
+    }
+
+    function extractLast(term) {
+        return split(term).pop();
+    }
+    {% if listing.address != None and listing.address.point %}
+        var geocoder = null;
+        var directionsDisplay = null;
+        var initialLocation = null;
+        var directionsService = null;
+        function initialize() {
+            directionsDisplay = new google.maps.DirectionsRenderer();
+            directionsService = new google.maps.DirectionsService();
+
+            var mapOptions = {
+                zoom: 15,
+                center: new google.maps.LatLng(-34.397, 150.644)
+            };
+
+            var map = new google.maps.Map(document.getElementById('map-canvas'),
+                    mapOptions);
+            directionsDisplay.setMap(map);
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    if (initialLocation != null) {
+                        var request = {
+                            origin: initialLocation,
+                            destination: pos,
+                            travelMode: google.maps.TravelMode.DRIVING
+                        };
+                        directionsService.route(request, function (result, status) {
+                            if (status == google.maps.DirectionsStatus.OK) {
+                                directionsDisplay.setDirections(result);
+                            }
+                        });
+                    }
+                });
+            }
+            var pos = new google.maps.LatLng({{ listing.address.point.y }}, {{ listing.address.point.x }});
+            var marker = new google.maps.Marker({
+                map: map,
+                position: pos,
+                title: '{{ listing.listing_name }}',
+                visible: true
+            });
+            map.setCenter(pos);
+        }
+    {% endif %}
     </script>
 {% endblock %}

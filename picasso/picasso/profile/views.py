@@ -6,7 +6,8 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
-from picasso.index.models import Listing, Address
+import re
+from picasso.index.models import Listing, Address, Tag
 
 
 @login_required
@@ -21,6 +22,15 @@ def add_listing(request):
         phone = request.POST['phone']
         owner = request.POST['owner']
         l_o_e = request.POST.getlist('level_of_expertise')
+        categories = request.POST['categories'].split(',')
+        tags = []
+        for cat in categories:
+            cat = cat.strip()
+            name = re.sub(r'\W+', '-', cat).lower()
+            try:
+                tags.append(Tag.objects.get(dash_version=name).id)
+            except Tag.DoesNotExist:
+                tags.append(Tag.objects.create(dash_version=name, tag_name=cat).id)
         if not l_o_e:
             l_o_e = "All"
         else:
@@ -35,7 +45,7 @@ def add_listing(request):
             owner = None
         listing = Listing.objects.create(listing_name=listing_name, description=description, address=address,
                                          phone=phone, active=active, owner=owner, created_by=request.user,
-                                         level_of_expertise=l_o_e, price_min=price_min, price_max=price_max)
+                                         level_of_expertise=l_o_e, price_min=price_min, price_max=price_max, tags=tags)
         return HttpResponse(json.dumps({'id': listing.id}), content_type='application/json')
     else:
         return render(request, 'profile/create_listing.html')
@@ -69,6 +79,16 @@ def edit_listing(request, list_id):
             listing.level_of_expertise = "All"
         listing.price_min = request.POST['price_min']
         listing.price_max = request.POST['price_max']
+        categories = request.POST['categories'].split(',')
+        tags = []
+        for cat in categories:
+            cat = cat.strip()
+            name = re.sub(r'\W+', '-', cat).lower()
+            try:
+                tags.append(Tag.objects.get(dash_version=name).id)
+            except Tag.DoesNotExist:
+                tags.append(Tag.objects.create(dash_version=name, tag_name=cat).id)
+        listing.tags = tags
         if request.POST['owner'] == "true":
             listing.owner = request.user
         if request.POST['active'] == "true":
