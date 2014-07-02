@@ -23,7 +23,7 @@ sitemaps = {
 urlpatterns = patterns('',
                        url(r'^$', TemplateView.as_view(template_name='base.html'), name='index'),
 
-                       #main
+                       # main
                        url(r'^logout$', user_logout, name='logout'),
                        url(r'^about$', about, name='about'),
                        url(r'^privacy$', privacy, name='privacy'),
@@ -67,7 +67,8 @@ urlpatterns += patterns('',
 for t in Tag.objects.all():
     urlpatterns += patterns('',
                             url(r'^' + t.dash_version + '/(?P<list_name>.*)/$', view=views.individual_listing,
-                                name=t.dash_version), )
+                                name=t.dash_version),
+                            url(r'^(?P<list_name>.*)/(?P<hash_key>.*)$', view=views.hash_listing))
 if settings.DEBUG:
     import debug_toolbar
 

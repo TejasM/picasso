@@ -1,9 +1,15 @@
-{% extends "base.html" %}
+{% extends "main_template.html" %}
 
 {% block title %}Page Not found{% endblock %}
 
 {% block page_title %}Page Not found{% endblock page_title %}
 
 {% block content %}
-<p>This is not the page you were looking for.</p>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <p>Sorry the page you are looking for could not be found.</p>
+            </div>
+        </div>
+    </div>
 {% endblock content %}

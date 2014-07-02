@@ -68,6 +68,27 @@
                             </button>
                         {% endif %}
 
+                        {% if listing.owner == None and claimable %}
+                            <div class="popover-icon" data-container="body" data-toggle="popover" data-trigger="hover"
+                                 data-placement="top"
+                                 data-content="You can edit any incorrect information after claiming the business"
+                                 data-original-title=""
+                                 title="">
+                                <button type="button" class="btn btn-primary btn-block" id="claim-listing-button">Claim
+                                    Listing
+                                </button>
+                            </div>
+                            <div class="popover-icon" data-container="body" data-toggle="popover" data-trigger="hover"
+                                 data-placement="top"
+                                 data-content="We will review and confirm the request as soon as possible to ensure prompt removal"
+                                 data-original-title=""
+                                 title="">
+                                <button type="button" class="btn btn-primary btn-block" id="remove-listing-button">
+                                    Remove
+                                    Listing
+                                </button>
+                            </div>
+                        {% endif %}
                         {% if user.is_authenticated %}
                             {% if listing not in user.profile.teachers.all %}
                                 <button type="button" class="btn btn-primary btn-block mt20" id="add-teacher">Add to
@@ -245,11 +266,30 @@
         });
 
         $('#add-teacher').click(function () {
-            $.post('{% url 'profile:add_teacher' listing.id %}', function () {
-                var $add = $('#add-teacher');
-                $add.text('Favourite');
-                $add.prop('disabled', true);
-            });
+            {% if user.is_authenticated %}
+                $.post('{% url 'profile:add_teacher' listing.id %}', function () {
+                    var $add = $('#add-teacher');
+                    $add.text('Favourite');
+                    $add.prop('disabled', true);
+                });
+            {% else %}
+                $('#main-section').hide();
+                $('#sign-in-lightbox').show();
+                $('#sign-up-stuff').show();
+                $('#signin-heading').text('Sign Up');
+                $('#type-signin').val('sign-up');
+                $('#sign-in-button').text('Sign Up');
+            {% endif %}
+        });
+
+        $main.on('click', '#claim-listing-button', function () {
+            $('#main-section').hide();
+            $('#sign-in-lightbox').show();
+            $('#sign-in-lightbox').find('form').append('<input type="hidden" name="claim-id" value="{{ listing.id }}">');
+            $('#sign-up-stuff').show();
+            $('#signin-heading').text('Sign Up');
+            $('#type-signin').val('sign-up');
+            $('#sign-in-button').text('Sign Up');
         });
 
         function loadScript() {

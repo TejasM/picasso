@@ -24,6 +24,25 @@ def individual_listing(request, list_name):
             return render(request, '404.html')
 
 
+def hash_listing(request, list_name, hash_key):
+    if request.method == "GET":
+        try:
+            listing = Listing.objects.get(unique_url=list_name, hash_key=hash_key)
+            if request.user.is_authenticated():
+                try:
+                    Review.objects.get(user=request.user, listing=listing)
+                    context = {'listing': listing, 'reviewed': True}
+                except Review.DoesNotExist:
+                    context = {'listing': listing}
+                except Review.MultipleObjectsReturned:
+                    context = {'listing': listing, 'reviewed': True}
+            else:
+                context = {'listing': listing}
+            return render(request, 'index/individual_listing.html', context)
+        except Listing.DoesNotExist:
+            return render(request, '404.html')
+
+
 def category_listings(request, tag_name):
     if request.method == "GET":
         try:

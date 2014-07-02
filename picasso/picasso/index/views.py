@@ -92,12 +92,20 @@ def signin(request):
             last_name = request.POST['last-name']
             username = request.POST['email']
             password = request.POST['password']
+            claim = request.POST.get('claim-id', '')
             try:
                 user = User.objects.create(first_name=first_name, last_name=last_name, email=username,
                                            username=username)
                 user.set_password(password)
                 user.save()
                 user = authenticate(username=username, password=password)
+                if claim != '':
+                    try:
+                        l = Listing.objects.get(pk=int(claim))
+                        l.owner = user
+                        l.save()
+                    except Listing.DoesNotExist:
+                        pass
                 login(request, user)
                 return HttpResponse(json.dumps({'success': 1}),
                                     content_type='application/json')
@@ -107,6 +115,7 @@ def signin(request):
         else:
             username = request.POST['email']
             password = request.POST['password']
+            claim = request.POST.get('claim-id', '')
             try:
                 User.objects.get(email=username, username=username)
             except User.DoesNotExist:
@@ -115,6 +124,13 @@ def signin(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 if user.is_active:
+                    if claim != '':
+                        try:
+                            l = Listing.objects.get(pk=int(claim))
+                            l.owner = user
+                            l.save()
+                        except Listing.DoesNotExist:
+                            pass
                     login(request, user)
                     return HttpResponse(json.dumps({'success': 1}),
                                         content_type='application/json')
