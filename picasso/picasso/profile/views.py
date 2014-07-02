@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.template import RequestContext
+from django.template.loader import get_template
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
@@ -112,7 +114,15 @@ def my_listings(request):
 
 @login_required
 def profile(request):
-    return render(request, 'profile.html')
+    listings = request.user.profile.teachers.all()
+    t = get_template('index/listings.html')
+    favs = t.render(
+        RequestContext(request, {'listings': listings, 'title': 'Favourite Teachers', 'button_name': 'View'}))
+    reviews = request.user.review_set.all()
+    reviewes = t.render(RequestContext(request, {'reviews': reviews}))
+    me_listings = Listing.objects.filter(Q(created_by=request.user) | Q(owner=request.user))
+    return render(request, 'profile.html',
+                  {'favs': favs, 'reviews': reviewes, 'my_listings': me_listings})
 
 
 @login_required

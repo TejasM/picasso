@@ -38,6 +38,7 @@ def hash_listing(request, list_name, hash_key):
                     context = {'listing': listing, 'reviewed': True}
             else:
                 context = {'listing': listing}
+            context['claimable'] = True
             return render(request, 'index/individual_listing.html', context)
         except Listing.DoesNotExist:
             return render(request, '404.html')

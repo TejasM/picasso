@@ -1,14 +1,219 @@
 {% extends 'main_template.html' %}
 {% load staticfiles %}
+{% block additionalStyles %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="{% static 'css/chosen.min.css' %}">
+{% endblock %}
 {% block content %}
-    <div id="main-section">
-
+    <div class="container">
+        <div class="row mt20">
+            <div class="col-lg-12">
+                <ul class="nav nav-tabs" role="tablist" id="myTab">
+                    {% if my_listings.count != 0s %}
+                        <li class="active"><a href="#main-listings" data-toggle="tab">My Listings</a></li>
+                        <li><a href="#my-teachers" data-toggle="tab">My Teachers</a></li>
+                    {% else %}
+                        <li class="active"><a href="#my-teachers" data-toggle="tab">My Teachers</a></li>
+                    {% endif %}
+                    <li><a href="#my-reviews" data-toggle="tab">My Reviews</a></li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    {% if my_listings.count != 0 %}
+                        <div class="tab-pane fade active in" id="main-listings">
+                            <div class="container" id="my-listings">
+                                <div class="row mt20">
+                                    <div class="col-lg-3 col-md-6 col-md-offset-6 col-lg-offset-9 col-sm-12">
+                                        <div class="right">
+                                            <button type="button" id="create-listing-button"
+                                                    class="btn btn-primary btn-block">Add
+                                                Listing
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% include 'index/listings.html' with listings=my_listings title='My Listings' button_name='View' map="True" reviews=None %}
+                            </div>
+                        </div>
+                        <div class="tab-pane fade in" id="my-teachers">
+                            {{ favs|safe }}
+                        </div>
+                    {% else %}
+                        <div class="tab-pane fade active in" id="my-teachers">
+                            {{ favs|safe }}
+                        </div>
+                    {% endif %}
+                    <div class="tab-pane fade in" id="my-reviews">
+                        {{ reviews|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 {% block scripts %}
+    <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+    <script src="{% static 'js/chosen.jquery.min.js' %}"></script>
     <script>
         $(function () {
-            var $main = $('#main-section');
+            $('input[type=checkbox], input[type=radio]').each(function () {
+                var self = $(this),
+                        label = self.next(),
+                        label_text = label.text();
+
+                label.remove();
+                self.iCheck({
+                    checkboxClass: 'icheckbox_line-blue',
+                    radioClass: 'iradio_line-blue',
+                    insert: '<div class="icheck_line-icon"></div>' + label_text
+                });
+            });
+            {% if my_listings.count != 0 %}
+                var $main_listings = $('#main-listings');
+                var $my_listings = $('#my-listings');
+                $('#create-listing-button').click(function () {
+                    $.get('{% url 'profile:add_listing' %}', function (data) {
+                        $my_listings.hide();
+                        $main_listings.append(data);
+                        $("#are-owner").bootstrapSwitch();
+                        $("#are-active").bootstrapSwitch();
+                        $('#listing-level').chosen({width: '200px'});
+                        var $range = $("#slider-range");
+                        var values = [ 10, 100];
+                        $range.slider({
+                            range: true,
+                            min: 0,
+                            max: 500,
+                            values: values,
+                            slide: function (event, ui) {
+                                $("#listing-price").val("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
+                            }
+                        });
+                        $("#listing-price").val("$" + $range.slider("values", 0) +
+                                " - $" + $range.slider("values", 1));
+                        $('#listing-categories').bind("keydown", function (event) {
+                            if (event.keyCode === $.ui.keyCode.TAB &&
+                                    $(this).autocomplete("instance").menu.active) {
+                                event.preventDefault();
+                            }
+                        })
+                                .autocomplete({
+                                    minLength: 0,
+                                    source: function (request, response) {
+                                        // delegate back to autocomplete, but extract the last term
+                                        response($.ui.autocomplete.filter(
+                                                tags, extractLast(request.term)));
+                                    },
+                                    focus: function () {
+                                        // prevent value inserted on focus
+                                        return false;
+                                    },
+                                    select: function (event, ui) {
+                                        var terms = split(this.value);
+                                        // remove the current input
+                                        terms.pop();
+                                        // add the selected item
+                                        terms.push(ui.item.value);
+                                        // add placeholder to get the comma-and-space at the end
+                                        terms.push("");
+                                        this.value = terms.join(", ");
+                                        return false;
+                                    }
+                                });
+                    });
+                });
+
+                $main_listings.on('click', '.to-listing', function () {
+                    var url = $(this).data('url');
+                    $.get(url, function (data) {
+                        $my_listings.hide();
+                        $main_listings.append(data);
+                    });
+                });
+
+                $main_listings.on('click', '.detail-back', function () {
+                    $('#listing-detail').remove();
+                    $my_listings.show();
+                });
+
+                $main_listings.on('click', '#edit-listing-button', function () {
+                    var url = $(this).data('url');
+                    $.get(url, function (data) {
+                        $('#listing-detail').remove();
+                        $main_listings.append(data);
+                        $("#are-owner").bootstrapSwitch();
+                        $("#are-active").bootstrapSwitch();
+                    });
+                });
+
+                $main_listings.on('click', '#submit-create-listing', function () {
+                    var url = $(this).data('url');
+                    var $range = $("#slider-range");
+                    $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
+                                'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
+                                'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
+                                'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
+                                'active': $('#are-active').is(':checked'),
+                                'price_min': $range.slider("values", 0), 'price_max': $range.slider("values", 1),
+                                'level_of_expertise[]': $('#listing-level').val() || [],
+                                'categories': $('#listing-categories').val(),
+                                'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
+                            function (data) {
+                                $('#create-listing-div').remove();
+                                $.get('/get-listing/' + data['id'], function (data2) {
+                                    $my_listings.find('.rooms').append(data2);
+                                });
+                                $my_listings.show();
+                                {% if user.owner.count == 0 %}
+                                    window.location.href = '/';
+                                {% endif %}
+                            });
+                });
+
+                $main_listings.on('click', '#cancel-create-listing', function () {
+                    if (window.location.search.replace("?", "").trim() != '') {
+                        window.location.href = '/';
+                    }
+                    $('#create-listing-div').remove();
+                    $my_listings.show();
+                });
+
+                $main_listings.on('click', '#cancel-edit-listing', function () {
+                    $('#edit-listing-div').remove();
+                    $my_listings.show();
+                });
+
+                $main_listings.on('click', '#save-edit-listing', function () {
+                    var url = $(this).data('url');
+                    $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
+                                'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
+                                'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
+                                'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
+                                'active': $('#are-active').is(':checked'),
+                                'price_min': $range.slider("values", 0), 'price_max': $range.slider("values", 1),
+                                'level_of_expertise[]': $('#listing-level').val() || [],
+                                'categories': $('#listing-categories').val(),
+                                'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
+                            function (data) {
+                                $('#edit-listing-div').remove();
+                                $my_listings.find('#listing-' + data['id']).remove();
+                                $.get('/get-listing/' + data['id'], function (data2) {
+                                    $my_listings.find('.rooms .row').append(data2);
+                                });
+                                $my_listings.show();
+                            });
+                });
+
+                {% if user.owner.count == 0 %}
+                    $('#create-listing-button').trigger('click');
+                {% endif %}
+                function split(val) {
+                    return val.split(/,\s*/);
+                }
+
+                function extractLast(term) {
+                    return split(term).pop();
+                }
+            {% endif %}
         });
     </script>
 {% endblock %}

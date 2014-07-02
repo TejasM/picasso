@@ -7,47 +7,50 @@
             <h2 class="lined-heading"><span>{{ title }}</span></h2>
         </div>
         <div class="row">
-            <div class="col-sm-2">
-                <div class="widget">
-                    {% if categories %}
-                        <h3 style="padding: 10px">Categories</h3>
-                        <ul class="nav nav-pills list-unstyled arrow" id="filters">
-                            <li class="active"><a href="#" data-filter="*">All</a></li>
-                            <li><a href="#" data-filter=".Piano">Piano</a></li>
-                            <li><a href="#" data-filter=".String">String</a></li>
-                            <li><a href="#" data-filter=".Singing">Singing</a></li>
-                            <li><a href="#" data-filter=".Theory">Theory</a></li>
-                        </ul>
-                    {% else %}
-                        <h3 style="padding: 10px">Filters</h3>
-                        <h4 style="padding: 10px">Level of Expertise</h4>
-                        <input type="checkbox" name="loe-check" class="loe-check" checked value="Beginner">
-                        <label>Beginner</label>
+            {% if not reviews %}
+                <div class="col-sm-2">
+                    <div class="widget">
 
-                        <input type="checkbox" name="loe-check" class="loe-check" checked value="Intermediate">
-                        <label>Intermediate</label>
+                        {% if categories %}
+                            <h3 style="padding: 10px">Categories</h3>
+                            <ul class="nav nav-pills list-unstyled arrow" id="filters">
+                                <li class="active"><a href="#" data-filter="*">All</a></li>
+                                <li><a href="#" data-filter=".Piano">Piano</a></li>
+                                <li><a href="#" data-filter=".String">String</a></li>
+                                <li><a href="#" data-filter=".Singing">Singing</a></li>
+                                <li><a href="#" data-filter=".Theory">Theory</a></li>
+                            </ul>
+                        {% else %}
+                            <h3 style="padding: 10px">Filters</h3>
+                            <h4 style="padding: 10px">Level of Expertise</h4>
+                            <input type="checkbox" name="loe-check" class="loe-check" checked value="Beginner">
+                            <label>Beginner</label>
 
-                        <input type="checkbox" name="loe-check" class="loe-check" checked value="Advanced">
-                        <label>Advanced</label>
+                            <input type="checkbox" name="loe-check" class="loe-check" checked value="Intermediate">
+                            <label>Intermediate</label>
 
-                        <h4 style="padding: 10px">Rating</h4>
-                        <input type="radio" checked name="review-radio" value="-1">
-                        <label>All</label>
+                            <input type="checkbox" name="loe-check" class="loe-check" checked value="Advanced">
+                            <label>Advanced</label>
 
-                        <input type="radio" name="review-radio" value="1">
-                        <label>&#9733; +</label>
+                            <h4 style="padding: 10px">Rating</h4>
+                            <input type="radio" checked name="review-radio" value="-1">
+                            <label>All</label>
 
-                        <input type="radio" name="review-radio" value="2">
-                        <label>&#9733;&#9733; +</label>
+                            <input type="radio" name="review-radio" value="1">
+                            <label>&#9733; +</label>
 
-                        <input type="radio" name="review-radio" value="3">
-                        <label>&#9733;&#9733;&#9733; +</label>
+                            <input type="radio" name="review-radio" value="2">
+                            <label>&#9733;&#9733; +</label>
 
-                        <input type="radio" name="review-radio" value="4">
-                        <label>&#9733;&#9733;&#9733;&#9733; +</label>
-                    {% endif %}
+                            <input type="radio" name="review-radio" value="3">
+                            <label>&#9733;&#9733;&#9733; +</label>
+
+                            <input type="radio" name="review-radio" value="4">
+                            <label>&#9733;&#9733;&#9733;&#9733; +</label>
+                        {% endif %}'
+                    </div>
                 </div>
-            </div>
+            {% endif %}
             <!-- Room -->
             {% if not reviews %}
                 <div class="col-sm-5">
@@ -105,12 +108,12 @@
                     <div id="map-canvas" style="width: 100%; min-height: 600px"></div>
                 </div>
             {% else %}
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <div class="isotope gallery">
                         {% for r in reviews %}
                             <div class="row isotope-item {{ r.listing.get_string_tags_no_comma }}"
                                  style="margin-top: 2em; width: 100%">
-                                <div class="col-sm-12 col-lg-4 col-middle">
+                                <div class="col-sm-12 col-lg-2 col-middle">
                                     <img src="{{ r.listing.get_photo_url }}" alt="{{ r.listing.listing_name }}"
                                          width="140px"
                                          height="100"/>
@@ -121,7 +124,7 @@
 
                                     <div class="price"><strong>Rating: {{ r.listing.get_rating }}</strong></div>
                                 </div>
-                                <div class="col-sm-12 col-lg-4">
+                                <div class="col-sm-12 col-lg-6">
                                     <a href="{{ r.listing.get_unique_url }}" style="color: #333">
                                         <p><strong>Address: </strong>{{ r.listing.address|safe }}</p>
 

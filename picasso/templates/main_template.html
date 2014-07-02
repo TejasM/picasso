@@ -74,20 +74,6 @@
                         <li><a href="#sign-in-lightbox" id="sign-up">Sign Up</a></li>
                         <li><a href="#sign-in-lightbox" id="login">Login</a></li>
                     {% else %}
-                        <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle js-activated">
-                            Listings <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                {% if user.owner.count != 0 %}
-                                    <li><a href="{% url 'profile:my_listings' %}" id="sign-up">My Listings</a></li>
-                                {% else %}
-                                    <li><a href="{% url 'profile:my_listings' %}?add=add" id="sign-up">Add Listing</a>
-                                    </li>
-                                {% endif %}
-                                <li><a href="{% url 'profile:my_teachers' %}" id="login">Favourite Teachers</a></li>
-                            </ul>
-                        </li>
-                        <li class=""><a href="{% url 'profile:my_reviews' %}">Reviews</a>
-                        </li>
                         <li class=""><a href="{% url 'profile:profile' %}">Profile</a>
                         </li>
                         <li class=""><a href="{% url 'logout' %}">Logout</a>
