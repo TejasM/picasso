@@ -47,7 +47,9 @@ def add_listing(request):
             owner = None
         listing = Listing.objects.create(listing_name=listing_name, description=description, address=address,
                                          phone=phone, active=active, owner=owner, created_by=request.user,
-                                         level_of_expertise=l_o_e, price_min=price_min, price_max=price_max, tags=tags)
+                                         level_of_expertise=l_o_e, price_min=price_min, price_max=price_max)
+        listing.tags = tags
+        listing.save()
         return HttpResponse(json.dumps({'id': listing.id}), content_type='application/json')
     else:
         return render(request, 'profile/create_listing.html')
