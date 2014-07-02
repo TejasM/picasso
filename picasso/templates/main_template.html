@@ -74,6 +74,10 @@
                         <li><a href="#sign-in-lightbox" id="sign-up">Sign Up</a></li>
                         <li><a href="#sign-in-lightbox" id="login">Login</a></li>
                     {% else %}
+                        {% if user.owner.count == 0 %}
+                            <li class=""><a href="{% url 'my_listings' %}">Add Listing</a>
+                            </li>
+                        {% endif %}
                         <li class=""><a href="{% url 'profile:profile' %}">Profile</a>
                         </li>
                         <li class=""><a href="{% url 'logout' %}">Logout</a>
