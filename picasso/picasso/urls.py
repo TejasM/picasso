@@ -37,7 +37,7 @@ urlpatterns = patterns('',
                        url(r'^sign-in/$', signin, name='signup'),
                        url(r'^review-listing/(?P<list_id>\w+)/$', review_listing, name='review_listing'),
 
-                       #Others
+                       # Others
                        url(r'^user/', include('picasso.profile.urls', namespace='profile')),
                        url(r'^admin/', include(admin.site.urls)),
                        url(r'^(?P<tag_name>[^/]*)/$', view=views.category_listings),
@@ -68,7 +68,8 @@ for t in Tag.objects.all():
     urlpatterns += patterns('',
                             url(r'^' + t.dash_version + '/(?P<list_name>.*)/$', view=views.individual_listing,
                                 name=t.dash_version),
-                            url(r'^(?P<list_name>.*)/(?P<hash_key>.*)$', view=views.hash_listing))
+                            url(r'^' + t.dash_version + '/(?P<list_name>.*)/(?P<hash_key>[a-zA-z0-9]{40})$',
+                                view=views.hash_listing))
 if settings.DEBUG:
     import debug_toolbar
 
