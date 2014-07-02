@@ -11,6 +11,8 @@ from django.views.decorators.csrf import csrf_exempt
 import re
 from picasso.index.models import Listing, Address, Tag
 
+#TODO: For all addresses get geocoder
+
 
 @login_required
 def add_listing(request):
@@ -116,16 +118,54 @@ def my_listings(request):
 
 @login_required
 def profile(request):
-    listings = request.user.profile.teachers.all()
-    t = get_template('index/listings.html')
-    favs = t.render(
-        RequestContext(request, {'listings': listings, 'title': 'Favourite Teachers', 'button_name': 'View'}))
-    reviews = request.user.review_set.all()
-    reviewes = t.render(RequestContext(request, {'reviews': reviews}))
-    me_listings = Listing.objects.filter(Q(created_by=request.user) | Q(owner=request.user))
-    return render(request, 'profile.html',
-                  {'favs': favs, 'reviews': reviewes, 'my_listings': me_listings})
-
+    if request.method == "GET":
+        listings = request.user.profile.teachers.all()
+        t = get_template('index/listings.html')
+        favs = t.render(
+            RequestContext(request, {'listings': listings, 'title': 'Favourite Teachers', 'button_name': 'View'}))
+        reviews = request.user.review_set.all()
+        reviewes = t.render(RequestContext(request, {'reviews': reviews}))
+        me_listings = Listing.objects.filter(Q(created_by=request.user) | Q(owner=request.user))
+        return render(request, 'profile.html',
+                      {'favs': favs, 'reviews': reviewes, 'my_listings': me_listings})
+    else:
+        user = request.user
+        first_name = request.POST['first']
+        last_name = request.POST['last']
+        email = request.POST['email']
+        nick = request.POST['nick']
+        location = request.POST['location']
+        postal = request.POST['postal']
+        city = request.POST['city']
+        country = request.POST['country']
+        phone = request.POST['phone']
+        hobbies = request.POST['hobbies']
+        tags = []
+        for cat in hobbies:
+            cat = cat.strip()
+            name = re.sub(r'\W+', '-', cat).lower()
+            try:
+                tags.append(Tag.objects.get(dash_version=name).id)
+            except Tag.DoesNotExist:
+                tags.append(Tag.objects.create(dash_version=name, tag_name=cat).id)
+        user.first_name = first_name
+        user.last_name = last_name
+        user.email = email
+        user.save()
+        user.profile.nickname = nick
+        if user.profile.address:
+            user.profile.address.location = location
+            user.profile.address.postal_code = postal
+            user.profile.address.city = city
+            user.profile.address.country = country
+            user.profile.address.save()
+        else:
+            addr = Address.objects.create(location=location, postal_code=postal, city=city, country=country)
+            user.profile.address = addr
+        user.profile.phone = phone
+        user.profile.hobbies = tags
+        user.profile.save()
+        return render(request, 'profile/_profile.html')
 
 @login_required
 def my_teachers(request):

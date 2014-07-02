@@ -1,0 +1,99 @@
+{% load staticfiles %}
+<div class="row">
+    <div class="col-sm-12 col-lg-4">
+        <img src="{% static 'images/musician-349790_1280.jpg' %}"
+             style="width: 100%; height: 100%">
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <form class="clearfix" role="form" action="#" method="post" id="profile-form">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-lg-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="profile-first">First Name</label>
+                        <input id="profile-first" class="form-control" disabled
+                               value="{{ user.first_name }}">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="profile-last">Last Name</label>
+                        <input id="profile-last" class="form-control" disabled
+                               value="{{ user.last_name }}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="profile-email">Email</label>
+                        <input id="profile-email" class="form-control" disabled type="email"
+                               value="{{ user.email }}">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="profile-nick">Nickname</label>
+                        <input id="profile-nick" class="form-control" disabled
+                               value="{{ user.profile.nickname }}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-10 col-sm-12">
+                    <div class="form-group">
+                        <label for="profile-address" accesskey="S">Address</label>
+                        <input id="profile-address" class="form-control"
+                               value="{{ user.profile.address.location }}" disabled>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-sm-12">
+                    <div class="form-group">
+                        <label for="profile-postal" accesskey="S">Postal Code</label>
+                        <input id="profile-postal" class="form-control"
+                               value="{{ user.profile.address.postal_code }}" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-sm-12">
+                    <div class="form-group">
+                        <label for="profile-city" accesskey="S">City</label>
+                        <input id="profile-city" class="form-control"
+                               value="{{ user.profile.address.city }}" disabled>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-12">
+                    <div class="form-group">
+                        <label for="profile-country" accesskey="S">Country</label>
+                        <input id="profile-country" class="form-control"
+                               value="{{ user.profile.address.country }}" disabled>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-12">
+                    <div class="form-group">
+                        <label for="profile-phone" accesskey="S">Phone</label>
+                        <input id="profile-phone" class="form-control"
+                               value="{{ user.profile.profile }}" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="form-group">
+                        <label for="profile-hobbies">Hobbies</label>
+                        <input id="profile-hobbies" class="form-control" disabled
+                               value="{{ user.profile.get_hobbies }}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-lg-6 col-lg-offset-6">
+                    <button type="button" id="profile-edit" class="btn btn-lg btn-primary"
+                            style="float:right;">Edit Profile
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
