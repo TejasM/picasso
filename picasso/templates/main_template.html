@@ -434,7 +434,7 @@
                     } else {
                         var done = false;
                         for (var i = 0; i < $checked.length; i++) {
-                            if (t.contains($checked[i].val())) {
+                            if (t.indexOf($checked[i].val()) > -1) {
                                 $(this).show();
                                 done = true;
                                 break;
