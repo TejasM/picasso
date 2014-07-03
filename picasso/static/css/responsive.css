@@ -662,9 +662,3 @@
 .iradio_line-blue {
     margin-bottom: 1em;
 }
-
-#profile-form input:disabled {
-    background: none;
-    border: none;
-    box-shadow: none;
-}
