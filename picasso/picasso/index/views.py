@@ -42,24 +42,29 @@ def get_listings(request):
         except IndexError:
             location = 'Toronto'
         search = search.split('----')[0]
-        listings = watson.filter(Listing, search)
+        listings = watson.filter(Listing, search).filter(~Q(address=None)).filter(~Q(address__point=None))
         try:
             results = Geocoder.geocode(str(location + ' Canada'))
             lat, lon = results[0].coordinates
             current_point = geos.fromstr("POINT(%s %s)" % (lon, lat))
-            temp_listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).distance(current_point,
-                                                                                                       field_name='address__point').order_by(
+            listings = listings.distance(current_point, field_name='address__point').order_by(
                 'distance')
-            if temp_listings.count() < 20 <= listings.count():
-                temp_listings = list(temp_listings)
-                i = 0
-                while len(temp_listings) < 20:
-                    if listings[i] not in temp_listings:
-                        temp_listings.append(listings[i])
-                    i += 1
-                listings = temp_listings
+            # if temp_listings.count() < 20 <= listings.count():
+            # temp_listings = list(temp_listings)
+            #     i = 0
+            #     while len(temp_listings) < 20:
+            #         if listings[i] not in temp_listings:
+            #             temp_listings.append(listings[i])
+            #         i += 1
+            # listings = temp_listings
+            # if len(listings) > 20:
+            #     listings = listings[:20]
+            if len(listings) > 20:
+                listings = listings[:20]
             context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More'}
         except:
+            if len(listings) > 20:
+                listings = listings[:20]
             context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More', 'filters': True}
         context = RequestContext(request, context)
         t = get_template('index/listings.html')

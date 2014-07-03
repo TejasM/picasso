@@ -210,7 +210,7 @@ class Review(BaseModel):
     listing = models.ForeignKey(Listing)
 
 
-watson.register(Listing)
+watson.register(Listing, fields=('tags__tag_name',))
 watson.register(Tag)
 watson.register(Review)
 watson.register(Address)
