@@ -13,6 +13,7 @@ urlpatterns = patterns('',
 
                        # Profile urls
                        url(r'^profile/$', views.profile, name='profile'),
+                       url(r'^change_pic/$', views.change_pic, name='change_pic'),
                        url(r'^add-teacher/(?P<list_id>\w+)$', views.add_teacher, name='add_teacher'),
 
                        #Teachers

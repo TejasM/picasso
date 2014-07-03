@@ -1,7 +1,8 @@
 import json
 from django.contrib.auth.decorators import login_required
+from django.core.files.base import ContentFile
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render
 from django.template import RequestContext
 from django.template.loader import get_template
@@ -11,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 import re
 from picasso.index.models import Listing, Address, Tag
 
-#TODO: For all addresses get geocoder
+# TODO: For all addresses get geocoder
 
 
 @login_required
@@ -139,7 +140,7 @@ def profile(request):
         city = request.POST['city']
         country = request.POST['country']
         phone = request.POST['phone']
-        hobbies = request.POST['hobbies']
+        hobbies = request.POST['hobbies'].split(',')
         tags = []
         for cat in hobbies:
             cat = cat.strip()
@@ -167,6 +168,7 @@ def profile(request):
         user.profile.save()
         return render(request, 'profile/_profile.html')
 
+
 @login_required
 def my_teachers(request):
     listings = request.user.profile.teachers.all()
@@ -179,3 +181,14 @@ def my_reviews(request):
     reviews = request.user.review_set.all()
     return render(request, 'my_reviews.html',
                   {'reviews': reviews})
+
+
+@login_required
+def change_pic(request):
+    if request.method == "POST":
+        user = request.user
+        f = ContentFile(request.FILES['profile-pic'], name=user.first_name + '.png')
+        user.profile.photo = f
+        user.profile.save()
+        return render(request, 'profile/_profile.html')
+    return HttpResponseForbidden('allowed only via POST')

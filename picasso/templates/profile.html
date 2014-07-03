@@ -70,6 +70,7 @@
                 insert: '<div class="icheck_line-icon"></div>' + label_text
             });
         });
+        var $main = $('#main-section');
         {% if my_listings.count != 0 %}
             var $main_listings = $('#main-listings');
             var $my_listings = $('#my-listings');
@@ -247,7 +248,7 @@
                         return false;
                     }
                 });
-        $('#profile-edit').click(function () {
+        $main.on('click', '#profile-edit', function () {
             if (profile_status == "not-edit") {
                 $('#profile-form').find('input').prop('disabled', false);
                 $(this).text('Save Profile');
@@ -274,8 +275,59 @@
                         $('#profile-edit').text('Edit Profile').prop('disabled', false);
                     }, 1000);
                     profile_status = "not-edit";
+                    $('#profile-hobbies').bind("keydown", function (event) {
+                        if (event.keyCode === $.ui.keyCode.TAB &&
+                                $(this).autocomplete("instance").menu.active) {
+                            event.preventDefault();
+                        }
+                    })
+                            .autocomplete({
+                                minLength: 0,
+                                source: function (request, response) {
+                                    // delegate back to autocomplete, but extract the last term
+                                    response($.ui.autocomplete.filter(
+                                            tags, extractLast(request.term)));
+                                },
+                                focus: function () {
+                                    // prevent value inserted on focus
+                                    return false;
+                                },
+                                select: function (event, ui) {
+                                    var terms = split(this.value);
+                                    // remove the current input
+                                    terms.pop();
+                                    // add the selected item
+                                    terms.push(ui.item.value);
+                                    // add placeholder to get the comma-and-space at the end
+                                    terms.push("");
+                                    this.value = terms.join(", ");
+                                    return false;
+                                }
+                            });
                 });
             }
+        });
+
+        $main.on('click', '#pic-edit', function () {
+            $('#profile-pic').trigger('click');
+        });
+        $main.on('change', '#profile-pic', function () {
+            $('#pic-upload').trigger('submit');
+        });
+
+        $main.on('submit', '#pic-upload', function (e) {
+            $.ajax({
+                url: '{% url 'profile:change_pic' %}',
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    $('#profile').empty();
+                    $('#profile').append(data);
+                }
+            });
+            e.preventDefault();
         });
     });
     </script>
