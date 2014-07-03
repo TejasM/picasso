@@ -85,6 +85,7 @@ def get_unique_url(instance):
 
 class Listing(BaseModel):
     listing_name = models.CharField(default="", max_length=500)
+    school_name = models.CharField(default="", max_length=500)
     description = models.CharField(default="", max_length=10000)
     tags = models.ManyToManyField(Tag)
     address = models.ForeignKey(Address, default=None, null=True)
