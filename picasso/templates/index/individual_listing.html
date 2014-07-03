@@ -53,13 +53,12 @@
 
                         <p>{{ listing.description|safe }}</p>
 
-                        <p><strong>Address: </strong>{{ listing.address|safe }}</p>
+                        <p><strong>Address: </strong>{{ listing.address.get_obscure|safe }}</p>
 
                         {% if listing.active %}<p>
                             <strong>Currently Accepting Students: </strong><i class="fa fa-2x fa-check-circle"></i>
                             </p>{% endif %}
 
-                        {% if listing.phone != "" %}<p><strong>Phone:</strong>{{ listing.phone }}</p>{% endif %}
                         <p><strong>Rating:</strong>{{ listing.get_rating }}</p>
 
                         {% if listing.owner == user or listing.created_by == user %}
@@ -89,20 +88,18 @@
                                 </button>
                             </div>
                         {% endif %}
-                        {% if user.is_authenticated %}
-                            {% if listing not in user.profile.teachers.all %}
-                                <button type="button" class="btn btn-primary btn-block mt20" id="add-teacher">Add to
-                                    Favourites
-                                </button>
-                            {% else %}
-                                <button type="button" class="btn btn-primary btn-block mt20" disabled>Favourite
-                                </button>
-                            {% endif %}
-
-                            <button type="button" class="mt20 btn btn-primary btn-block" id="review-button">Write a
-                                Review
+                        {% if listing not in user.profile.teachers.all %}
+                            <button type="button" class="btn btn-primary btn-block mt20" id="add-teacher">Add to
+                                Favourites
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-primary btn-block mt20" disabled>Favourite
                             </button>
                         {% endif %}
+
+                        <button type="button" class="mt20 btn btn-primary btn-block" id="review-button">Write a
+                            Review
+                        </button>
                     </div>
                 </div>
             </section>

@@ -22,13 +22,13 @@ for i in range(1, 1000):
             soup = BeautifulSoup(r.text)
             content = soup.select('.rightbox_content')[0].findAll(text=True)
             content = [re.sub(' +', ' ', x.replace('\n', '').strip()) for x in content if
-                       x != '\n' and x != 'TEL:' and x != 'CELL:']
+                       x != '\n' and x != 'TEL:' and x != 'CELL:' and x != 'TEL:' and x != 'FAX:']
             description = ''
             if len(content) > 3 and ('Site:' not in content[2] and 'Email:' not in content[2]):
                 while len(content) > 3 and ('Site:' not in content[2] and 'Email:' not in content[2]):
                     description += content[2]
                     del content[2]
-            if len(content) == 15:
+            if len(content) == 14:
                 listing_name = content[0]
                 school = content[1]
                 site = content[4]
@@ -65,7 +65,7 @@ for i in range(1, 1000):
                     l.address.save()
                 l.tags = [tag.id]
                 l.save()
-            elif len(content) == 14:
+            elif len(content) == 13:
                 listing_name = content[0]
                 school = content[1]
                 site = content[4]
@@ -101,7 +101,7 @@ for i in range(1, 1000):
                     l.address.save()
                 l.tags = [tag.id]
                 l.save()
-            elif len(content) == 12:
+            elif len(content) == 11:
                 listing_name = content[0]
                 school = content[1]
                 email = content[4]
@@ -138,7 +138,7 @@ for i in range(1, 1000):
                 l.tags = [tag.id]
                 l.save()
 
-            elif len(content) == 11:
+            elif len(content) == 10:
                 listing_name = content[0]
                 school = content[1]
                 email = content[4]

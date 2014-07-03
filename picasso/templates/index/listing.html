@@ -42,7 +42,7 @@
 
                     <p>{{ listing.description|safe }}</p>
 
-                    <p><strong>Address: </strong>{{ listing.address|safe }}</p>
+                    <p><strong>Address: </strong>{{ listing.address.get_obscure|safe }}</p>
 
                     {% if listing.active %}<p>
                         <strong>Currently Accepting Students: </strong><i class="fa fa-2x fa-check-circle"></i>
