@@ -187,7 +187,7 @@ def my_reviews(request):
 def change_pic(request):
     if request.method == "POST":
         user = request.user
-        f = ContentFile(request.FILES['profile-pic'], name=user.first_name + '.png')
+        f = ContentFile(request.FILES['profile-pic'].read(), name=user.first_name + '.png')
         user.profile.photo = f
         user.profile.save()
         return render(request, 'profile/_profile.html')
