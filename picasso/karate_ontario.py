@@ -11,7 +11,7 @@ from picasso.index.models import Listing, Tag, Address
 __author__ = 'tmehta'
 base_url = 'https://members.karate-ontario.com/members/memberships.html/assoc-page/map-mapper?association_id='
 
-tag = Tag.objects.get_create(tag_name='Karate', dash_version='karate')
+tag = Tag.objects.get_or_create(tag_name='Karate', dash_version='karate')
 i = 642
 scraped_url = base_url + str(i)
 try:
