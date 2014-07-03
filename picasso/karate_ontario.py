@@ -85,11 +85,11 @@ for i in range(1, 1000):
                 if l.address is None:
                     try:
                         point = "POINT(%s %s)" % (lon, lat)
-                        add = Address.objects.create(city=city, location=location, postal_code=postal_code,
+                        add = Address.objects.create(city=city, location=location, postal_code='',
                                                      point=geos.fromstr(point))
                         l.address = add
                     except Exception as e:
-                        print postal_code
+                        print ''
                 else:
                     point = "POINT(%s %s)" % (lon, lat)
                     l.address.point = point
@@ -157,11 +157,11 @@ for i in range(1, 1000):
                 if l.address is None:
                     try:
                         point = "POINT(%s %s)" % (lon, lat)
-                        add = Address.objects.create(city=city, location=location, postal_code=postal_code,
+                        add = Address.objects.create(city=city, location=location, postal_code='',
                                                      point=geos.fromstr(point))
                         l.address = add
                     except Exception as e:
-                        print postal_code
+                        print ''
                 else:
                     point = "POINT(%s %s)" % (lon, lat)
                     l.address.point = point
