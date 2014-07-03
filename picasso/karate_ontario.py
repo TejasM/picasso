@@ -23,7 +23,6 @@ for i in range(1, 1000):
             content = soup.select('.rightbox_content')[0].findAll(text=True)
             content = [re.sub(' +', ' ', x.replace('\n', '').strip()) for x in content if x != '\n']
             if len(content) == 15:
-                print content
                 listing_name = content[0]
                 school = content[1]
                 site = content[4]
@@ -32,7 +31,43 @@ for i in range(1, 1000):
                 city = content[10].split(',')[0]
                 country = 'Canada'
                 postal_code = content[11]
-                phone = content[13].replace('Tel: ', '')
+                phone = content[13].replace('Tel: ', '').replace('Cell:', '')
+                try:
+                    results = Geocoder.geocode(str(location + ' ' + postal_code + ' Canada'))
+                    lat, lon = results[0].coordinates
+                except IndexError:
+                    lat, lon = 43.7, 79.4
+                except GeocoderError:
+                    lat, lon = 43.7, 79.4
+                print lat, lon
+                l = Listing.objects.create(listing_name=listing_name, scraped_url=scraped_url)
+                l.description = ''
+                l.email = email
+                l.phone = phone
+                l.active = True
+                if l.address is None:
+                    try:
+                        point = "POINT(%s %s)" % (lon, lat)
+                        add = Address.objects.create(city=city, location=location, postal_code=postal_code,
+                                                     point=geos.fromstr(point))
+                        l.address = add
+                    except Exception as e:
+                        print postal_code
+                else:
+                    point = "POINT(%s %s)" % (lon, lat)
+                    l.address.point = point
+                    l.address.save()
+                l.tags = [tag.id]
+                l.save()
+            elif len(content) == 12:
+                listing_name = content[0]
+                school = content[1]
+                email = content[4]
+                location = content[6]
+                city = content[7].split(',')[0]
+                country = 'Canada'
+                postal_code = content[8]
+                phone = content[10].replace('Tel: ', '').replace('Cell:', '')
                 try:
                     results = Geocoder.geocode(str(location + ' ' + postal_code + ' Canada'))
                     lat, lon = results[0].coordinates
