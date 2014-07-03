@@ -24,10 +24,8 @@ for i in range(1, 1000):
             content = [re.sub(' +', ' ', x.replace('\n', '').strip()) for x in content if
                        x != '\n' and x != 'TEL:' and x != 'CELL:']
             description = ''
-            if len(content) > 3 and ('Site:' not in content[2] or 'Email:' not in content[2]):
-                print content
-                print i
-                while len(content) > 3 and ('Site:' not in content[2] or 'Email:' not in content[2]):
+            if len(content) > 3 and ('Site:' not in content[2] and 'Email:' not in content[2]):
+                while len(content) > 3 and ('Site:' not in content[2] and 'Email:' not in content[2]):
                     description += content[2]
                     del content[2]
             if len(content) == 15:
