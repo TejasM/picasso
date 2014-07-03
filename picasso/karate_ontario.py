@@ -24,9 +24,11 @@ for i in range(1, 1000):
             content = [re.sub(' +', ' ', x.replace('\n', '').strip()) for x in content if
                        x != '\n' and x != 'TEL:' and x != 'CELL:']
             description = ''
-            while len(content) > 3 and (content[2] != 'Site:' or content[2] != 'Email:'):
-                description += content[2]
-                content.pop(2)
+            if content[2] != 'Site:' or content[2] != 'Email:':
+                print content
+                while len(content) > 3 and (content[2] != 'Site:' or content[2] != 'Email:'):
+                    description += content[2]
+                    del content[2]
             if len(content) == 15:
                 listing_name = content[0]
                 school = content[1]
