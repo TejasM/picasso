@@ -23,6 +23,11 @@ for i in range(1, 1000):
             content = soup.select('.rightbox_content')[0].findAll(text=True)
             content = [re.sub(' +', ' ', x.replace('\n', '').strip()) for x in content if
                        x != '\n' and x != 'TEL:' and x != 'CELL:']
+            description = ''
+            if len(content) > 3:
+                while content[2] != 'Site:' or content[2] != 'Email:':
+                    description += content[2]
+                    content.pop(2)
             if len(content) == 15:
                 listing_name = content[0]
                 school = content[1]
@@ -42,7 +47,7 @@ for i in range(1, 1000):
                     lat, lon = 43.7, 79.4
                 print lat, lon
                 l = Listing.objects.create(listing_name=listing_name, scraped_url=scraped_url)
-                l.description = ''
+                l.description = description
                 l.email = email
                 l.phone = phone
                 l.active = True
@@ -78,7 +83,7 @@ for i in range(1, 1000):
                     lat, lon = 43.7, 79.4
                 print lat, lon
                 l = Listing.objects.create(listing_name=listing_name, scraped_url=scraped_url)
-                l.description = ''
+                l.description = description
                 l.email = email
                 l.phone = phone
                 l.active = True
@@ -114,7 +119,7 @@ for i in range(1, 1000):
                     lat, lon = 43.7, 79.4
                 print lat, lon
                 l = Listing.objects.create(listing_name=listing_name, scraped_url=scraped_url)
-                l.description = ''
+                l.description = description
                 l.email = email
                 l.phone = phone
                 l.active = True
@@ -150,7 +155,7 @@ for i in range(1, 1000):
                     lat, lon = 43.7, 79.4
                 print lat, lon
                 l = Listing.objects.create(listing_name=listing_name, scraped_url=scraped_url)
-                l.description = ''
+                l.description = description
                 l.email = email
                 l.phone = phone
                 l.active = True
