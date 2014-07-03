@@ -70,7 +70,7 @@ for i in range(1, 1000):
                 country = 'Canada'
                 phone = content[12].replace('Tel: ', '').replace('Cell:', '')
                 try:
-                    results = Geocoder.geocode(str(location + ' ' + postal_code + ' Canada'))
+                    results = Geocoder.geocode(str(location + ' Canada'))
                     lat, lon = results[0].coordinates
                 except IndexError:
                     lat, lon = 43.7, 79.4
@@ -142,7 +142,7 @@ for i in range(1, 1000):
                 country = 'Canada'
                 phone = content[9].replace('Tel: ', '').replace('Cell:', '')
                 try:
-                    results = Geocoder.geocode(str(location + ' ' + postal_code + ' Canada'))
+                    results = Geocoder.geocode(str(location + ' Canada'))
                     lat, lon = results[0].coordinates
                 except IndexError:
                     lat, lon = 43.7, 79.4
