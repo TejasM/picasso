@@ -37,7 +37,7 @@
                     <div class="tab-pane fade in active" id="overview">
                         <div class="tp-leftarrow tparrows default detail-back" style="width: 100%;">
                             <div style="float: right; display:none;">
-                                {% if listing.owner == None %}
+                                {% if listing.owner == None  and listing.email != '' %}
                                     {% if claimable %}
                                         <div class="popover-icon" data-container="body" data-toggle="popover"
                                              data-trigger="hover"

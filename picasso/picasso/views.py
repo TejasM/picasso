@@ -58,7 +58,7 @@ def send_claim_email(request, list_id):
         t = get_template('emails/claim_email.html')
         context = RequestContext(request, {})
         content = t.render(context)
-        msg = EmailMessage('Picasso - Claim your business', content, [listing.email], 'contact@findpicasso.com')
+        msg = EmailMessage('Picasso - Claim your business', content, 'contact@findpicasso.com', [listing.email])
         msg.send()
     else:
         return HttpResponse(json.dumps({'fail': True}), content_type='application/json')
