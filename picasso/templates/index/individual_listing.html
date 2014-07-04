@@ -414,7 +414,7 @@
                         });
                     }
                     var distance = google.maps.geometry.spherical.computeDistanceBetween(initialLocation, pos);
-                    $("#distance").replaceWith('<p><strong>Distance: </strong>' + (Math.round(distance / 1000 * 10) / 10).toString() + 'km </p>')
+                    $("#distance").replaceWith('<p><strong>Distance: </strong>' + (Math.round(distance / 1000 * 10) / 10).toString() + ' km </p>')
                 });
             }
             var pos = new google.maps.LatLng({{ listing.address.point.y }}, {{ listing.address.point.x }});
