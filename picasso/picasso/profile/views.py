@@ -184,6 +184,18 @@ def my_reviews(request):
 
 
 @login_required
+def send_contact_email(request, list_id):
+    listing = Listing.objects.get(pk=list_id)
+    msg = request.POST['message']
+    email = request.POST['email']
+    if email != '' and msg != '' and listing.email != '':
+        t = get_template('emails/contact_email.html')
+        context = RequestContext(request, )
+        t.render(context)
+
+
+
+@login_required
 def change_pic(request):
     if request.method == "POST":
         user = request.user
