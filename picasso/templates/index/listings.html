@@ -1,6 +1,5 @@
 {% load staticfiles %}
 {% load mathfilters %}
-{% load utilfilters %}
 <!-- Rooms -->
 <div class="container mt20">
     <div class="row">
@@ -87,7 +86,7 @@
                                             <p><strong>Address: </strong>{{ l.address.get_obscure|safe }}</p>
 
                                             {% if l.distance %}
-                                                <p><strong>Distance: </strong>{{ l.distance|format_distance }}</p>
+                                                <p><strong>Distance: </strong>{{ l.distance.km }}</p>
                                             {% endif %}
                                             {% if l.description != '' %}
                                                 <p>
