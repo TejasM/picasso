@@ -3,3 +3,4 @@ Disallow: /admin/
 Disallow: /static/
 Disallow: /main/
 Disallow: /accounts/
+Disallow: /claim_account/
