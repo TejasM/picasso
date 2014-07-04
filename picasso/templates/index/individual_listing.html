@@ -35,7 +35,50 @@
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-6">
                     <div class="tab-pane fade in active" id="overview">
-                        <div class="tp-leftarrow tparrows default detail-back"></div>
+                        <div class="tp-leftarrow tparrows default detail-back" style="width: 100%;">
+                            <div style="float: right">
+                                {% if listing.owner == None %}
+                                    {% if claimable %}
+                                        <div class="popover-icon" data-container="body" data-toggle="popover"
+                                             data-trigger="hover"
+                                             data-placement="top"
+                                             data-content="You can edit any incorrect information after claiming the business"
+                                             data-original-title=""
+                                             title="">
+                                            <button type="button" class="btn btn-primary btn-block"
+                                                    id="claim-listing-button">
+                                                Sign Up to Claim Your Listing
+                                            </button>
+                                        </div>
+                                        <div class="popover-icon" data-container="body" data-toggle="popover"
+                                             data-trigger="hover"
+                                             data-placement="top"
+                                             data-content="We will review and confirm the request as soon as possible to ensure prompt removal"
+                                             data-original-title=""
+                                             title="">
+                                            <button type="button" class="btn btn-primary btn-block"
+                                                    id="remove-listing-button">
+                                                Remove
+                                                Listing
+                                            </button>
+                                        </div>
+                                    {% else %}
+                                        <div class="popover-icon" data-container="body" data-toggle="popover"
+                                             data-trigger="hover"
+                                             data-placement="top"
+                                             data-content="You can edit or remove any incorrect information after claiming the business"
+                                             data-original-title=""
+                                             title="">
+                                            <button type="button" class="btn btn-primary btn-block"
+                                                    id="send-claim-button">
+                                                &nbsp;&nbsp;Claim
+                                                Listing&nbsp;&nbsp;
+                                            </button>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
                         <h3>
                             Overview
                         </h3>
@@ -55,6 +98,8 @@
 
                         <p><strong>Address: </strong>{{ listing.address.get_obscure|safe }}</p>
 
+                        <span id="distance"></span>
+
                         {% if listing.active %}<p>
                             <strong>Currently Accepting Students: </strong><i class="fa fa-2x fa-check-circle"></i>
                             </p>{% endif %}
@@ -67,27 +112,6 @@
                             </button>
                         {% endif %}
 
-                        {% if listing.owner == None and claimable %}
-                            <div class="popover-icon" data-container="body" data-toggle="popover" data-trigger="hover"
-                                 data-placement="top"
-                                 data-content="You can edit any incorrect information after claiming the business"
-                                 data-original-title=""
-                                 title="">
-                                <button type="button" class="btn btn-primary btn-block" id="claim-listing-button">Claim
-                                    Listing
-                                </button>
-                            </div>
-                            <div class="popover-icon" data-container="body" data-toggle="popover" data-trigger="hover"
-                                 data-placement="top"
-                                 data-content="We will review and confirm the request as soon as possible to ensure prompt removal"
-                                 data-original-title=""
-                                 title="">
-                                <button type="button" class="btn btn-primary btn-block" id="remove-listing-button">
-                                    Remove
-                                    Listing
-                                </button>
-                            </div>
-                        {% endif %}
                         {% if listing not in user.profile.teachers.all %}
                             <button type="button" class="btn btn-primary btn-block mt20" id="add-teacher">Add to
                                 Favourites
@@ -289,6 +313,13 @@
             $('#sign-in-button').text('Sign Up');
         });
 
+        $main.on('click', '#send-claim-button', function () {
+            $.post('{% url 'send_claim_email' listing.id %}', function () {
+                $('#send-claim-button').text('Email Sent');
+                $('#send-claim-button').prop('disabled', true);
+            });
+        });
+
         function loadScript() {
             var script = document.createElement('script');
             script.type = 'text/javascript';
@@ -382,6 +413,8 @@
                             }
                         });
                     }
+                    var distance = google.maps.geometry.spherical.computeDistanceBetween(initialLocation, pos);
+                    $("#distance").replaceWith('<p><strong>Distance: </strong>' + (Math.round(distance / 1000 * 10) / 10).toString() + 'km </p>')
                 });
             }
             var pos = new google.maps.LatLng({{ listing.address.point.y }}, {{ listing.address.point.x }});

@@ -39,8 +39,16 @@ urlpatterns = patterns('',
 
                        # Others
                        url(r'^user/', include('picasso.profile.urls', namespace='profile')),
+
+
+                       # Emails
+                       url(r'claim_account/(?P<list_id>\w+)/$', views.send_claim_email, name='send_claim_email'),
+
+                       #Admin
                        url(r'^admin/', include(admin.site.urls)),
                        url(r'^(?P<tag_name>[^/]*)/$', view=views.category_listings),
+
+                       #SEO
                        url(r'^google46c8e47a069f43cd\.html$',
                            lambda r: HttpResponse("google-site-verification: google46c8e47a069f43cd.html",
                                                   mimetype="text/plain")),

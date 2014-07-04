@@ -1,5 +1,10 @@
+import json
+from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.template import RequestContext
+from django.template.loader import get_template
 from picasso.index.models import Listing, Review, Tag
 
 __author__ = 'tmehta'
@@ -36,12 +41,28 @@ def hash_listing(request, list_name, hash_key):
                     context = {'listing': listing}
                 except Review.MultipleObjectsReturned:
                     context = {'listing': listing, 'reviewed': True}
+                if listing.owner is None:
+                    listing.owner = request.user
+                    listing.save()
             else:
-                context = {'listing': listing}
-            context['claimable'] = True
+                context = {'listing': listing, 'claimable': True}
             return render(request, 'index/individual_listing.html', context)
         except Listing.DoesNotExist:
             return render(request, '404.html')
+
+
+def send_claim_email(request, list_id):
+    #TODO create email
+    listing = Listing.objects.get(pk=list_id)
+    if listing.email != '':
+        t = get_template('emails/claim_email.html')
+        context = RequestContext(request, {})
+        content = t.render(context)
+        msg = EmailMessage('Picasso - Claim your business', content, [listing.email], 'contact@findpicasso.com')
+        msg.send()
+    else:
+        return HttpResponse(json.dumps({'fail': True}), content_type='application/json')
+    return HttpResponse("")
 
 
 def category_listings(request, tag_name):
