@@ -86,7 +86,7 @@
                                             <p><strong>Address: </strong>{{ l.address.get_obscure|safe }}</p>
 
                                             {% if l.distance %}
-                                                <p><strong>Distance: </strong>{{ l.distance.km }}</p>
+                                                <p><strong>Distance: </strong>{{ l.distance.km|floatformat }} km</p>
                                             {% endif %}
                                             {% if l.description != '' %}
                                                 <p>
