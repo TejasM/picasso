@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import RequestContext
 from django.template.loader import get_template
+from django.views.decorators.csrf import csrf_exempt
 from picasso.index.models import Listing, Review, Tag
 
 __author__ = 'tmehta'
@@ -54,6 +55,7 @@ def hash_listing(request, hash_key):
             return render(request, '404.html')
 
 
+@csrf_exempt
 def send_claim_email(request, list_id):
     # TODO create email
     if request.method == "POST":

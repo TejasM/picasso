@@ -40,11 +40,15 @@ urlpatterns = patterns('',
                        # Others
                        url(r'^user/', include('picasso.profile.urls', namespace='profile')),
 
+
+                       # Emails
+                       url(r'claim_account/(?P<list_id>\w+)/$', views.send_claim_email, name='send_claim_email'),
+
                        # Admin
                        url(r'^admin/', include(admin.site.urls)),
                        url(r'^(?P<tag_name>[^/]*)/$', view=views.category_listings),
 
-                       # SEO
+                       #SEO
                        url(r'^google46c8e47a069f43cd\.html$',
                            lambda r: HttpResponse("google-site-verification: google46c8e47a069f43cd.html",
                                                   mimetype="text/plain")),
@@ -71,15 +75,11 @@ urlpatterns = patterns('',
 urlpatterns += patterns('',
                         url(r'^unknown/(?P<list_name>.*)/$', view=views.individual_listing, name='unknown'),
                         url(r'^hash-key/(?P<hash_key>[a-zA-z0-9]{40})/$',
-                            view=views.hash_listing, name='hash-key'), )
+                            view=views.hash_listing, name='hash-key'),)
 for t in Tag.objects.all():
     urlpatterns += patterns('',
                             url(r'^' + t.dash_version + '/(?P<list_name>.*)/$', view=views.individual_listing,
                                 name=t.dash_version), )
-
-urlpatterns += patterns('',
-                        url(r'claim_account/(?P<list_id>\w+)/$', views.send_claim_email, name='send_claim_email'), )
-
 if settings.DEBUG:
     import debug_toolbar
 
