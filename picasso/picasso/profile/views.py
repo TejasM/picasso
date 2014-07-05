@@ -23,6 +23,7 @@ def add_listing(request):
         address = request.POST['address']
         postal = request.POST['postal']
         city = request.POST['city']
+        email = request.POST['email']
         country = request.POST['country']
         phone = request.POST['phone']
         owner = request.POST['owner']
@@ -50,7 +51,8 @@ def add_listing(request):
             owner = None
         listing = Listing.objects.create(listing_name=listing_name, description=description, address=address,
                                          phone=phone, active=active, owner=owner, created_by=request.user,
-                                         level_of_expertise=l_o_e, price_min=price_min, price_max=price_max)
+                                         level_of_expertise=l_o_e, price_min=price_min, price_max=price_max,
+                                         email=email)
         listing.tags = tags
         listing.save()
         return HttpResponse(json.dumps({'id': listing.id}), content_type='application/json')
@@ -73,6 +75,7 @@ def edit_listing(request, list_id):
         listing = Listing.objects.get(pk=int(list_id))
         listing.listing_name = request.POST['listing_name']
         listing.description = request.POST['description']
+        listing.email = request.POST['email']
         listing.address.location = request.POST['address']
         listing.address.postal = request.POST['postal']
         listing.address.city = request.POST['city']
