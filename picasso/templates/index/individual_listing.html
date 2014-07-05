@@ -47,7 +47,7 @@
                                              title="">
                                             <button type="button" class="btn btn-primary btn-block"
                                                     id="claim-listing-button">
-                                                Sign Up to Claim Your Listing
+                                                &nbsp;&nbsp;Sign Up to Claim Your Listing&nbsp;&nbsp;
                                             </button>
                                         </div>
                                         <div class="popover-icon" data-container="body" data-toggle="popover"
@@ -58,8 +58,8 @@
                                              title="">
                                             <button type="button" class="btn btn-primary btn-block"
                                                     id="remove-listing-button">
-                                                Remove
-                                                Listing
+                                                &nbsp;&nbsp;Remove
+                                                Listing&nbsp;&nbsp;
                                             </button>
                                         </div>
                                     {% else %}
@@ -259,8 +259,10 @@
             $('#listing-detail').show();
         });
 
-        $main.on('click', '.detail-back', function () {
-            window.location.href = '/';
+        $main.on('click', '.detail-back', function (event) {
+            if (!$(event.target).is('button')) {
+                window.location.href = '/';
+            }
         });
 
         $main.on('click', '#save-edit-listing', function () {
