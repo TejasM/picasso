@@ -56,10 +56,9 @@ def hash_listing(request, hash_key):
 
 def send_claim_email(request, list_id):
     # TODO create email
-    logger.debug('Claim for listing called')
     if request.method == "POST":
         listing = Listing.objects.get(pk=list_id)
-        logger.debug('Listing sending email')
+        logger.debug('Listing claim sending email to : ' + listing.email)
         if listing.email != '':
             t = get_template('emails/claim_email.html')
             context = RequestContext(request, {'listing': listing})
