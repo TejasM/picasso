@@ -93,7 +93,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'mysite.log',
+            'filename': '/home/tejas/picasso/mysite.log',
             'formatter': 'verbose'
         },
         'mail_admins': {
