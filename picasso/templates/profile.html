@@ -71,7 +71,7 @@
             });
         });
         var $main = $('#main-section');
-        {% if my_listings.count != 0 %}
+        {% if my_listings.count == 0 %}
             var $main_listings = $('#main-listings');
             var $my_listings = $('#my-listings');
             $('#create-listing-button').click(function () {
