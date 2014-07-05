@@ -1,4 +1,5 @@
 import json
+import logging
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
@@ -8,6 +9,8 @@ from django.template.loader import get_template
 from picasso.index.models import Listing, Review, Tag
 
 __author__ = 'tmehta'
+
+logger = logging.getLogger(__name__)
 
 
 def individual_listing(request, list_name):
@@ -55,6 +58,7 @@ def send_claim_email(request, list_id):
     # TODO create email
     if request.method == "POST":
         listing = Listing.objects.get(pk=list_id)
+        logger.debug('Claim for listing ' + listing.listing_name + ' ' + listing.email)
         if listing.email != '':
             t = get_template('emails/claim_email.html')
             context = RequestContext(request, {'listing': listing})
