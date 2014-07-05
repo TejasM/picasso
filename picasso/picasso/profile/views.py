@@ -32,11 +32,12 @@ def add_listing(request):
         tags = []
         for cat in categories:
             cat = cat.strip()
-            name = re.sub(r'\W+', '-', cat).lower()
-            try:
-                tags.append(Tag.objects.get(dash_version=name).id)
-            except Tag.DoesNotExist:
-                tags.append(Tag.objects.create(dash_version=name, tag_name=cat).id)
+            if cat != '':
+                name = re.sub(r'\W+', '-', cat).lower()
+                try:
+                    tags.append(Tag.objects.get(dash_version=name).id)
+                except Tag.DoesNotExist:
+                    tags.append(Tag.objects.create(dash_version=name, tag_name=cat).id)
         if not l_o_e:
             l_o_e = "All"
         else:
@@ -92,12 +93,13 @@ def edit_listing(request, list_id):
         categories = request.POST['categories'].split(',')
         tags = []
         for cat in categories:
-            cat = cat.strip()
-            name = re.sub(r'\W+', '-', cat).lower()
-            try:
-                tags.append(Tag.objects.get(dash_version=name).id)
-            except Tag.DoesNotExist:
-                tags.append(Tag.objects.create(dash_version=name, tag_name=cat).id)
+            if cat != '':
+                cat = cat.strip()
+                name = re.sub(r'\W+', '-', cat).lower()
+                try:
+                    tags.append(Tag.objects.get(dash_version=name).id)
+                except Tag.DoesNotExist:
+                    tags.append(Tag.objects.create(dash_version=name, tag_name=cat).id)
         listing.tags = tags
         if request.POST['owner'] == "true":
             listing.owner = request.user
