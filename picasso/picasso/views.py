@@ -29,10 +29,10 @@ def individual_listing(request, list_name):
             return render(request, '404.html')
 
 
-def hash_listing(request, list_name, hash_key):
+def hash_listing(request, hash_key):
     if request.method == "GET":
         try:
-            listing = Listing.objects.get(unique_url=list_name, hash_key=hash_key)
+            listing = Listing.objects.get(hash_key=hash_key)
             if request.user.is_authenticated():
                 try:
                     Review.objects.get(user=request.user, listing=listing)
@@ -52,16 +52,18 @@ def hash_listing(request, list_name, hash_key):
 
 
 def send_claim_email(request, list_id):
-    #TODO create email
-    listing = Listing.objects.get(pk=list_id)
-    if listing.email != '':
-        t = get_template('emails/claim_email.html')
-        context = RequestContext(request, {})
-        content = t.render(context)
-        msg = EmailMessage('Picasso - Claim your business', content, 'contact@findpicasso.com', [listing.email])
-        msg.send()
-    else:
-        return HttpResponse(json.dumps({'fail': True}), content_type='application/json')
+    # TODO create email
+    if request.method == "POST":
+        listing = Listing.objects.get(pk=list_id)
+        if listing.email != '':
+            t = get_template('emails/claim_email.html')
+            context = RequestContext(request, {'listing': listing})
+            content = t.render(context)
+            msg = EmailMessage('Picasso - Claim your business', content, 'contact@findpicasso.com', [listing.email])
+            msg.send()
+            return HttpResponse(json.dumps({'fail': False}), content_type='application/json')
+        else:
+            return HttpResponse(json.dumps({'fail': True}), content_type='application/json')
     return HttpResponse("")
 
 
