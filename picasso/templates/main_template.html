@@ -369,9 +369,11 @@
             });
 
             $('#sign-in-button').click(function () {
+                var claim_id = $('input[name="claim-id"]').val() || '';
                 $.post('{% url 'signup' %}', {'first-name': $('#first-name').val(),
                     'last-name': $('#last-name').val(), 'type': $('#type-signin').val(),
                     'email': $('#email').val(), 'password': $('#password').val(),
+                    'claim-id': claim_id,
                     'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
                     if (parseInt(data['success']) == 0) {
                         $('.error_message').text(data['error']);
