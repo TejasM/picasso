@@ -11,6 +11,8 @@ urlpatterns = patterns('',
                        url(r'^add-listing/$', views.add_listing, name='add_listing'),
                        url(r'^edit-listing/(?P<list_id>\w+)$', views.edit_listing, name='edit_listing'),
 
+                       url(r'^send-contact/(?P<list_id>\w+)$', views.send_contact_email, name='send_contact_email'),
+
                        # Profile urls
                        url(r'^profile/$', views.profile, name='profile'),
                        url(r'^change_pic/$', views.change_pic, name='change_pic'),

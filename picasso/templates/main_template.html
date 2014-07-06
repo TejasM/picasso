@@ -378,7 +378,7 @@
                     if (parseInt(data['success']) == 0) {
                         $('.error_message').text(data['error']);
                     } else {
-                        document.location.href = '/';
+                        document.location.href = '{{ request.get_full_path }}';
                     }
                 });
             });

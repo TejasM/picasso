@@ -191,6 +191,7 @@ def my_reviews(request):
                   {'reviews': reviews})
 
 
+@login_required
 def send_contact_email(request, list_id):
     if request.method == "POST":
         listing = Listing.objects.get(pk=list_id)
