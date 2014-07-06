@@ -1,6 +1,8 @@
 import json
+import logging
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
+from django.core.mail import EmailMessage
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render
@@ -13,6 +15,7 @@ import re
 from picasso.index.models import Listing, Address, Tag
 
 # TODO: For all addresses get geocoder
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -188,16 +191,21 @@ def my_reviews(request):
                   {'reviews': reviews})
 
 
-@login_required
 def send_contact_email(request, list_id):
-    listing = Listing.objects.get(pk=list_id)
-    msg = request.POST['message']
-    email = request.POST['email']
-    if email != '' and msg != '' and listing.email != '':
-        t = get_template('emails/contact_email.html')
-        context = RequestContext(request, )
-        t.render(context)
-
+    if request.method == "POST":
+        listing = Listing.objects.get(pk=list_id)
+        msg = request.POST['message']
+        email = request.POST['email']
+        if email != '' and msg != '' and listing.email != '':
+            t = get_template('emails/contact_email.html')
+            context = RequestContext(request, {'msg': msg, 'email': email})
+            content = t.render(context)
+            msg = EmailMessage('Picasso - Claim your business', content, 'contact@findpicasso.com', [listing.email])
+            msg.content_subtype = "html"
+            msg.send()
+            logger.debug("Email to listing sent by " + email + ' to ' + listing.email)
+            return HttpResponse(json.dumps({}), content_type='application/json')
+    return HttpResponse("")
 
 
 @login_required
