@@ -158,7 +158,7 @@
                         'active': $('#are-active').is(':checked'),
                         'price_min': $range.slider("values", 0), 'price_max': $range.slider("values", 1),
                         'level_of_expertise[]': $('#listing-level').val() || [],
-                        'categories': $('#listing-categories').val(),
+                        'categories': $('#listing-categories').val(), 'email': $('#listing-email').val(),
                         'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
                     function (data) {
                         $('#create-listing-div').remove();
