@@ -474,6 +474,8 @@
             });
             map.setCenter(pos);
         }
+    {% else %}
+        $('#map-canvas').hide();
     {% endif %}
     </script>
 {% endblock %}
