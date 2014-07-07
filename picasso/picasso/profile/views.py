@@ -1,5 +1,7 @@
 import json
 import logging
+import re
+
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
 from django.core.mail import EmailMessage
@@ -9,9 +11,8 @@ from django.shortcuts import render
 from django.template import RequestContext
 from django.template.loader import get_template
 from django.utils import timezone
-from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
-import re
+
 from picasso.index.models import Listing, Address, Tag
 
 # TODO: For all addresses get geocoder
@@ -40,7 +41,8 @@ def add_listing(request):
                 try:
                     tags.append(Tag.objects.get(dash_version=name).id)
                 except Tag.DoesNotExist:
-                    tags.append(Tag.objects.create(dash_version=name, tag_name=cat).id)
+                    t = Tag.objects.create(dash_version=name, tag_name=cat)
+                    tags.append(t.id)
         if not l_o_e:
             l_o_e = "All"
         else:
@@ -86,7 +88,7 @@ def edit_listing(request, list_id):
         listing.address.country = request.POST['country']
         listing.address.save()
         listing.phone = request.POST['phone']
-        l_o_e = request.POST.getlist('level_of_expertise')
+        l_o_e = request.POST.getlist('level_of_expertise[]')
         if l_o_e:
             listing.level_of_expertise = ", ".join(l_o_e)
         else:

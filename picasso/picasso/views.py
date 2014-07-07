@@ -14,7 +14,7 @@ __author__ = 'tmehta'
 logger = logging.getLogger(__name__)
 
 
-def individual_listing(request, list_name):
+def individual_listing(request, dash_version, list_name):
     if request.method == "GET":
         try:
             listing = Listing.objects.get(unique_url=list_name)
