@@ -71,153 +71,152 @@
             });
         });
         var $main = $('#main-section');
-        {% if my_listings.count == 0 %}
-            var $main_listings = $('#main-listings');
-            var $my_listings = $('#my-listings');
-            $('#create-listing-button').click(function () {
-                $.get('{% url 'profile:add_listing' %}', function (data) {
-                    $my_listings.hide();
-                    $main_listings.append(data);
-                    $("#are-owner").bootstrapSwitch();
-                    $("#are-active").bootstrapSwitch();
-                    $('#listing-level').chosen({width: '200px'});
-                    var $range = $("#slider-range");
-                    var values = [ 10, 100];
-                    $range.slider({
-                        range: true,
-                        min: 0,
-                        max: 500,
-                        values: values,
-                        slide: function (event, ui) {
-                            $("#listing-price").val("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
-                        }
-                    });
-                    $("#listing-price").val("$" + $range.slider("values", 0) +
-                            " - $" + $range.slider("values", 1));
-                    $('#listing-categories').bind("keydown", function (event) {
-                        if (event.keyCode === $.ui.keyCode.TAB &&
-                                $(this).autocomplete("instance").menu.active) {
-                            event.preventDefault();
-                        }
-                    })
-                            .autocomplete({
-                                minLength: 0,
-                                source: function (request, response) {
-                                    // delegate back to autocomplete, but extract the last term
-                                    response($.ui.autocomplete.filter(
-                                            tags, extractLast(request.term)));
-                                },
-                                focus: function () {
-                                    // prevent value inserted on focus
-                                    return false;
-                                },
-                                select: function (event, ui) {
-                                    var terms = split(this.value);
-                                    // remove the current input
-                                    terms.pop();
-                                    // add the selected item
-                                    terms.push(ui.item.value);
-                                    // add placeholder to get the comma-and-space at the end
-                                    terms.push("");
-                                    this.value = terms.join(", ");
-                                    return false;
-                                }
-                            });
-                });
-            });
-
-            $main_listings.on('click', '.to-listing', function () {
-                var url = $(this).data('url');
-                $.get(url, function (data) {
-                    $my_listings.hide();
-                    $main_listings.append(data);
-                });
-            });
-
-            $main_listings.on('click', '.detail-back', function () {
-                $('#listing-detail').remove();
-                $my_listings.show();
-            });
-
-            $main_listings.on('click', '#edit-listing-button', function () {
-                var url = $(this).data('url');
-                $.get(url, function (data) {
-                    $('#listing-detail').remove();
-                    $main_listings.append(data);
-                    $("#are-owner").bootstrapSwitch();
-                    $("#are-active").bootstrapSwitch();
-                });
-            });
-
-            $main_listings.on('click', '#submit-create-listing', function () {
-                var url = $(this).data('url');
+        var $main_listings = $('#main-listings');
+        var $my_listings = $('#my-listings');
+        $('#create-listing-button').click(function () {
+            $.get('{% url 'profile:add_listing' %}', function (data) {
+                $my_listings.hide();
+                $main_listings.append(data);
+                $("#are-owner").bootstrapSwitch();
+                $("#are-active").bootstrapSwitch();
+                $('#listing-level').chosen({width: '200px'});
                 var $range = $("#slider-range");
-                $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
-                            'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
-                            'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
-                            'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
-                            'active': $('#are-active').is(':checked'),
-                            'price_min': $range.slider("values", 0), 'price_max': $range.slider("values", 1),
-                            'level_of_expertise[]': $('#listing-level').val() || [],
-                            'categories': $('#listing-categories').val(),
-                            'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
-                        function (data) {
-                            $('#create-listing-div').remove();
-                            $.get('/get-listing/' + data['id'], function (data2) {
-                                $my_listings.find('.rooms').append(data2);
-                            });
-                            $my_listings.show();
-                            {% if user.owner.count == 0 %}
-                                window.location.href = '/';
-                            {% endif %}
+                var values = [ 10, 100];
+                $range.slider({
+                    range: true,
+                    min: 0,
+                    max: 500,
+                    values: values,
+                    slide: function (event, ui) {
+                        $("#listing-price").val("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
+                    }
+                });
+                $("#listing-price").val("$" + $range.slider("values", 0) +
+                        " - $" + $range.slider("values", 1));
+                $('#listing-categories').bind("keydown", function (event) {
+                    if (event.keyCode === $.ui.keyCode.TAB &&
+                            $(this).autocomplete("instance").menu.active) {
+                        event.preventDefault();
+                    }
+                })
+                        .autocomplete({
+                            minLength: 0,
+                            source: function (request, response) {
+                                // delegate back to autocomplete, but extract the last term
+                                response($.ui.autocomplete.filter(
+                                        tags, extractLast(request.term)));
+                            },
+                            focus: function () {
+                                // prevent value inserted on focus
+                                return false;
+                            },
+                            select: function (event, ui) {
+                                var terms = split(this.value);
+                                // remove the current input
+                                terms.pop();
+                                // add the selected item
+                                terms.push(ui.item.value);
+                                // add placeholder to get the comma-and-space at the end
+                                terms.push("");
+                                this.value = terms.join(", ");
+                                return false;
+                            }
                         });
             });
+        });
 
-            $main_listings.on('click', '#cancel-create-listing', function () {
-                if (window.location.search.replace("?", "").trim() != '') {
-                    window.location.href = '/';
-                }
-                $('#create-listing-div').remove();
-                $my_listings.show();
+        $main_listings.on('click', '.to-listing', function () {
+            var url = $(this).data('url');
+            $.get(url, function (data) {
+                $my_listings.hide();
+                $main_listings.append(data);
             });
+        });
 
-            $main_listings.on('click', '#cancel-edit-listing', function () {
-                $('#edit-listing-div').remove();
-                $my_listings.show();
+        $main_listings.on('click', '.detail-back', function () {
+            $('#listing-detail').remove();
+            $my_listings.show();
+        });
+
+        $main_listings.on('click', '#edit-listing-button', function () {
+            var url = $(this).data('url');
+            $.get(url, function (data) {
+                $('#listing-detail').remove();
+                $main_listings.append(data);
+                $("#are-owner").bootstrapSwitch();
+                $("#are-active").bootstrapSwitch();
             });
+        });
 
-            $main_listings.on('click', '#save-edit-listing', function () {
-                var url = $(this).data('url');
-                $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
-                            'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
-                            'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
-                            'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
-                            'active': $('#are-active').is(':checked'),
-                            'price_min': $range.slider("values", 0), 'price_max': $range.slider("values", 1),
-                            'level_of_expertise[]': $('#listing-level').val() || [],
-                            'categories': $('#listing-categories').val(),
-                            'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
-                        function (data) {
-                            $('#edit-listing-div').remove();
-                            $my_listings.find('#listing-' + data['id']).remove();
-                            $.get('/get-listing/' + data['id'], function (data2) {
-                                $my_listings.find('.rooms .row').append(data2);
-                            });
-                            $my_listings.show();
+        $main_listings.on('click', '#submit-create-listing', function () {
+            var url = $(this).data('url');
+            var $range = $("#slider-range");
+            $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
+                        'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
+                        'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
+                        'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
+                        'active': $('#are-active').is(':checked'),
+                        'price_min': $range.slider("values", 0), 'price_max': $range.slider("values", 1),
+                        'level_of_expertise[]': $('#listing-level').val() || [],
+                        'categories': $('#listing-categories').val(),
+                        'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
+                    function (data) {
+                        $('#create-listing-div').remove();
+                        $.get('/get-listing/' + data['id'], function (data2) {
+                            $my_listings.find('.rooms').append(data2);
                         });
-            });
+                        $my_listings.show();
+                        {% if user.owner.count == 0 %}
+                            window.location.href = '/';
+                        {% endif %}
+                    });
+        });
 
-            {% if user.owner.count == 0 %}
-                $('#create-listing-button').trigger('click');
-            {% endif %}
-            function split(val) {
-                return val.split(/,\s*/);
+        $main_listings.on('click', '#cancel-create-listing', function () {
+            if (window.location.search.replace("?", "").trim() != '') {
+                window.location.href = '/';
             }
+            $('#create-listing-div').remove();
+            $my_listings.show();
+        });
 
-            function extractLast(term) {
-                return split(term).pop();
-            }
+        $main_listings.on('click', '#cancel-edit-listing', function () {
+            $('#edit-listing-div').remove();
+            $my_listings.show();
+        });
+
+        $main_listings.on('click', '#save-edit-listing', function () {
+            var url = $(this).data('url');
+            $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
+                        'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
+                        'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
+                        'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
+                        'active': $('#are-active').is(':checked'),
+                        'price_min': $range.slider("values", 0), 'price_max': $range.slider("values", 1),
+                        'level_of_expertise[]': $('#listing-level').val() || [],
+                        'categories': $('#listing-categories').val(),
+                        'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
+                    function (data) {
+                        $('#edit-listing-div').remove();
+                        $my_listings.find('#listing-' + data['id']).remove();
+                        $.get('/get-listing/' + data['id'], function (data2) {
+                            $my_listings.find('.rooms .row').append(data2);
+                        });
+                        $my_listings.show();
+                    });
+        });
+
+        {% if user.owner.count == 0 %}
+            $('#create-listing-button').trigger('click');
         {% endif %}
+        function split(val) {
+            return val.split(/,\s*/);
+        }
+
+        function extractLast(term) {
+            return split(term).pop();
+        }
+
         var profile_status = "not-edit";
         $('#profile-hobbies').bind("keydown", function (event) {
             if (event.keyCode === $.ui.keyCode.TAB &&
