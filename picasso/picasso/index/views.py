@@ -49,7 +49,7 @@ def get_listings(request):
             current_point = geos.fromstr("POINT(%s %s)" % (lon, lat))
             temp_listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).distance(current_point,
                                           field_name='address__point').order_by('distance')
-            if listings.count() == 0:
+            if temp_listings.count() == 0:
                 raise Exception
             else:
                 listings = temp_listings
@@ -57,13 +57,12 @@ def get_listings(request):
                 listings = listings[:20]
             lons = [x.address.point.x for x in listings]
             lats = [x.address.point.y for x in listings]
-            context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More'}
         except:
             if len(listings) > 20:
                 listings = listings[:20]
             lats = []
             lons = []
-            context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More', 'filters': True}
+        context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More', 'filters': True}
         context = RequestContext(request, context)
         t = get_template('index/listings.html')
         names = [str(x.listing_name) for x in listings]
