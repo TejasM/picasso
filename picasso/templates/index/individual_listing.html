@@ -175,7 +175,7 @@
             <button type="button" class="btn  btn-lg btn-primary" id="cancel-contact-button">Cancel</button>
             <button type="button" class="btn  btn-lg btn-primary" id="contact-submit"
                     data-url="{% url 'profile:send_contact_email' listing.id %}">
-                Submit Review
+                Send Message
             </button>
         </form>
     </div>
@@ -294,6 +294,9 @@
 
         $main.on('click', '#contact-button', function () {
             $('#contact_form').show();
+            var divPosition = $('#contact_form').offset();
+            $('html, body').animate({scrollTop: divPosition.top}, "slow");
+            $("#review-rating").rating({'min': 0, 'max': 5, 'step': 0.5});
         });
 
         $main.on('click', '#cancel-contact-button', function () {
