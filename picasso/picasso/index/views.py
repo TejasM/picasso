@@ -49,6 +49,8 @@ def get_listings(request):
             current_point = geos.fromstr("POINT(%s %s)" % (lon, lat))
             listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).distance(current_point,
                                           field_name='address__point').order_by('distance')
+            if listings.count() == 0:
+                raise Exception
             if len(listings) > 20:
                 listings = listings[:20]
             lons = [x.address.point.x for x in listings]
