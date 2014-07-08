@@ -174,7 +174,7 @@ class Listing(BaseModel):
             string = self.tags.all().order_by('?')[0].dash_version
         else:
             string = "unknown"
-        return (string, [self.unique_url])
+        return ('actual_listing', [string, self.unique_url])
 
     def save(self, **kwargs):
         count = Listing.objects.filter(listing_name=self.listing_name).count()
