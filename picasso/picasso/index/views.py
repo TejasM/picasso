@@ -1,4 +1,5 @@
 import json
+import logging
 
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -16,6 +17,8 @@ from pygeocoder import Geocoder
 import watson
 
 from picasso.index.models import Listing, Review
+
+logger = logging.getLogger(__name__)
 
 
 def featured(request):
@@ -112,6 +115,7 @@ def signin(request):
                 if claim != '':
                     try:
                         l = Listing.objects.get(pk=int(claim))
+                        logger.debug("Listing " + l.list_name + " was claimed")
                         l.owner = user
                         l.save()
                     except Listing.DoesNotExist:
