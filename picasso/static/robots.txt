@@ -4,3 +4,4 @@ Disallow: /static/
 Disallow: /main/
 Disallow: /accounts/
 Disallow: /claim_account/
+Disallow: /review-listing/
