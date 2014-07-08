@@ -20,20 +20,19 @@ for url in urls:
     phone = [x.text for x in phone_selector(tree)]
     set_of_tags = [[y.strip() for y in x.text.split(',')] for x in styles(tree) if x.text is not None]
     for n, c, p, tags in zip(names, city, phone, set_of_tags):
+        django_tags = []
+        for t in tags:
+            try:
+                t = Tag.objects.get(tag_name=t)
+            except Tag.DoesNotExist:
+                t = Tag.objects.create(tag_name=t)
+            django_tags.append(t.id)
         try:
             l = Listing.objects.get(listing_name=n, scraped_url=url)
         except Listing.DoesNotExist:
-            django_tags = []
-            for t in tags:
-                try:
-                    t = Tag.objects.get(tag_name=t)
-                except Tag.DoesNotExist:
-                    t = Tag.objects.create(tag_name=t)
-                django_tags.append(t.id)
             l = Listing.objects.create(listing_name=n, scraped_url=url, phone=p)
-            l.tags = django_tags
-
+        l.tags = django_tags
         if l.address is None:
-            address = Address.objects.get(city=c)
+            address = Address.objects.create(city=c)
             l.address = address
         l.save()
