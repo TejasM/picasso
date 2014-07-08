@@ -15,8 +15,8 @@
                             <h3 style="padding: 10px">Categories</h3>
                             <ul class="nav nav-pills list-unstyled arrow" id="filters">
                                 <li class="active"><a href="#" data-filter="*">All</a></li>
-                                {% for t in tags|slice:":20" %}
-                                    <li><a href="{% url 'by_category' t.dash_version %}">{{ t.tag_name }}</a></li>
+                                {% for t in full_tags|slice:":20" %}
+                                    <li><a href="{% url 'by_category' t.dash_version %}" onclick="window.location='{% url 'by_category' t.dash_version %}'">{{ t.tag_name }}</a></li>
                                 {% endfor %}
                             </ul>
                         {% else %}
