@@ -93,7 +93,7 @@ class Listing(BaseModel):
     scraped_url = models.CharField(default="", max_length=10000)
     active = models.BooleanField(default=True)
     email = models.EmailField(default="", blank=True, null=True)
-    phone = models.CharField(default="", blank=True, null=True, max_length=20)
+    phone = models.CharField(default="", blank=True, null=True, max_length=100)
     created_by = models.ForeignKey(User, null=True, default=None, related_name='creator')
     owner = models.ForeignKey(User, null=True, default=None, related_name='owner')
     unique_url = models.CharField(max_length=1000, default="")

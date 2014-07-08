@@ -22,9 +22,9 @@ for url in urls:
     set_of_tags = [[y.strip() for y in x.text.split(',')] for x in styles(tree) if x.text is not None]
     for n, c, p, tags in zip(names, city, phone, set_of_tags):
         django_tags = []
-        p = p.split('/')[0].strip()
-        p = p.split('or')[0].strip()
-        p = p.split('c')[0].strip()
+        # p = p.split('/')[0].strip()
+        # p = p.split('or')[0].strip()
+        # p = p.split('c')[0].strip()
         c = c.strip()
         for t in tags:
             try:
