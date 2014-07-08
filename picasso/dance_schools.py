@@ -18,7 +18,7 @@ for url in urls:
     names = [x.text for x in company_name_selector(tree)]
     city = [x.text for x in city_selector(tree)]
     phone = [x.text for x in phone_selector(tree)]
-    set_of_tags = [[y.strip() for y in x.text.split(',')] for x in styles(tree)]
+    set_of_tags = [[y.strip() for y in x.text.split(',')] for x in styles(tree) if x.text is not None]
     for n, c, p, tags in zip(names, city, phone, set_of_tags):
         try:
             l = Listing.objects.get(listing_name=n, scraped_url=url)
