@@ -25,6 +25,8 @@ for url in urls:
         # p = p.split('/')[0].strip()
         # p = p.split('or')[0].strip()
         # p = p.split('c')[0].strip()
+        if c is None:
+            c = 'Toronto'
         c = c.strip()
         for t in tags:
             try:
