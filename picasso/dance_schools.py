@@ -1,3 +1,4 @@
+from django.db import DataError
 from lxml import html
 from lxml.cssselect import CSSSelector
 import requests
@@ -30,7 +31,10 @@ for url in urls:
         try:
             l = Listing.objects.get(listing_name=n, scraped_url=url)
         except Listing.DoesNotExist:
-            l = Listing.objects.create(listing_name=n, scraped_url=url, phone=p)
+            try:
+                l = Listing.objects.create(listing_name=n, scraped_url=url, phone=p)
+            except DataError:
+                print p
         l.tags = django_tags
         if l.address is None:
             address = Address.objects.create(city=c)
