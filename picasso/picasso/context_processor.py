@@ -4,5 +4,5 @@ __author__ = 'tmehta'
 
 
 def get_current_tags(request):
-    tags = [str(x) for x in Tag.objects.all().values_list('tag_name', flat=True)]
+    tags = [str(x) for x in Tag.objects.all().order_by('?').values_list('tag_name', flat=True)]
     return {'tags': tags}

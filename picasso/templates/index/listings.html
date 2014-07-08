@@ -15,10 +15,9 @@
                             <h3 style="padding: 10px">Categories</h3>
                             <ul class="nav nav-pills list-unstyled arrow" id="filters">
                                 <li class="active"><a href="#" data-filter="*">All</a></li>
-                                <li><a href="#" data-filter=".Piano">Piano</a></li>
-                                <li><a href="#" data-filter=".String">String</a></li>
-                                <li><a href="#" data-filter=".Singing">Singing</a></li>
-                                <li><a href="#" data-filter=".Theory">Theory</a></li>
+                                {% for t in tags|slice:":20" %}
+                                    <li><a href="{% url 'by_category' t.dash_version %}">{{ t.tag_name }}</a></li>
+                                {% endfor %}
                             </ul>
                         {% else %}
                             <h3 style="padding: 10px">Filters</h3>
