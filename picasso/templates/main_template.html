@@ -91,52 +91,54 @@
 {% block above_content %}
 {% endblock %}
 <!-- Reservation form -->
-<section id="reservation-form">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1 style="margin: 10px 0 20px;">Find the best extracurricular teachers around you.</h1>
+{% block res_form %}
+    <section id="reservation-form">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 style="margin: 10px 0 20px;">Find the best extracurricular teachers around you.</h1>
 
-                <h2 style="margin-bottom: 20px">Search from over 2000 teachers in Ontario.</h2>
+                    <h2 style="margin-bottom: 20px">Search from over 2000 teachers in Ontario.</h2>
 
-                <form class="form-inline reservation-horizontal clearfix" role="form" method="post"
-                      action="" name="reservationform" id="reservationform" onsubmit="javascript:void (0);"
-                      style="padding: 10px 10px">
-                    <div id="message"></div>
-                    <!-- Error message display -->
-                    <div class="row row-xs-height">
-                        <div class="col-lg-6 col-sm-12 col-lg-height">
-                            <div class="form-group" style=" width: 100%">
-                                <i class="fa fa-2x fa-search"
-                                   style="position: absolute; top: 10px; left: 25px; z-index: 1000;"></i>
-                                <input type="text" name="search" id="search-text"
-                                       value="What are you looking for?" onblur="if (this.value == '')
+                    <form class="form-inline reservation-horizontal clearfix" role="form" method="post"
+                          action="" name="reservationform" id="reservationform" onsubmit="javascript:void (0);"
+                          style="padding: 10px 10px">
+                        <div id="message"></div>
+                        <!-- Error message display -->
+                        <div class="row row-xs-height">
+                            <div class="col-lg-6 col-sm-12 col-lg-height">
+                                <div class="form-group" style=" width: 100%">
+                                    <i class="fa fa-2x fa-search"
+                                       style="position: absolute; top: 10px; left: 25px; z-index: 1000;"></i>
+                                    <input type="text" name="search" id="search-text"
+                                           value="What are you looking for?" onblur="if (this.value == '')
                             this.value = this.defaultValue" onfocus="if (this.value == this.defaultValue)
                             this.value = ''" class="form-control autocomplete"
-                                       style="font-size: 25px; height: 100%; padding-left: 55px; width: 100%">
+                                           style="font-size: 25px; height: 100%; padding-left: 55px; width: 100%">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-4 col-sm-12 col-lg-height">
-                            <div class="form-group">
-                                <i class="fa fa-2x fa-map-marker"
-                                   style="position: absolute; top: 12px; left: 30px; z-index: 1000;"></i>
-                                <input type="text" name="location" id="location-text" value="Toronto" onblur="if (this.value == '')
+                            <div class="col-lg-4 col-sm-12 col-lg-height">
+                                <div class="form-group">
+                                    <i class="fa fa-2x fa-map-marker"
+                                       style="position: absolute; top: 12px; left: 30px; z-index: 1000;"></i>
+                                    <input type="text" name="location" id="location-text" value="Toronto" onblur="if (this.value == '')
                             this.value = this.defaultValue" onfocus="if (this.value == this.defaultValue)
                             this.value = ''" class="form-control" style="font-size: 25px; height: 100%;
                             padding-left: 40px">
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-12 col-lg-height">
+                                <button type="button" class="btn btn-primary btn-block" id="search-submisson"
+                                        style="margin-top: 0; height: 45px">Search Now
+                                </button>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-sm-12 col-lg-height">
-                            <button type="button" class="btn btn-primary btn-block" id="search-submisson"
-                                    style="margin-top: 0; height: 45px">Search Now
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+{% endblock %}
 <div id="main-section">
     {% block content %}
     {% endblock %}
@@ -226,7 +228,6 @@
             <div class="col-md-3 col-sm-3">
                 <h4><a href="{% url 'about' %}">About Picasso</a></h4>
                 <h4><a href="{% url 'content' %}">Content Guidelines</a></h4>
-                <h4><a href="{% url 'privacy' %}">Privacy Policy</a></h4>
             </div>
             <div class="col-md-6 col-sm-6" style="text-align: center">
                 <a href="https://www.facebook.com/getpicasso" style="font-size: 50px; margin-right: 20px"><i
@@ -236,6 +237,7 @@
                 <a href="https://www.facebook.com/getpicasso" style="font-size: 50px"><i class="fa fa-google-plus"></i></a>
             </div>
             <div class="col-md-3 col-sm-3">
+                <h4><a href="{% url 'privacy' %}">Privacy Policy</a></h4>
                 <h4><a href="{% url 'terms' %}">Terms of Agreement</a></h4>
             </div>
         </div>

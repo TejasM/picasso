@@ -1,20 +1,32 @@
 {% extends 'main_template.html' %}
 {% load staticfiles %}
 {% block seo %}
-        <title>About | Picasso</title>
-        <meta name="description"
-              content="About us. Picasso started in July of 2014 and already has over 2000 teachers, tutors, and coaches listed in Ontario. Find the best teacher for your passion and hobbies near you.">
+    <title>About | Picasso</title>
+    <meta name="description"
+          content="About us. Picasso started in July of 2014 and already has over 2000 teachers, tutors, and coaches listed in Ontario. Find the best teacher for your passion and hobbies near you.">
+{% endblock %}
+{% block res_form %}
 {% endblock %}
 {% block content %}
     <div class="container">
         <div class="row">
-            <h1>About Picasso</h1>
+            <div class="col-sm-12">
+                <h1>About Picasso</h1>
 
-            <h3>Picasso helps students and parents find the best hobby teachers in their local community. Use Picasso to
-                search,
-                review and contact teachers for all of your passions and hobbies. Find the best teacher to suit your
-                needs.
-            </h3>
+                <h3>Picasso helps students and parents find the best hobby teachers in their local community. Use
+                    Picasso to
+                    search,
+                    review and contact teachers for all of your passions and hobbies. Find the best teacher to suit your
+                    needs.
+                </h3>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <hr/>
+            </div>
         </div>
     </div>
     <div class="container container-xs-height">
@@ -49,6 +61,65 @@
                     trial
                     class.
                     You’re on your way!</h4>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>Picasso's Founders</h1>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <hr/>
+            </div>
+        </div>
+    </div>
+
+    <div class="container container-xs-height">
+        <div class="row">
+            <div class="col-sm-12 col-lg-4 columns" style="text-align: center">
+                <img src="{% static 'images/Cheng Zhao 1.jpg' %}" style="margin-bottom: 20px;" height="400px">
+                <br>
+                <strong style="font-size: 20px">Cheng Zhao</strong><br>
+                <span style="font-size: 12px">Co-founder</span>
+
+                <p style="text-align: left; width: 80%; margin: 0 auto">Cheng is set on bringing innovative solutions to
+                    the world. Cheng has extensive technical and
+                    research
+                    background, coupled with an innate business acumen. He is currently a master’s student in computer
+                    science at the University of Toronto, doing research in machine learning. He has previously done
+                    research work in Ulm University in Germany, National Research Council, and University of Toronto. He
+                    completed his bachelor in Engineering Science at University of Toronto as well.</p>
+            </div>
+            <div class="col-sm-12 col-lg-4 columns" style="text-align: center">
+                <img src="{% static 'images/Cynthia-Liao 1.jpg' %}" style="margin-bottom: 20px" height="400px">
+                <br>
+                <strong style="font-size: 20px">Cynthia Liao</strong><br>
+                <span style="font-size: 12px">Co-founder</span>
+
+                <p style="text-align: left; width: 80%; margin: 0 auto">Cynthia Liao is currently completing her final
+                    year at the Richard Ivey School of Business at the
+                    University of Western Ontario. She has a background in international relations and is interested in
+                    pursuing a career that combines her interest in public policy, sustainable international
+                    development, technology and entrepreneurship. Cynthia is passionate about creating sustainable changes in developing
+                    economies and hopes to devote her career to social entrepreneurship.</p>
+            </div>
+            <div class="col-sm-12 col-lg-4 columns" style="text-align: center">
+                <img src="{% static 'images/Tejas Mehta 1.jpg' %}" style="margin-bottom: 20px" height="400px">
+                <br>
+                <strong style="font-size: 20px">Tejas Mehta</strong><br>
+                <span style="font-size: 12px">Co-founder</span>
+
+                <p style="text-align: left; width: 80%; margin: 0 auto">Tejas Mehta is a graduate from the Engineering
+                    Science program at University of Toronto majoring in
+                    Electrical and Computer Engineering. He is an aspiring entrepreneur having started several start ups
+                    in the last two years. He is an expert in various technology stacks including Java EE, Spring MVC,
+                    Django, and Node.js. Tejas' ambition is to develop technologies in healthcare and education to help
+                    improve quality of life for people in developing nations.</p>
             </div>
         </div>
     </div>
