@@ -662,3 +662,7 @@
 .iradio_line-blue {
     margin-bottom: 1em;
 }
+
+.twitter-typeahead {
+    width: 100%;
+}

@@ -12,6 +12,8 @@ from django.template import RequestContext
 from django.template.loader import get_template
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+from pygeocoder import Geocoder
+from pygeolib import GeocoderError
 
 from picasso.index.models import Listing, Address, Tag
 
@@ -50,7 +52,15 @@ def add_listing(request):
         price_min = request.POST['price_min']
         price_max = request.POST['price_max']
         active = True if request.POST['active'] == "true" else False
-        address = Address.objects.create(city=city, country=country, postal_code=postal, location=address)
+        try:
+            results = Geocoder.geocode(str(address + ' ' + postal + ' Canada'))
+            lat, lon = results[0].coordinates
+        except IndexError:
+            lat, lon = 43.7, 79.4
+        except GeocoderError:
+            lat, lon = 43.7, 79.4
+        point = "POINT(%s %s)" % (lon, lat)
+        address = Address.objects.create(city=city, country=country, postal_code=postal, location=address, point=point)
         if owner == "true":
             owner = request.user
         else:
@@ -86,6 +96,15 @@ def edit_listing(request, list_id):
         listing.address.postal = request.POST['postal']
         listing.address.city = request.POST['city']
         listing.address.country = request.POST['country']
+        try:
+            results = Geocoder.geocode(str(listing.address.location + ' ' + listing.address.postal + ' Canada'))
+            lat, lon = results[0].coordinates
+        except IndexError:
+            lat, lon = 43.7, 79.4
+        except GeocoderError:
+            lat, lon = 43.7, 79.4
+        point = "POINT(%s %s)" % (lon, lat)
+        listing.address.point = point
         listing.address.save()
         listing.phone = request.POST['phone']
         l_o_e = request.POST.getlist('level_of_expertise[]')

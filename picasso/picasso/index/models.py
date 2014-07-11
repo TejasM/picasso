@@ -211,7 +211,7 @@ class Review(BaseModel):
 
 
 watson.register(Listing,
-                fields=('tags__tag_name', 'listing_name', 'school_name', 'description', 'scraped_url', 'unique_url'))
+                fields=('tags__tag_name', 'listing_name', 'school_name', 'description', 'scraped_url', 'unique_url', 'email'))
 watson.register(Tag)
 watson.register(Review)
 watson.register(Address)
