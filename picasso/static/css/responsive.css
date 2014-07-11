@@ -666,3 +666,11 @@
 .twitter-typeahead {
     width: 100%;
 }
+
+.tp-leftarrow {
+    display: none;
+}
+
+.navbar-nav  a {
+    font-weight: 800;
+}
