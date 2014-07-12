@@ -1,3 +1,5 @@
+from HTMLParser import HTMLParser
+
 __author__ = 'tmehta'
 
 from django import template
@@ -24,4 +26,5 @@ def format_distance_(distance):
 
 @register.filter
 def unidecode(string):
-    return "".join(i for i in string if ord(i)<128)
+    parser = HTMLParser()
+    return parser.unescape(string)
