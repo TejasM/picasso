@@ -1,7 +1,8 @@
+import re
+
 __author__ = 'tmehta'
 
 from django import template
-from unidecode import unidecode as _unidecode
 
 register = template.Library()
 
@@ -25,4 +26,4 @@ def format_distance_(distance):
 
 @register.filter
 def unidecode(string):
-    return _unidecode(string)
+    return re.sub('[^A-Za-z0-9]+', '', string)
