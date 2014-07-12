@@ -2,9 +2,9 @@
 {% load staticfiles %}
 {% load mathfilters %}
 {% block seo %}
-    <title>{{ listing.listing_name|escape }} - {{ listing.get_string_tags }} | Picasso</title>
+    <title>{{ listing.listing_name|safe }} - {{ listing.get_string_tags }} | Picasso</title>
     <meta name="description"
-          content="Teacher's Name: {{ listing.listing_name|escape }}. Subjects: {{ listing.get_string_tags }}. Location: {{ listing.address|safe }}">
+          content="Teacher's Name: {{ listing.listing_name|safe }}. Subjects: {{ listing.get_string_tags }}. Location: {{ listing.address|safe }}">
 {% endblock %}
 {% block additionalStyles %}
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
@@ -15,7 +15,7 @@
     <div class="row">
         <!-- Slider -->
         <div class="col-sm-12">
-            <h2 class="lined-heading"><span>{{ listing.listing_name|escape }}</span></h2>
+            <h2 class="lined-heading"><span>{{ listing.listing_name|safe }}</span></h2>
         </div>
         <section class="standard-slider room-slider">
             <div class="col-sm-12 col-md-6 col-lg-6">
