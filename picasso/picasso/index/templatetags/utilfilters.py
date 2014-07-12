@@ -26,5 +26,4 @@ def format_distance_(distance):
 
 @register.filter
 def unidecode(string):
-    parser = HTMLParser()
-    return parser.unescape(string)
+    return string.replace('&amd;', '').replace('#39;', '')
