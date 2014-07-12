@@ -26,4 +26,4 @@ def format_distance_(distance):
 
 @register.filter
 def unidecode(string):
-    return string.replace('&amd;', '').replace('#39;', '')
+    return string.replace('U&amp;', '').replace('#39;', '')
