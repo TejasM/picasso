@@ -1,6 +1,7 @@
 __author__ = 'tmehta'
 
 from django import template
+from unidecode import unidecode as _unidecode
 
 register = template.Library()
 
@@ -20,3 +21,8 @@ def format_distance_(distance):
     string = "{0:.2f}".format(round(l, 2))
     string += " km"
     return string
+
+
+@register.filter
+def unidecode(string):
+    return _unidecode(string.lower().replace (" ", "_")).replace("'","")
