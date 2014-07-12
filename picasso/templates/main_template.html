@@ -73,6 +73,11 @@
                     {% if not user.is_authenticated %}
                         <li><a href="#sign-in-lightbox" id="sign-up">Sign Up</a></li>
                         <li><a href="#sign-in-lightbox" id="login">Login</a></li>
+                        <li class=""><a href="#sign-in-lightbox" id="add-listing">
+                            <button type="button" style="margin-top: -12px" class="btn btn-primary btn-block">&nbsp;&nbsp;Add
+                                Listing&nbsp;&nbsp;</button>
+                        </a>
+                        </li>
                     {% else %}
                         {% if user.owner.count == 0 %}
                             <li class=""><a href="{% url 'profile:my_listings' %}">Add Listing</a>
@@ -283,205 +288,219 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
 <script>
-    function initialize() {
-        var mapOptions = {
-            zoom: 10,
-            center: new google.maps.LatLng(43.7, -79.4)
-        };
+function initialize() {
+    var mapOptions = {
+        zoom: 10,
+        center: new google.maps.LatLng(43.7, -79.4)
+    };
 
-        var map = new google.maps.Map(document.getElementById('map-canvas'),
-                mapOptions);
+    var map = new google.maps.Map(document.getElementById('map-canvas'),
+            mapOptions);
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                map.setCenter(initialLocation);
-            });
-        }
-
-        for (var i = 0; i < lats.length; i++) {
-            var marker = new google.maps.Marker({
-                map: map,
-                position: new google.maps.LatLng(lats[i], lons[i]),
-                title: names[i],
-                visible: true,
-                icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (i + 1).toString() + '|FF0000|000000'
-            });
-        }
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            map.setCenter(initialLocation);
+        });
     }
 
-    function loadScript() {
-        var script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&' +
-                'callback=initialize';
-        document.body.appendChild(script);
-        script_loaded = true;
+    for (var i = 0; i < lats.length; i++) {
+        var marker = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(lats[i], lons[i]),
+            title: names[i],
+            visible: true,
+            icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (i + 1).toString() + '|FF0000|000000'
+        });
     }
-    var lats = [];
-    var lons = [];
-    var names = [];
-    var geocoder = null;
-    var script_loaded = false;
-    var tags = {{ tags|safe }};
+}
 
-    $(function () {
-        var $main = $('#main-section');
-        $('#search-submisson').click(function (e) {
+function loadScript() {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&' +
+            'callback=initialize';
+    document.body.appendChild(script);
+    script_loaded = true;
+}
+var lats = [];
+var lons = [];
+var names = [];
+var geocoder = null;
+var script_loaded = false;
+var tags = {{ tags|safe }};
+
+$(function () {
+    var $main = $('#main-section');
+    $('#search-submisson').click(function (e) {
+        $main.empty();
+        $main.append('<div class="container mt50" style="text-align: center; margin-bottom: 50px"><img src="{% static 'images/ui/AjaxLoader.gif' %}" alt="loading"></div>');
+        $.get('{% url 'get_listings' %}', {'term': $('#search-text').val() + '----' + $('#location-text').val()}, function (data) {
             $main.empty();
-            $main.append('<div class="container mt50" style="text-align: center; margin-bottom: 50px"><img src="{% static 'images/ui/AjaxLoader.gif' %}" alt="loading"></div>');
-            $.get('{% url 'get_listings' %}', {'term': $('#search-text').val() + '----' + $('#location-text').val()}, function (data) {
-                $main.empty();
-                $main.append(data['html']);
-                lons = $.parseJSON(data['lons']);
-                lats = $.parseJSON(data['lats']);
-                names = data['names'];
-                if (!script_loaded) {
-                    loadScript();
+            $main.append(data['html']);
+            lons = $.parseJSON(data['lons']);
+            lats = $.parseJSON(data['lats']);
+            names = data['names'];
+            if (!script_loaded) {
+                loadScript();
+            } else {
+                initialize();
+            }
+            $('input[type=checkbox], input[type=radio]').each(function () {
+                var self = $(this),
+                        label = self.next(),
+                        label_text = label.text();
+
+                label.remove();
+                self.iCheck({
+                    checkboxClass: 'icheckbox_line-blue',
+                    radioClass: 'iradio_line-blue',
+                    insert: '<div class="icheck_line-icon"></div>' + label_text
+                });
+            });
+        });
+        return false;
+    });
+    {% if not user.is_authenticated %}
+        $('#sign-up').click(function () {
+            $('#main-section').hide();
+            $('#sign-in-lightbox').show();
+            $('#sign-up-stuff').show();
+            $('#type-signin').val('sign-up');
+            $('#signin-heading').text('Sign Up');
+            $('#sign-in-button').text('Sign Up');
+        });
+
+        $('#add-listing').click(function () {
+            $('#main-section').hide();
+            $('#sign-in-lightbox').show();
+            $('#sign-up-stuff').show();
+            $('#type-signin').val('sign-up');
+            $('#signupform').append('<input type="hidden" value="{% url 'profile:add_listing' %}" name="next" id="next_url">');
+            $('#signin-heading').text('Sign Up');
+            $('#sign-in-button').text('Sign Up');
+        });
+
+        $('#login').click(function () {
+            $('#main-section').hide();
+            $('#sign-in-lightbox').show();
+            $('#sign-up-stuff').hide();
+            $('#type-signin').val('login');
+            $('#signin-heading').text('Login');
+            $('#sign-in-button').text('Login');
+        });
+
+        $('#sign-in-button').click(function () {
+            var claim_id = $('input[name="claim-id"]').val() || '';
+            $.post('{% url 'signup' %}', {'first-name': $('#first-name').val(),
+                'last-name': $('#last-name').val(), 'type': $('#type-signin').val(),
+                'email': $('#email').val(), 'password': $('#password').val(),
+                'claim-id': claim_id,
+                'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
+                if (parseInt(data['success']) == 0) {
+                    $('.error_message').text(data['error']);
                 } else {
-                    initialize();
+                    var $next = $('#next_url');
+                    if ($next.length != 0) {
+                        document.location.href = $next.val();
+                    }
+                    document.location.href = '{{ request.get_full_path }}';
                 }
-                $('input[type=checkbox], input[type=radio]').each(function () {
-                    var self = $(this),
-                            label = self.next(),
-                            label_text = label.text();
-
-                    label.remove();
-                    self.iCheck({
-                        checkboxClass: 'icheckbox_line-blue',
-                        radioClass: 'iradio_line-blue',
-                        insert: '<div class="icheck_line-icon"></div>' + label_text
-                    });
-                });
-            });
-            return false;
-        });
-        {% if not user.is_authenticated %}
-            $('#sign-up').click(function () {
-                $('#main-section').hide();
-                $('#sign-in-lightbox').show();
-                $('#sign-up-stuff').show();
-                $('#type-signin').val('sign-up');
-                $('#signin-heading').text('Sign Up');
-                $('#sign-in-button').text('Sign Up');
-            });
-
-            $('#login').click(function () {
-                $('#main-section').hide();
-                $('#sign-in-lightbox').show();
-                $('#sign-up-stuff').hide();
-                $('#type-signin').val('login');
-                $('#signin-heading').text('Login');
-                $('#sign-in-button').text('Login');
-            });
-
-            $('#sign-in-button').click(function () {
-                var claim_id = $('input[name="claim-id"]').val() || '';
-                $.post('{% url 'signup' %}', {'first-name': $('#first-name').val(),
-                    'last-name': $('#last-name').val(), 'type': $('#type-signin').val(),
-                    'email': $('#email').val(), 'password': $('#password').val(),
-                    'claim-id': claim_id,
-                    'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
-                    if (parseInt(data['success']) == 0) {
-                        $('.error_message').text(data['error']);
-                    } else {
-                        document.location.href = '{{ request.get_full_path }}';
-                    }
-                });
-            });
-        {% endif %}
-        // constructs the suggestion engine
-        var tags_blood = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            // `states` is an array of state names defined in "The Basics"
-            local: $.map(tags, function (state) {
-                return { value: state };
-            })
-        });
-        tags_blood.initialize();
-
-        $('.autocomplete').typeahead({
-                    hint: true,
-                    highlight: true,
-                    minLength: 1
-                },
-                {
-                    name: 'tags',
-                    displayKey: 'value',
-                    source: tags_blood.ttAdapter()
-                });
-        var $contact_div = $('#contact-us-div');
-        $('#contact-us-click').click(function () {
-            $main.hide();
-            $contact_div.show();
-        });
-        $('#contact-us-submit').click(function () {
-            $.post('{% url 'contact' %}', {'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val(),
-                'email': $('#contact-email').val(), 'comment': $('#contact-comments').val()
-            }, function (res) {
-                $contact_div.empty();
-                $contact_div.append('<div class="container mt20" style="text-align: center"><h2>Thank you for your message! We will try and get back to you as soon as possible.</h2></div>');
-                setTimeout(function () {
-                    $contact_div.hide();
-                    $main.show();
-                }, 5000);
             });
         });
+    {% endif %}
+    // constructs the suggestion engine
+    var tags_blood = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        // `states` is an array of state names defined in "The Basics"
+        local: $.map(tags, function (state) {
+            return { value: state };
+        })
+    });
+    tags_blood.initialize();
 
-        $main.on('ifToggled', '.loe-check', function () {
-            var $checked = $('.loe-check:checked');
-            var $items = $('.isotope-item');
-            if ($checked.length == 0) {
-                $('.loe-check').iCheck('check');
-                $checked = $('.loe-check:checked');
-            }
-            if ($checked.length == 3) {
-                $items.show();
-            } else {
-                $.each($items, function (index) {
-                    var $teach = $(this).find('.teaches');
-                    var t = $teach.text();
-                    if (t == "All") {
-                        $(this).show();
-                    } else {
-                        var done = false;
-                        for (var i = 0; i < $checked.length; i++) {
-                            if (t.indexOf($checked[i].val()) > -1) {
-                                $(this).show();
-                                done = true;
-                                break;
-                            }
-                        }
-                        if (!done) {
-                            $(this).hide();
-                        }
-                    }
-                });
-            }
-        });
-        $main.on('ifChecked', 'input[name="review-radio"]', function () {
-            var val = $(this).val();
-            var $items = $('.isotope-item');
-            if (val == -1) {
-                $items.show();
-            } else {
-                $.each($items, function (index) {
-                    var $r = $(this).find('.review');
-                    var r = parseInt($r.text());
-                    if (!isNaN(r)) {
-                        if (r < val) {
-                            $(this).hide();
-                        } else {
-                            $(this).show();
-                        }
-                    } else {
-                        $(this).hide();
-                    }
-                });
-            }
+    $('.autocomplete').typeahead({
+                hint: true,
+                highlight: true,
+                minLength: 1
+            },
+            {
+                name: 'tags',
+                displayKey: 'value',
+                source: tags_blood.ttAdapter()
+            });
+    var $contact_div = $('#contact-us-div');
+    $('#contact-us-click').click(function () {
+        $main.hide();
+        $contact_div.show();
+    });
+    $('#contact-us-submit').click(function () {
+        $.post('{% url 'contact' %}', {'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val(),
+            'email': $('#contact-email').val(), 'comment': $('#contact-comments').val()
+        }, function (res) {
+            $contact_div.empty();
+            $contact_div.append('<div class="container mt20" style="text-align: center"><h2>Thank you for your message! We will try and get back to you as soon as possible.</h2></div>');
+            setTimeout(function () {
+                $contact_div.hide();
+                $main.show();
+            }, 5000);
         });
     });
+
+    $main.on('ifToggled', '.loe-check', function () {
+        var $checked = $('.loe-check:checked');
+        var $items = $('.isotope-item');
+        if ($checked.length == 0) {
+            $('.loe-check').iCheck('check');
+            $checked = $('.loe-check:checked');
+        }
+        if ($checked.length == 3) {
+            $items.show();
+        } else {
+            $.each($items, function (index) {
+                var $teach = $(this).find('.teaches');
+                var t = $teach.text();
+                if (t == "All") {
+                    $(this).show();
+                } else {
+                    var done = false;
+                    for (var i = 0; i < $checked.length; i++) {
+                        if (t.indexOf($checked[i].val()) > -1) {
+                            $(this).show();
+                            done = true;
+                            break;
+                        }
+                    }
+                    if (!done) {
+                        $(this).hide();
+                    }
+                }
+            });
+        }
+    });
+    $main.on('ifChecked', 'input[name="review-radio"]', function () {
+        var val = $(this).val();
+        var $items = $('.isotope-item');
+        if (val == -1) {
+            $items.show();
+        } else {
+            $.each($items, function (index) {
+                var $r = $(this).find('.review');
+                var r = parseInt($r.text());
+                if (!isNaN(r)) {
+                    if (r < val) {
+                        $(this).hide();
+                    } else {
+                        $(this).show();
+                    }
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+    });
+});
 </script>
 {% block scripts %}
 

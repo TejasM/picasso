@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 def featured(request):
     if request.method == "GET":
         featured_listings = Listing.objects.filter(~Q(address=None)).filter(~Q(address__point=None)).order_by('?')[:6]
-        context = {'listings': featured_listings, 'title': 'Feature Listings', 'button_name': 'Read More',
+        context = {'listings': featured_listings, 'title': 'Featured Listings', 'button_name': 'Read More',
                    'categories': True}
         context = RequestContext(request, context)
         t = get_template('index/listings.html')
