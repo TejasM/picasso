@@ -16,7 +16,9 @@
                             <ul class="nav nav-pills list-unstyled arrow" id="filters">
                                 <li class="active"><a href="#" data-filter="*">All</a></li>
                                 {% for t in full_tags|slice:":20" %}
-                                    <li><a href="{% url 'by_category' t.dash_version %}" onclick="window.location='{% url 'by_category' t.dash_version %}'">{{ t.tag_name }}</a></li>
+                                    <li><a href="{% url 'by_category' t.dash_version %}"
+                                           onclick="window.location='{% url 'by_category' t.dash_version %}'">{{ t.tag_name }}</a>
+                                    </li>
                                 {% endfor %}
                             </ul>
                         {% else %}
@@ -59,12 +61,13 @@
                                 <div class="row row-lg-height isotope-item {{ l.get_string_tags_no_comma }}"
                                      style="width: 100%;">
                                     <div class="col-sm-12 col-lg-6 col-middle">
-                                        <img src="{{ l.get_photo_url }}" alt="{{ l.listing_name }}" width="140px"
-                                             height="100"/>
+                                        <a href="{{ l.get_unique_url }}"><img src="{{ l.get_photo_url }}"
+                                                                              alt="{{ l.listing_name }}" width="140px"
+                                                                              height="100"/>
 
-                                        <a href="{{ l.get_unique_url }}"><h4 style="font-size: 1.3em">
-                                            <strong>{{ forloop.counter }}. {{ l.listing_name }}</strong>
-                                            <br><span>{{ l.get_string_tags }}</span></h4></a>
+                                            <h4 style="font-size: 1.3em">
+                                                <strong>{{ forloop.counter }}. {{ l.listing_name }}</strong>
+                                                <br><span>{{ l.get_string_tags }}</span></h4></a>
                                     </div>
                                     <div class="col-sm-12 col-lg-6">
                                         <a href="{{ l.get_unique_url }}" style="color: #333">
@@ -113,13 +116,14 @@
                             <div class="row isotope-item {{ r.listing.get_string_tags_no_comma }}"
                                  style="margin-top: 2em; width: 100%">
                                 <div class="col-sm-12 col-lg-2 col-middle">
-                                    <img src="{{ r.listing.get_photo_url }}" alt="{{ r.listing.listing_name }}"
-                                         width="140px"
-                                         height="100"/>
+                                    <a href="{{ r.listing.get_unique_url }}"><img src="{{ r.listing.get_photo_url }}"
+                                                                                  alt="{{ r.listing.listing_name }}"
+                                                                                  width="140px"
+                                                                                  height="100"/>
 
-                                    <a href="{{ r.listing.get_unique_url }}"><h4 style="font-size: 1.3em">
-                                        <strong>{{ r.listing.listing_name }}</strong>
-                                        <br><span>{{ r.listing.get_string_tags }}</span></h4></a>
+                                        <h4 style="font-size: 1.3em">
+                                            <strong>{{ r.listing.listing_name }}</strong>
+                                            <br><span>{{ r.listing.get_string_tags }}</span></h4></a>
 
                                     <div class="price"><strong>Rating: {{ r.listing.get_rating }}</strong></div>
                                 </div>

@@ -9,6 +9,8 @@ from django.contrib.gis import geos
 from django.db import models
 from django.db.models import Avg, permalink
 from django.utils import timezone
+from pygeocoder import Geocoder
+from pygeolib import GeocoderError
 import watson
 from django.contrib.gis.db import models as gis_models
 
@@ -46,6 +48,7 @@ class Address(BaseModel):
     country = models.CharField(default="Canada", max_length=100)
     location = models.CharField(default="", max_length=1000)
     postal_code = models.CharField(default="", max_length=100)
+    state = models.CharField(default="Ontario", max_length=100)
     point = gis_models.PointField(u"longitude/latitude",
                                   geography=True, blank=True, null=True)
 
@@ -73,6 +76,19 @@ class Address(BaseModel):
         if self.postal_code != "":
             string += "<br>" + self.postal_code
         return string
+
+    def save(self, **kwargs):
+        if self.point is None:
+            try:
+                results = Geocoder.geocode(
+                    str(self.location + ' ' + self.postal_code + ' ' + self.state + ' ' + self.country))
+                lat, lon = results[0].coordinates
+            except IndexError:
+                lat, lon = 43.7, 79.4
+            except GeocoderError:
+                lat, lon = 43.7, 79.4
+            self.point = "POINT(%s %s)" % (lon, lat)
+        super(Address, self).save(**kwargs)
 
 
 def get_unique_url(instance):
@@ -211,7 +227,8 @@ class Review(BaseModel):
 
 
 watson.register(Listing,
-                fields=('tags__tag_name', 'listing_name', 'school_name', 'description', 'scraped_url', 'unique_url', 'email'))
+                fields=(
+                'tags__tag_name', 'listing_name', 'school_name', 'description', 'scraped_url', 'unique_url', 'email'))
 watson.register(Tag)
 watson.register(Review)
 watson.register(Address)
