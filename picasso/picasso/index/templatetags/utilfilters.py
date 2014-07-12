@@ -25,4 +25,4 @@ def format_distance_(distance):
 
 @register.filter
 def unidecode(string):
-    return _unidecode(string.lower().replace (" ", "_")).replace("'","")
+    return _unidecode(string)
