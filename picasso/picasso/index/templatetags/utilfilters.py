@@ -24,4 +24,4 @@ def format_distance_(distance):
 
 @register.filter
 def unidecode(string):
-    return ' '.join(e for e in string if e.isalnum())
+    return "".join(i for i in string if ord(i)<128)
