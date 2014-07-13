@@ -114,7 +114,7 @@ class Listing(BaseModel):
     owner = models.ForeignKey(User, null=True, default=None, related_name='owner')
     unique_url = models.CharField(max_length=1000, default="")
     last_modified = models.DateTimeField(default=timezone.now())
-
+    website = models.CharField(default="", max_length=1000)
     hash_key = models.CharField(max_length=40, default=hashlib.sha1(os.urandom(128)).hexdigest())
 
     level_of_expertise = models.CharField(default="All", max_length=100)
