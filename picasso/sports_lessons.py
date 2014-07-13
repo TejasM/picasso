@@ -88,11 +88,13 @@ for i in range(1, 6):
                                        address=address, phone=phone, email=email, website=site)
             l.tags = [tag[0].id]
             if 'Basketball' in name:
-                l.tags += [basketball[0].id]
+                l.tags.add(basketball[0])
             elif 'Soccer' in name:
-                l.tags += [soccer[0].id]
+                l.tags.add(soccer[0])
             elif 'Baseball' in name:
-                l.tags += [baseball[0].id]
+                l.tags.add(baseball[0])
             else:
-                l.tags += [basketball[0].id, soccer[0].id, baseball[0].id]
+                l.tags.add(basketball[0])
+                l.tags.add(soccer[0])
+                l.tags.add(baseball[0])
             l.save()
