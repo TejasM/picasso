@@ -12,7 +12,7 @@ def send_claim_email(listing):
     logger.debug('Listing claim sending email to : ' + listing.email)
     if listing.email != '':
         t = get_template('emails/claim_email.html')
-        context = {'listing': listing}
+        context = RequestContext({}, {'listing': listing})
         content = t.render(context)
         msg = EmailMessage('Picasso - Message for your Business', content, 'contact@findpicasso.com', [listing.email])
         msg.content_subtype = "html"
