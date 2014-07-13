@@ -68,7 +68,7 @@ def get_listings(request):
         context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More', 'filters': True}
         context = RequestContext(request, context)
         t = get_template('index/listings.html')
-        names = [str(x.listing_name) for x in listings]
+        names = [str(x.listing_name.encode('utf-8')) for x in listings]
         return HttpResponse(
             json.dumps({'html': t.render(context),
                         'lons': str(lons), 'lats': str(lats), 'names': names}),
