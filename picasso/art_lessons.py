@@ -33,6 +33,7 @@ base_url = 'http://www.helpwevegotkids.com'
 url = 'http://www.helpwevegotkids.com/toronto/listings/art-classes-lessons-courses--supplies/artcraft-classes?page='
 listing_selector = CSSSelector('.featured > div.cleared')
 url_selector = CSSSelector('.logodiv a')
+no_url_selector = CSSSelector('.nologo a')
 tag = Tag.objects.get_or_create(tag_name='Art')
 name_selector = CSSSelector('h3 a')
 phone_selector = CSSSelector('.icons .telephone')
@@ -46,7 +47,10 @@ for i in range(1, 6):
     tree = html.fromstring(r.text)
     listings = listing_selector(tree)
     for listing in listings:
-        scraped_url = base_url + url_selector(listing)[0].attrib['href']
+        try:
+            scraped_url = base_url + url_selector(listing)[0].attrib['href']
+        except IndexError:
+            scraped_url = base_url + no_url_selector(listing)[0].attrib['href']
         r = requests.get(scraped_url)
         listing = html.fromstring(r.text)
         name = name_selector(listing)[0].text.strip()
