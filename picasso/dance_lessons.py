@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.contrib.gis import geos
 from lxml import html
 from lxml.cssselect import CSSSelector
