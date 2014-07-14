@@ -7,34 +7,25 @@ import requests
 from picasso.index.models import Tag, Listing, Address
 
 __author__ = 'tmehta'
-emails = {"Avenue Road Arts School": "contactus@avenueroadartsschool.com",
-          "Kidville Canada": "mayor.ylv@kidville.ca",
-          "Wise Adventures": "mail@wise-adventures.ca",
-          "Action Potential Lab": "hello@actionpotentiallab.ca",
-          "Art One Academy- two locations in Richmond Hill": "info@artoneacademy.com",
-          "Art Gallery of Ontario": "",
-          "Wanda's Creative Clay": "wanda@wandascreativeclay.com",
-          "Artistic Way": "art@artisticway.ca",
-          "Freehand School of Art": "info@freehandart.ca",
-          "RedFish BlueFish Creative Cafe": "support@redfishbluefishcafe.com",
-          "4Cats Arts Studio Meadowvale - Mississauga": "meadowvale@4cats.com",
-          "GTA Photography Classes": "info@gtaphotographyclasses.com",
-          "Nature's Course": "info@naturescoursearts.com",
-          "Mess for Fun Indoor Playground & Ceramic Studio": "messforfun@gmail.com",
-          "Art-on-Wheels": "Sandra@art-on-wheel.com",
-          "Monet's Waterlily Garden": "lisafrasca@gmail.com",
-          "Woodbridge Art School": "art@catherinesgro.com",
-          "Clown Antics": "orders@clownantics.com",
-          "Rebellion Gallery and Art Academy": "stacey@rebelliongallery.com",
-          "Koffler Centre of the Arts": "dnolan@kofflerarts.org",
-          "Art Works Art School": "info@artworksartschool.com",}
+emails = {"In The Mix": "jackie@inthemixprogram.com",
+          "National Rhythmic Gymnastics Centre": "info@nationalrg.ca",
+          "Rugcutterz Danz Artz": "stephanie@rugcutterz.com",
+          "Martha Hicks School of Ballet": "office@mhsb.ca",
+          "Conservatory of Dance and Music": "cdmdance@me.com",
+          "School of CCDT – Canadian Contemporary Dance Theatre": "schoolofccdt@ccdt.org",
+          "SPACE The School of Performing Arts for the Community of East York": "linette@the-space.ca",
+          "STARting Pointe Productions ltd. - Jump STARters": "info@startingpointeproductions.com",
+          "ViBE Dance & Fitness Studio": "info@vibestudio.ca",
+          "Groove School of Dance": "",
+          "Swansea School of Dance": "info@swanseaschoolofdance.com",
+          "Royal Academy Of Dance": "info@radcanada.org", }
 
 base_url = 'http://www.helpwevegotkids.com'
-url = 'http://www.helpwevegotkids.com/toronto/listings/art-classes-lessons-courses--supplies/artcraft-classes?page='
+url = 'http://www.helpwevegotkids.com/toronto/listings/after-school-programs-and-weekend-activities/dance-lessons?page='
 listing_selector = CSSSelector('.featured > div.cleared')
 url_selector = CSSSelector('.logodiv a')
 no_url_selector = CSSSelector('.nologo a')
-tag = Tag.objects.get_or_create(tag_name='Art')
+tag = Tag.objects.get_or_create(tag_name='Dance')
 name_selector = CSSSelector('h3 a')
 phone_selector = CSSSelector('.icons .telephone')
 email_selector = CSSSelector('.email')
@@ -87,7 +78,7 @@ for i in range(1, 6):
                     lat, lon = 43.7, 79.4
                 point = "POINT(%s %s)" % (lon, lat)
                 address = Address.objects.create(location=location, postal_code=postal_code,
-                                             point=geos.fromstr(point))
+                                                 point=geos.fromstr(point), website=site)
             else:
                 address = None
         else:
@@ -101,6 +92,6 @@ for i in range(1, 6):
             description = ''
         if Listing.objects.filter(scraped_url=scraped_url).count() == 0:
             l = Listing.objects.create(listing_name=name, description=description, scraped_url=scraped_url,
-                                       address=address, phone=phone, email=email, website=site)
+                                       address=address, phone=phone, email=email)
             l.tags = [tag[0].id]
             l.save()
