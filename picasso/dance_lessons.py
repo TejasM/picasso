@@ -79,7 +79,7 @@ for i in range(1, 6):
                     lat, lon = 43.7, 79.4
                 point = "POINT(%s %s)" % (lon, lat)
                 address = Address.objects.create(location=location, postal_code=postal_code,
-                                                 point=geos.fromstr(point), website=site)
+                                                 point=geos.fromstr(point))
             else:
                 address = None
         else:
@@ -93,6 +93,6 @@ for i in range(1, 6):
             description = ''
         if Listing.objects.filter(scraped_url=scraped_url).count() == 0:
             l = Listing.objects.create(listing_name=name, description=description, scraped_url=scraped_url,
-                                       address=address, phone=phone, email=email)
+                                       address=address, phone=phone, email=email, website=site)
             l.tags = [tag[0].id]
             l.save()
