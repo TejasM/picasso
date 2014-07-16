@@ -34,6 +34,7 @@ class Tag(BaseModel):
     tag_name = models.CharField(default="", max_length=500)
     possible_folders = models.CharField(default="", max_length=500)
     dash_version = models.CharField(default="", max_length=500)
+    parent_tag = models.ForeignKey('Tag', default=None, null=True)
 
     def save(self, **kwargs):
         self.dash_version = re.sub(r'\W+', '-', self.tag_name).lower()
@@ -228,7 +229,8 @@ class Review(BaseModel):
 
 watson.register(Listing,
                 fields=(
-                'tags__tag_name', 'listing_name', 'school_name', 'description', 'scraped_url', 'unique_url', 'email'))
+                'tags__tag_name', 'listing_name', 'school_name', 'description', 'scraped_url', 'unique_url', 'email',
+                'tags__parent_tag__tag_name'))
 watson.register(Tag)
 watson.register(Review)
 watson.register(Address)
