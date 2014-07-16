@@ -3,203 +3,215 @@
 {% load utilfilters %}
 <!-- Rooms -->
 <div class="container mt20">
-    <div class="row">
-        <div class="col-sm-12">
-            <h2 class="lined-heading"><span>{{ title }}</span></h2>
-        </div>
-        <div class="row">
-            {% if not reviews %}
-                <div class="col-sm-2">
-                    <div class="widget">
-                        {% if categories %}
-                            <h3 style="padding: 10px">Categories</h3>
-                            <ul class="nav nav-pills list-unstyled arrow" id="filters">
-                                <li class="active"><a href="#" data-filter="*">All</a></li>
-                                {% for t in full_tags|slice:":20" %}
-                                    <li><a href="{% url 'by_category' t.dash_version %}"
-                                           onclick="window.location='{% url 'by_category' t.dash_version %}'">{{ t.tag_name }}</a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% else %}
-                            {% if sub_categories %}
-                                <h3 style="padding: 10px">Sub Categories</h3>
-                                <ul class="nav nav-pills list-unstyled arrow" id="filters">
-                                    {% for t in sub_categories|slice:":20" %}
-                                        <li><a href="{% url 'by_category' t.dash_version %}"
-                                               onclick="window.location='{% url 'by_category' t.dash_version %}'">{{ t.tag_name }}</a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                            <h3 style="padding: 10px">Filters</h3>
-                            <h4 style="padding: 10px">Level of Expertise</h4>
-                            <input type="checkbox" name="loe-check" class="loe-check" checked value="Beginner">
-                            <label>Beginner</label>
-
-                            <input type="checkbox" name="loe-check" class="loe-check" checked value="Intermediate">
-                            <label>Intermediate</label>
-
-                            <input type="checkbox" name="loe-check" class="loe-check" checked value="Advanced">
-                            <label>Advanced</label>
-
-                            <h4 style="padding: 10px">Rating</h4>
-                            <input type="radio" checked name="review-radio" value="-1">
-                            <label>All</label>
-
-                            <input type="radio" name="review-radio" value="1">
-                            <label>&#9733; +</label>
-
-                            <input type="radio" name="review-radio" value="2">
-                            <label>&#9733;&#9733; +</label>
-
-                            <input type="radio" name="review-radio" value="3">
-                            <label>&#9733;&#9733;&#9733; +</label>
-
-                            <input type="radio" name="review-radio" value="4">
-                            <label>&#9733;&#9733;&#9733;&#9733; +</label>
-                        {% endif %}'
-                    </div>
-                </div>
-            {% endif %}
-            <!-- Room -->
-            {% if not reviews %}
-                <div class="col-sm-5">
-                    {% if listings.count != 0 %}
-                        <div class="isotope gallery list">
-                            {% for l in listings %}
-                                <div class="row row-lg-height isotope-item {{ l.get_string_tags_no_comma }}"
-                                     style="width: 100%;">
-                                    <div class="col-sm-12 col-lg-6 col-middle">
-                                        <a href="{{ l.get_unique_url }}"><img src="{{ l.get_photo_url }}"
-                                                                              alt="{{ l.listing_name|unidecode }}"
-                                                                              width="140px"
-                                                                              height="100"/>
-
-                                            <h4 style="font-size: 1.3em">
-                                                <strong>{% if listings.paginator %}
-                                                    {{ forloop.counter0|add:listings.start_index }}.{% else %}
-                                                    {{ forloop.counter }}.{% endif %}
-                                                    {{ l.listing_name|unidecode }}</strong>
-                                                <br><span>{{ l.get_string_tags }}</span></h4>
-                                        </a>
-                                    </div>
-                                    <div class="col-sm-12 col-lg-6">
-                                        <a href="{{ l.get_unique_url }}" style="color: #333">
-                                            <p><strong>Teaches: </strong><span
-                                                    class="teaches">{{ l.level_of_expertise }}</span> level of students
-                                            </p>
-                                            {% if l.price_min == 0 and l.price_max == 0 %}
-                                                <p><strong>Price per lesson: </strong><span
-                                                        class="price">Unspecified</span></p>
-                                            {% else %}
-                                                <p><strong>Price per lesson: </strong><span
-                                                        class="price">${{ l.price_min }} - {{ l.price_max }}</span></p>
-                                            {% endif %}
-
-                                            <p><strong>Address: </strong>{{ l.address.get_obscure|safe }}</p>
-
-                                            {% if l.distance %}
-                                                <p><strong>Distance: </strong>{{ l.distance.km|floatformat }} km</p>
-                                            {% endif %}
-                                            {% if l.description != '' %}
-                                                <p>
-                                                    <strong>Description: </strong>{{ l.description|truncatewords:20|safe }}
-                                                </p>
-                                            {% endif %}
-                                        </a>
-                                    </div>
-                                    <div class="col-lg-12 col-sm-12">
-                                        {% if l.get_rating == 'N/A' %}
-                                            <div class="price"><input name="rating" class="form-control rating"
-                                                                      value="" disabled data-size="xs"></div>
-                                        {% else %}
-                                            <div class="price"><input name="rating" class="form-control rating"
-                                                                      data-size="xs"
-                                                                      value="{{ l.get_rating }}" disabled></div>
-                                        {% endif %}
-                                        <hr style="margin-bottom: 0px; margin-top: 10px">
-                                    </div>
-                                </div>
-                            {% endfor %}
-                            {% if listings.paginator and listings.paginator.num_pages > 1 %}
-                                <ul class="pagination clearfix">
-                                    <li {% if not listings.has_previous %}class="disabled"{% endif %}>
-                                        {% if request.is_ajax %}
-                                            <a href="#"
-                                               onclick="custom_search({{ listings.previous_page_number }}, '{{ term }}');">«</a>
-                                        {% else %}
-                                            <a href="?page={{ listings.previous_page_number }}">«</a>
-                                        {% endif %}
-                                    </li>
-                                    {% if listings.paginator.num_pages < 10 %}
-                                        {% for n in listings.paginator.page_range %}
-                                            <li>  {% if request.is_ajax %}
-                                                <a href="#" onclick="custom_search({{ n }}, '{{ term }}');">{{ n }}</a>
-                                                {% else %}<a href="?page={{ n }}">{{ n }}</a>{% endif %}</li>
-                                        {% endfor %}
-                                    {% else %}
-                                        <li class="disabled"><a href="#">{{ listings.number }}
-                                            of {{ listings.paginator.num_pages }}</a></li>
-                                    {% endif %}
-                                    <li {% if not listings.has_next %}class="disabled"{% endif %}>
-                                        {% if request.is_ajax %}
-                                            <a href="#"
-                                               onclick="custom_search({{ listings.next_page_number }}, '{{ term }}');">»</a>
-                                            {% else %}<a
-                                                    href="?page={{ listings.next_page_number }}">»</a>{% endif %}</li>
-                                </ul>
-                            {% endif %}
-                        </div>
-                    {% else %}
-                        <h2>Sorry your search turned up nothing. We are constantly adding new listings so please check
-                            back
-                            often!</h2>
-                    {% endif %}
-                </div>
-                <div class="col-sm-5">
-                    <div id="map-canvas" style="width: 100%; min-height: 600px"></div>
-                </div>
+<div class="row">
+<div class="col-sm-12">
+    <h2 class="lined-heading"><span>{{ title }}</span></h2>
+</div>
+<div class="row">
+{% if not reviews %}
+    <div class="col-sm-2">
+        <div class="widget">
+            {% if categories %}
+                <h3 style="padding: 10px">Categories</h3>
+                <ul class="nav nav-pills list-unstyled arrow" id="filters">
+                    <li class="active"><a href="#" data-filter="*">All</a></li>
+                    {% for t in full_tags|slice:":20" %}
+                        <li><a href="{% url 'by_category' t.dash_version %}"
+                               onclick="window.location='{% url 'by_category' t.dash_version %}'">{{ t.tag_name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
             {% else %}
-                <div class="col-sm-12">
-                    <div class="isotope gallery">
-                        {% for r in reviews %}
-                            <div class="row isotope-item {{ r.listing.get_string_tags_no_comma }}"
-                                 style="margin-top: 2em; width: 100%">
-                                <div class="col-sm-12 col-lg-2 col-middle">
-                                    <a href="{{ r.listing.get_unique_url }}"><img src="{{ r.listing.get_photo_url }}"
-                                                                                  alt="{{ r.listing.listing_name }}"
-                                                                                  width="140px"
-                                                                                  height="100"/>
-
-                                        <h4 style="font-size: 1.3em">
-                                            <strong>{{ r.listing.listing_name }}</strong>
-                                            <br><span>{{ r.listing.get_string_tags }}</span></h4></a>
-
-                                    <div class="price"><strong>Rating: {{ r.listing.get_rating }}</strong></div>
-                                </div>
-                                <div class="col-sm-12 col-lg-6">
-                                    <a href="{{ r.listing.get_unique_url }}" style="color: #333">
-                                        <p><strong>Address: </strong>{{ r.listing.address|safe }}</p>
-
-                                        <p><strong>Contact: </strong>{{ r.listing.phone }}</p>
-
-                                        <p><strong>Email: </strong>{{ r.listing.email }}</p>
-                                    </a>
-                                </div>
-                                <div class="col-sm-12 col-lg-4">
-                                    <a href="{{ r.listing.get_unique_url }}" style="color: #333">
-                                        <p><strong>Rating: </strong><input class="rating" value="{{ r.rating }}"
-                                                                           readonly></p>
-
-                                        <p><strong>Comment: </strong>{{ r.comment }}</p>
-                                    </a>
-                                </div>
-                            </div>
+                {% if sub_categories %}
+                    <h3 style="padding: 10px">Sub Categories</h3>
+                    <ul class="nav nav-pills list-unstyled arrow" id="filters">
+                        {% for t in sub_categories|slice:":20" %}
+                            <li><a href="{% url 'by_category' t.dash_version %}"
+                                   onclick="window.location='{% url 'by_category' t.dash_version %}'">{{ t.tag_name }}</a>
+                            </li>
                         {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
+                    </ul>
+                {% endif %}
+                <h3 style="padding: 10px">Filters</h3>
+                <h4 style="padding: 10px">Level of Expertise</h4>
+                <input type="checkbox" name="loe-check" class="loe-check" checked value="Beginner">
+                <label>Beginner</label>
+
+                <input type="checkbox" name="loe-check" class="loe-check" checked value="Intermediate">
+                <label>Intermediate</label>
+
+                <input type="checkbox" name="loe-check" class="loe-check" checked value="Advanced">
+                <label>Advanced</label>
+
+                <h4 style="padding: 10px">Rating</h4>
+                <input type="radio" checked name="review-radio" value="-1">
+                <label>All</label>
+
+                <input type="radio" name="review-radio" value="1">
+                <label>&#9733; +</label>
+
+                <input type="radio" name="review-radio" value="2">
+                <label>&#9733;&#9733; +</label>
+
+                <input type="radio" name="review-radio" value="3">
+                <label>&#9733;&#9733;&#9733; +</label>
+
+                <input type="radio" name="review-radio" value="4">
+                <label>&#9733;&#9733;&#9733;&#9733; +</label>
+            {% endif %}'
         </div>
     </div>
+{% endif %}
+<!-- Room -->
+{% if not reviews %}
+    <div class="col-sm-5">
+        {% if listings.count != 0 %}
+            <div class="isotope gallery list">
+                {% for l in listings %}
+                    <div class="row row-lg-height isotope-item {{ l.get_string_tags_no_comma }}"
+                         style="width: 100%;">
+                        <div class="col-sm-12 col-lg-6 col-middle">
+                            <a href="{{ l.get_unique_url }}"><img src="{{ l.get_photo_url }}"
+                                                                  alt="{{ l.listing_name|unidecode }}"
+                                                                  width="140px"
+                                                                  height="100"/>
+
+                                <h4 style="font-size: 1.3em">
+                                    <strong>{% if listings.paginator %}
+                                        {{ forloop.counter0|add:listings.start_index }}.{% else %}
+                                        {{ forloop.counter }}.{% endif %}
+                                        {{ l.listing_name|unidecode }}</strong>
+                                    <br><span>{{ l.get_string_tags }}</span></h4>
+                            </a>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <a href="{{ l.get_unique_url }}" style="color: #333">
+                                <p><strong>Teaches: </strong><span
+                                        class="teaches">{{ l.level_of_expertise }}</span> level of students
+                                </p>
+                                {% if l.price_min == 0 and l.price_max == 0 %}
+                                    <p><strong>Price per lesson: </strong><span
+                                            class="price">Unspecified</span></p>
+                                {% else %}
+                                    <p><strong>Price per lesson: </strong><span
+                                            class="price">${{ l.price_min }} - {{ l.price_max }}</span></p>
+                                {% endif %}
+
+                                <p><strong>Address: </strong>{{ l.address.get_obscure|safe }}</p>
+
+                                {% if l.distance %}
+                                    <p><strong>Distance: </strong>{{ l.distance.km|floatformat }} km</p>
+                                {% endif %}
+                                {% if l.description != '' %}
+                                    <p>
+                                        <strong>Description: </strong>{{ l.description|truncatewords:20|safe }}
+                                    </p>
+                                {% endif %}
+                            </a>
+                        </div>
+                        <div class="col-lg-12 col-sm-12">
+                            {% if l.get_rating == 'N/A' %}
+                                <div class="price"><input name="rating" class="form-control rating"
+                                                          value="" disabled data-size="xs"></div>
+                            {% else %}
+                                <div class="price"><input name="rating" class="form-control rating"
+                                                          data-size="xs"
+                                                          value="{{ l.get_rating }}" disabled></div>
+                            {% endif %}
+                            <hr style="margin-bottom: 0px; margin-top: 10px">
+                        </div>
+                    </div>
+                {% endfor %}
+                {% if listings.paginator and listings.paginator.num_pages > 1 %}
+                    <ul class="pagination clearfix">
+                        {% if not listings.has_previous %}
+                            <li class="disabled">
+                                <a href="#">«</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                {% if request.is_ajax %}
+                                    <a href="#"
+                                       onclick="custom_search({{ listings.previous_page_number }}, '{{ term }}');">«</a>
+                                {% else %}
+                                    <a href="?page={{ listings.previous_page_number }}">«</a>
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                        {% if listings.paginator.num_pages < 10 %}
+                            {% for n in listings.paginator.page_range %}
+                                <li>{% if request.is_ajax %}
+                                    <a href="#" onclick="custom_search({{ n }}, '{{ term }}');">{{ n }}</a>
+                                    {% else %}<a href="?page={{ n }}">{{ n }}</a>{% endif %}</li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="disabled"><a href="#">{{ listings.number }}
+                                of {{ listings.paginator.num_pages }}</a></li>
+                        {% endif %}
+                        {% if not listings.has_next %}
+                            <li class="disabled">
+                                <a href="#">»</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                {% if request.is_ajax %}
+                                    <a href="#"
+                                       onclick="custom_search({{ listings.next_page_number }}, '{{ term }}');">»</a>
+                                    {% else %}<a
+                                            href="?page={{ listings.next_page_number }}">»</a>{% endif %}</li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% else %}
+            <h2>Sorry your search turned up nothing. We are constantly adding new listings so please check
+                back
+                often!</h2>
+        {% endif %}
+    </div>
+    <div class="col-sm-5">
+        <div id="map-canvas" style="width: 100%; min-height: 600px"></div>
+    </div>
+{% else %}
+    <div class="col-sm-12">
+        <div class="isotope gallery">
+            {% for r in reviews %}
+                <div class="row isotope-item {{ r.listing.get_string_tags_no_comma }}"
+                     style="margin-top: 2em; width: 100%">
+                    <div class="col-sm-12 col-lg-2 col-middle">
+                        <a href="{{ r.listing.get_unique_url }}"><img src="{{ r.listing.get_photo_url }}"
+                                                                      alt="{{ r.listing.listing_name }}"
+                                                                      width="140px"
+                                                                      height="100"/>
+
+                            <h4 style="font-size: 1.3em">
+                                <strong>{{ r.listing.listing_name }}</strong>
+                                <br><span>{{ r.listing.get_string_tags }}</span></h4></a>
+
+                        <div class="price"><strong>Rating: {{ r.listing.get_rating }}</strong></div>
+                    </div>
+                    <div class="col-sm-12 col-lg-6">
+                        <a href="{{ r.listing.get_unique_url }}" style="color: #333">
+                            <p><strong>Address: </strong>{{ r.listing.address|safe }}</p>
+
+                            <p><strong>Contact: </strong>{{ r.listing.phone }}</p>
+
+                            <p><strong>Email: </strong>{{ r.listing.email }}</p>
+                        </a>
+                    </div>
+                    <div class="col-sm-12 col-lg-4">
+                        <a href="{{ r.listing.get_unique_url }}" style="color: #333">
+                            <p><strong>Rating: </strong><input class="rating" value="{{ r.rating }}"
+                                                               readonly></p>
+
+                            <p><strong>Comment: </strong>{{ r.comment }}</p>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+</div>
+</div>
 </div>

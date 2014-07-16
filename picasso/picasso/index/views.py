@@ -80,13 +80,14 @@ def get_listings(request):
                     listings = paginator.page(1)
                 except EmptyPage:
                     listings = paginator.page(paginator.num_pages)
-        context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More', 'filters': True}
+        context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More', 'filters': True,
+                   'term': original_search}
         context = RequestContext(request, context)
         t = get_template('index/listings.html')
         names = [str(x.listing_name.encode('utf-8')) for x in listings]
         return HttpResponse(
             json.dumps({'html': t.render(context),
-                        'lons': str(lons), 'lats': str(lats), 'names': names, 'term': original_search}),
+                        'lons': str(lons), 'lats': str(lats), 'names': names}),
             content_type='application/json')
 
 
