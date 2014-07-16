@@ -23,9 +23,8 @@
                             </ul>
                         {% else %}
                             {% if sub_categories %}
-                                <h3 style="padding: 10px">Categories</h3>
+                                <h3 style="padding: 10px">Sub Categories</h3>
                                 <ul class="nav nav-pills list-unstyled arrow" id="filters">
-                                    <li class="active"><a href="#" data-filter="*">All</a></li>
                                     {% for t in sub_categories|slice:":20" %}
                                         <li><a href="{% url 'by_category' t.dash_version %}"
                                                onclick="window.location='{% url 'by_category' t.dash_version %}'">{{ t.tag_name }}</a>
