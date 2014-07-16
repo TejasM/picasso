@@ -102,9 +102,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h1 style="margin: 10px 0 20px;">Find the best {% block category %}extracurricular{% endblock %} teachers around you.</h1>
+                    <h1 style="margin: 10px 0 20px;">Find the best {% block category %}extracurricular{% endblock %}
+                        teachers around you.</h1>
 
-                    <h2 style="margin-bottom: 20px">Search from over {{ number_of_listings }} teachers in Toronto, Ontario.</h2>
+                    <h2 style="margin-bottom: 20px">Search from over {{ number_of_listings }} teachers in Toronto,
+                        Ontario.</h2>
 
                     <form class="form-inline reservation-horizontal clearfix" role="form" method="post"
                           action="" name="reservationform" id="reservationform" onsubmit="javascript:void (0);"
@@ -331,41 +333,53 @@ var names = [];
 var geocoder = null;
 var script_loaded = false;
 var tags = {{ all_tags|safe }};
+function search(e) {
+    $main.empty();
+    $main.append('<div class="container mt50" style="text-align: center; margin-bottom: 50px"><img src="{% static 'images/ui/AjaxLoader.gif' %}" alt="loading"></div>');
+    last_data = {'term': $('#search-text').val() + '----' + $('#location-text').val()};
+    actual_search(last_data);
+    return false;
+}
 
-$(function () {
-    var $main = $('#main-section');
-    var last_data;
-    $('#search-submisson').click(function (e) {
+function custom_search(page_number, term) {
+    $main.empty();
+    $main.append('<div class="container mt50" style="text-align: center; margin-bottom: 50px"><img src="{% static 'images/ui/AjaxLoader.gif' %}" alt="loading"></div>');
+    last_data = {'term': term, 'page': page_number};
+    actual_search(last_data);
+    return false;
+}
+
+function actual_search(data) {
+    $.get('{% url 'get_listings' %}', last_data, function (data) {
         $main.empty();
-        $main.append('<div class="container mt50" style="text-align: center; margin-bottom: 50px"><img src="{% static 'images/ui/AjaxLoader.gif' %}" alt="loading"></div>');
-        last_data = {'term': $('#search-text').val() + '----' + $('#location-text').val()};
-        $.get('{% url 'get_listings' %}', last_data, function (data) {
-            $main.empty();
-            $main.append(data['html']);
-            lons = $.parseJSON(data['lons']);
-            lats = $.parseJSON(data['lats']);
-            names = data['names'];
-            if (!script_loaded) {
-                loadScript();
-            } else {
-                initialize();
-            }
-            $('input[type=checkbox], input[type=radio]').each(function () {
-                var self = $(this),
-                        label = self.next(),
-                        label_text = label.text();
+        $main.append(data['html']);
+        lons = $.parseJSON(data['lons']);
+        lats = $.parseJSON(data['lats']);
+        names = data['names'];
+        if (!script_loaded) {
+            loadScript();
+        } else {
+            initialize();
+        }
+        $('input[type=checkbox], input[type=radio]').each(function () {
+            var self = $(this),
+                    label = self.next(),
+                    label_text = label.text();
 
-                label.remove();
-                self.iCheck({
-                    checkboxClass: 'icheckbox_line-blue',
-                    radioClass: 'iradio_line-blue',
-                    insert: '<div class="icheck_line-icon"></div>' + label_text
-                });
+            label.remove();
+            self.iCheck({
+                checkboxClass: 'icheckbox_line-blue',
+                radioClass: 'iradio_line-blue',
+                insert: '<div class="icheck_line-icon"></div>' + label_text
             });
-            $(".rating").rating({'min': 0, 'max': 5, 'step': 0.5, size: 'xs'});
         });
-        return false;
+        $(".rating").rating({'min': 0, 'max': 5, 'step': 0.5, size: 'xs'});
     });
+}
+var last_data;
+var $main = $('#main-section');
+$(function () {
+    $('#search-submisson').click(search);
     {% if not user.is_authenticated %}
         $('#sign-up').click(function () {
             $('#main-section').hide();

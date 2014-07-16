@@ -126,15 +126,16 @@
                                 <ul class="pagination clearfix">
                                     <li {% if not listings.has_previous %}class="disabled"{% endif %}>
                                         {% if request.is_ajax %}
-                                            <a href="{% url 'get_listings' %}?page={{ contacts.previous_page_number }}&term={{ term }}">«</a>
+                                            <a href="#"
+                                               onclick="custom_search({{ listings.previous_page_number }}, '{{ term }}');">«</a>
                                         {% else %}
-                                            <a href="?page={{ contacts.previous_page_number }}">«</a>
+                                            <a href="?page={{ listings.previous_page_number }}">«</a>
                                         {% endif %}
                                     </li>
                                     {% if listings.paginator.num_pages < 10 %}
                                         {% for n in listings.paginator.page_range %}
                                             <li>  {% if request.is_ajax %}
-                                                <a href="{% url 'get_listings' %}?page={{ n }}&term={{ term }}">{{ n }}</a>
+                                                <a href="#" onclick="custom_search({{ n }}, '{{ term }}');">{{ n }}</a>
                                                 {% else %}<a href="?page={{ n }}">{{ n }}</a>{% endif %}</li>
                                         {% endfor %}
                                     {% else %}
@@ -143,7 +144,8 @@
                                     {% endif %}
                                     <li {% if not listings.has_next %}class="disabled"{% endif %}>
                                         {% if request.is_ajax %}
-                                            <a href="{% url 'get_listings' %}?page={{ listings.next_page_number }}&term={{ term }}">»</a>
+                                            <a href="#"
+                                               onclick="custom_search({{ listings.next_page_number }}, '{{ term }}');">»</a>
                                             {% else %}<a
                                                     href="?page={{ listings.next_page_number }}">»</a>{% endif %}</li>
                                 </ul>
