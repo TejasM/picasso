@@ -86,7 +86,7 @@ def category_listings(request, tag_name):
                     list_tags.append(t.id)
                 listings = Listing.objects.filter(tags__in=list_tags)
                 if listings.count() > 50:
-                    listings = listings[:50]
+                    listings = listings.order_by('?')[:50]
                 context = {'listings': listings, 'title': possible_tag.tag_name, 'button_name': 'Read More'}
                 return render(request, 'index/category_listings.html', context)
             else:
