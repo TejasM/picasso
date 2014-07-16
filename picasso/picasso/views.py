@@ -65,7 +65,8 @@ def send_claim_email(request, list_id):
             t = get_template('emails/claim_email.html')
             context = RequestContext(request, {'listing': listing})
             content = t.render(context)
-            msg = EmailMessage('Picasso - Message for your Business', content, 'contact@findpicasso.com', [listing.email])
+            msg = EmailMessage('Picasso - Message for your Business', content, 'contact@findpicasso.com',
+                               [listing.email])
             msg.content_subtype = "html"
             msg.send()
             return HttpResponse(json.dumps({'fail': False}), content_type='application/json')
@@ -79,7 +80,8 @@ def category_listings(request, tag_name):
         try:
             if tag_name != "unknown":
                 possible_tag = Tag.objects.get(dash_version=tag_name)
-                listings = Listing.objects.filter(tags__in=[possible_tag.id])
+                listings = Listing.objects.filter(tags__in=[possible_tag.id]) | Listing.objects.filter(
+                    parent_tag=possible_tag)
                 context = {'listings': listings, 'title': possible_tag.tag_name, 'button_name': 'Read More'}
                 return render(request, 'index/category_listings.html', context)
             else:
