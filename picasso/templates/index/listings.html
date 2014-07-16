@@ -123,7 +123,7 @@
                                     </div>
                                 </div>
                             {% endfor %}
-                            {% if listings.paginator %}
+                            {% if listings.paginator and listings.paginator.num_pages > 1 %}
                                 <ul class="pagination clearfix">
                                     <li {% if not listings.has_previous %}class="disabled"{% endif %}>
                                         {% if request.is_ajax %}
