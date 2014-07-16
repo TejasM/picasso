@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.gis import geos
 from django.core import serializers
 from django.core.mail import EmailMessage
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import IntegrityError
 from django.db.models import Q
 from django.http import HttpResponse
@@ -56,15 +57,27 @@ def get_listings(request):
                 raise Exception
             else:
                 listings = temp_listings
-            if listings.count() > 20:
-                listings = listings[:20]
+            paginator = Paginator(listings, 10)
+            page = request.GET.get('page')
+            try:
+                listings = paginator.page(page)
+            except PageNotAnInteger:
+                listings = paginator.page(1)
+            except EmptyPage:
+                listings = paginator.page(paginator.num_pages)
             lons = [x.address.point.x for x in listings]
             lats = [x.address.point.y for x in listings]
         except:
-            if len(listings) > 20:
-                listings = listings[:20]
             lats = []
             lons = []
+            paginator = Paginator(listings, 10)
+            page = request.GET.get('page')
+            try:
+                listings = paginator.page(page)
+            except PageNotAnInteger:
+                listings = paginator.page(1)
+            except EmptyPage:
+                listings = paginator.page(paginator.num_pages)
         context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More', 'filters': True}
         context = RequestContext(request, context)
         t = get_template('index/listings.html')

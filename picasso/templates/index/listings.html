@@ -109,17 +109,18 @@
                                     </div>
                                 </div>
                             {% endfor %}
-                            <ul class="pagination clearfix">
-                                <li class="disabled">{% if contacts.has_previous %}
-                                    <a href="?page={{ contacts.previous_page_number }}">«</a>
-                                {% endif %}</li>
-                                <li class="active"><a href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">4</a></li>
-                                <li><a href="#">5</a></li>
-                                <li><a href="#">»</a></li>
-                            </ul>
+                            {% if listings.page_range %}
+                                <ul class="pagination clearfix">
+                                    <li {% if not listings.has_previous %}class="disabled"{% endif %}>
+                                        <a href="?page={{ contacts.previous_page_number }}">«</a>
+                                    </li>
+                                    {% for n in listings.page_range %}
+                                        <li><a href="?page={{ n }}">{{ n }}</a></li>
+                                    {% endfor %}
+                                    <li {% if not listings.has_next %}class="disabled"{% endif %}><a
+                                            href="?page={{ listings.next_page_number }}">»</a></li>
+                                </ul>
+                            {% endif %}
                         </div>
                     {% else %}
                         <h2>Sorry your search turned up nothing. We are constantly adding new listings so please check
