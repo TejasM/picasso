@@ -81,7 +81,7 @@ def category_listings(request, tag_name):
             if tag_name != "unknown":
                 possible_tag = Tag.objects.get(dash_version=tag_name)
                 listings = Listing.objects.filter(tags__in=[possible_tag.id]) | Listing.objects.filter(
-                    parent_tag=possible_tag)
+                    tags__parent_tag=possible_tag)
                 context = {'listings': listings, 'title': possible_tag.tag_name, 'button_name': 'Read More'}
                 return render(request, 'index/category_listings.html', context)
             else:
