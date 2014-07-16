@@ -34,7 +34,7 @@ class Tag(BaseModel):
     tag_name = models.CharField(default="", max_length=500)
     possible_folders = models.CharField(default="", max_length=500, blank=True)
     dash_version = models.CharField(default="", max_length=500, blank=True)
-    parent_tag = models.ForeignKey('Tag', default=None, null=True)
+    parent_tag = models.ForeignKey('Tag', default=None, null=True, blank=True)
 
     def save(self, **kwargs):
         self.dash_version = re.sub(r'\W+', '-', self.tag_name).lower()
