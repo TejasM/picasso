@@ -109,12 +109,12 @@
                                     </div>
                                 </div>
                             {% endfor %}
-                            {% if listings.page_range %}
+                            {% if listings.paginator %}
                                 <ul class="pagination clearfix">
                                     <li {% if not listings.has_previous %}class="disabled"{% endif %}>
                                         <a href="?page={{ contacts.previous_page_number }}">«</a>
                                     </li>
-                                    {% for n in listings.page_range %}
+                                    {% for n in listings.paginator.page_range %}
                                         <li><a href="?page={{ n }}">{{ n }}</a></li>
                                     {% endfor %}
                                     <li {% if not listings.has_next %}class="disabled"{% endif %}><a
