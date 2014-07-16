@@ -5,17 +5,22 @@
         {% include 'index/listings.html' %}
     </div>
 {% endblock %}
+{% if category %}
+    {% block category %}
+        {{ category }}
+    {% endblock %}
+{% endif %}
 {% block scripts %}
     <script>
         $(function () {
             {% for l in listings %}
-            {% if l.address.point %}
-                lons.push({{ l.address.point.x }});
-                lats.push({{ l.address.point.y }});
-            {% else %}
-                lons.push(-79.4);
-                lats.push(43.7);
-            {% endif %}
+                {% if l.address.point %}
+                    lons.push({{ l.address.point.x }});
+                    lats.push({{ l.address.point.y }});
+                {% else %}
+                    lons.push(-79.4);
+                    lats.push(43.7);
+                {% endif %}
                 names.push('{{ l.listing_name }}');
             {% endfor %}
             if (!script_loaded) {
