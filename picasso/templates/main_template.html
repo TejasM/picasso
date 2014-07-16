@@ -240,7 +240,8 @@
                         class="fa fa-facebook"></i></a>
                 <a href="https://twitter.com/FindPicasso" style="font-size: 50px; margin-right: 20px"><i
                         class="fa fa-twitter"></i></a>
-                <a href="https://plus.google.com/b/109533021584477101803/109533021584477101803/about?cfem=1" style="font-size: 50px"><i class="fa fa-google-plus"></i></a>
+                <a href="https://plus.google.com/b/109533021584477101803/109533021584477101803/about?cfem=1"
+                   style="font-size: 50px"><i class="fa fa-google-plus"></i></a>
             </div>
             <div class="col-md-3 col-sm-3">
                 <h4><a href="{% url 'privacy' %}">Privacy Policy</a></h4>
@@ -333,10 +334,12 @@ var tags = {{ tags|safe }};
 
 $(function () {
     var $main = $('#main-section');
+    var last_data;
     $('#search-submisson').click(function (e) {
         $main.empty();
         $main.append('<div class="container mt50" style="text-align: center; margin-bottom: 50px"><img src="{% static 'images/ui/AjaxLoader.gif' %}" alt="loading"></div>');
-        $.get('{% url 'get_listings' %}', {'term': $('#search-text').val() + '----' + $('#location-text').val()}, function (data) {
+        last_data = {'term': $('#search-text').val() + '----' + $('#location-text').val()};
+        $.get('{% url 'get_listings' %}', last_data, function (data) {
             $main.empty();
             $main.append(data['html']);
             lons = $.parseJSON(data['lons']);

@@ -40,19 +40,20 @@ def featured(request):
 
 def get_listings(request):
     if request.method == "GET":
-        search = request.GET.get('term', '')
+        original_search = request.GET.get('term', '')
         try:
-            location = search.split('----')[1]
+            location = original_search.split('----')[1]
         except IndexError:
             location = 'Toronto'
-        search = search.split('----')[0]
+        search = original_search.split('----')[0]
         listings = watson.filter(Listing, search)
         try:
             results = Geocoder.geocode(str(location + ' Canada'))
             lat, lon = results[0].coordinates
             current_point = geos.fromstr("POINT(%s %s)" % (lon, lat))
             temp_listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).distance(current_point,
-                                          field_name='address__point').order_by('distance')
+                                                                                                       field_name='address__point').order_by(
+                'distance')
             if temp_listings.count() == 0:
                 raise Exception
             else:
@@ -84,7 +85,7 @@ def get_listings(request):
         names = [str(x.listing_name.encode('utf-8')) for x in listings]
         return HttpResponse(
             json.dumps({'html': t.render(context),
-                        'lons': str(lons), 'lats': str(lats), 'names': names}),
+                        'lons': str(lons), 'lats': str(lats), 'names': names, 'term': original_search}),
             content_type='application/json')
 
 

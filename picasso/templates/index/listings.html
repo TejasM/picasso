@@ -11,7 +11,6 @@
             {% if not reviews %}
                 <div class="col-sm-2">
                     <div class="widget">
-
                         {% if categories %}
                             <h3 style="padding: 10px">Categories</h3>
                             <ul class="nav nav-pills list-unstyled arrow" id="filters">
@@ -23,6 +22,17 @@
                                 {% endfor %}
                             </ul>
                         {% else %}
+                            {% if sub_categories %}
+                                <h3 style="padding: 10px">Categories</h3>
+                                <ul class="nav nav-pills list-unstyled arrow" id="filters">
+                                    <li class="active"><a href="#" data-filter="*">All</a></li>
+                                    {% for t in sub_categories|slice:":20" %}
+                                        <li><a href="{% url 'by_category' t.dash_version %}"
+                                               onclick="window.location='{% url 'by_category' t.dash_version %}'">{{ t.tag_name }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
                             <h3 style="padding: 10px">Filters</h3>
                             <h4 style="padding: 10px">Level of Expertise</h4>
                             <input type="checkbox" name="loe-check" class="loe-check" checked value="Beginner">
@@ -105,7 +115,8 @@
                                             <div class="price"><input name="rating" class="form-control rating"
                                                                       value="" disabled data-size="xs"></div>
                                         {% else %}
-                                            <div class="price"><input name="rating" class="form-control rating" data-size="xs"
+                                            <div class="price"><input name="rating" class="form-control rating"
+                                                                      data-size="xs"
                                                                       value="{{ l.get_rating }}" disabled></div>
                                         {% endif %}
                                         <hr style="margin-bottom: 0px; margin-top: 10px">
@@ -115,17 +126,27 @@
                             {% if listings.paginator %}
                                 <ul class="pagination clearfix">
                                     <li {% if not listings.has_previous %}class="disabled"{% endif %}>
-                                        <a href="?page={{ contacts.previous_page_number }}">«</a>
+                                        {% if request.is_ajax %}
+                                            <a href="{% url 'get_listings' %}?page={{ contacts.previous_page_number }}&term={{ term }}">«</a>
+                                        {% else %}
+                                            <a href="?page={{ contacts.previous_page_number }}">«</a>
+                                        {% endif %}
                                     </li>
                                     {% if listings.paginator.num_pages < 10 %}
                                         {% for n in listings.paginator.page_range %}
-                                            <li><a href="?page={{ n }}">{{ n }}</a></li>
+                                            <li>  {% if request.is_ajax %}
+                                                <a href="{% url 'get_listings' %}?page={{ n }}&term={{ term }}">{{ n }}</a>
+                                                {% else %}<a href="?page={{ n }}">{{ n }}</a>{% endif %}</li>
                                         {% endfor %}
                                     {% else %}
-                                        <li class="disabled"><a href="#">{{ listings.number }} of {{ listings.paginator.num_pages }}</a></li>
+                                        <li class="disabled"><a href="#">{{ listings.number }}
+                                            of {{ listings.paginator.num_pages }}</a></li>
                                     {% endif %}
-                                    <li {% if not listings.has_next %}class="disabled"{% endif %}><a
-                                            href="?page={{ listings.next_page_number }}">»</a></li>
+                                    <li {% if not listings.has_next %}class="disabled"{% endif %}>
+                                        {% if request.is_ajax %}
+                                            <a href="{% url 'get_listings' %}?page={{ listings.next_page_number }}&term={{ term }}">»</a>
+                                            {% else %}<a
+                                                    href="?page={{ listings.next_page_number }}">»</a>{% endif %}</li>
                                 </ul>
                             {% endif %}
                         </div>

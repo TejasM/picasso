@@ -94,7 +94,8 @@ def category_listings(request, tag_name):
                     listings = paginator.page(1)
                 except EmptyPage:
                     listings = paginator.page(paginator.num_pages)
-                context = {'listings': listings, 'title': possible_tag.tag_name, 'button_name': 'Read More'}
+                context = {'listings': listings, 'title': possible_tag.tag_name, 'button_name': 'Read More',
+                           'sub_categories': other_tags}
                 return render(request, 'index/category_listings.html', context)
             else:
                 listings = Listing.objects.filter(tags=None)
