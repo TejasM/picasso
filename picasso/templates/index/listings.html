@@ -103,9 +103,9 @@
                                     <div class="col-lg-12 col-sm-12">
                                         {% if l.get_rating == 'N/A' %}
                                             <div class="price"><input name="rating" class="form-control rating"
-                                                                      value="" disabled></div>
+                                                                      value="" disabled data-size="xs"></div>
                                         {% else %}
-                                            <div class="price"><input name="rating" class="form-control rating"
+                                            <div class="price"><input name="rating" class="form-control rating" data-size="xs"
                                                                       value="{{ l.get_rating }}" disabled></div>
                                         {% endif %}
                                         <hr style="margin-bottom: 0px; margin-top: 10px">
