@@ -30,7 +30,7 @@ def featured(request):
         t = get_template('index/listings.html')
         lons = [x.address.point.x for x in featured_listings]
         lats = [x.address.point.y for x in featured_listings]
-        names = [str(x) for x in featured_listings.values_list('listing_name', flat=True)]
+        names = [str(x.listing_name.encode('utf-8')) for x in featured_listings]
         return HttpResponse(
             json.dumps({'html': t.render(context),
                         'lons': str(lons), 'lats': str(lats), 'names': names}),
