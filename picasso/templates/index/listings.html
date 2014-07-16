@@ -109,6 +109,17 @@
                                     </div>
                                 </div>
                             {% endfor %}
+                            <ul class="pagination clearfix">
+                                <li class="disabled">{% if contacts.has_previous %}
+                                    <a href="?page={{ contacts.previous_page_number }}">«</a>
+                                {% endif %}</li>
+                                <li class="active"><a href="#">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#">5</a></li>
+                                <li><a href="#">»</a></li>
+                            </ul>
                         </div>
                     {% else %}
                         <h2>Sorry your search turned up nothing. We are constantly adding new listings so please check

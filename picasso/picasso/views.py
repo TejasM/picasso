@@ -1,6 +1,7 @@
 import json
 import logging
 from django.core.mail import EmailMessage
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -85,12 +86,26 @@ def category_listings(request, tag_name):
                 for t in other_tags:
                     list_tags.append(t.id)
                 listings = Listing.objects.filter(tags__in=list_tags)
-                if listings.count() > 50:
-                    listings = listings.order_by('?')[:50]
+                paginator = Paginator(listings, 10)
+                page = request.GET.get('page')
+                try:
+                    listings = paginator.page(page)
+                except PageNotAnInteger:
+                    listings = paginator.page(1)
+                except EmptyPage:
+                    listings = paginator.page(paginator.num_pages)
                 context = {'listings': listings, 'title': possible_tag.tag_name, 'button_name': 'Read More'}
                 return render(request, 'index/category_listings.html', context)
             else:
                 listings = Listing.objects.filter(tags=None)
+                paginator = Paginator(listings, 10)
+                page = request.GET.get('page')
+                try:
+                    listings = paginator.page(page)
+                except PageNotAnInteger:
+                    listings = paginator.page(1)
+                except EmptyPage:
+                    listings = paginator.page(paginator.num_pages)
                 context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More'}
                 return render(request, 'index/category_listings.html', context)
         except Tag.DoesNotExist:
