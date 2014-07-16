@@ -68,7 +68,9 @@
                                                                               height="100"/>
 
                                             <h4 style="font-size: 1.3em">
-                                                <strong>{{ forloop.counter }}. {{ l.listing_name|unidecode }}</strong>
+                                                <strong>{% if listings.paginator %}
+                                                    {{ listing.start_index|add:forloop.counter0 }}{% else %}
+                                                    {{ forloop.counter }}{% endif %}. {{ l.listing_name|unidecode }}</strong>
                                                 <br><span>{{ l.get_string_tags }}</span></h4>
                                         </a>
                                     </div>
