@@ -46,7 +46,7 @@ def get_listings(request):
         except IndexError:
             location = 'Toronto'
         search = original_search.split('----')[0]
-        listings = watson.filter(Listing, search)
+        listings = watson.filter(Listing, search).distinct()
         try:
             results = Geocoder.geocode(str(location + ' Canada'))
             lat, lon = results[0].coordinates

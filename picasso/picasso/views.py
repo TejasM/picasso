@@ -85,7 +85,7 @@ def category_listings(request, tag_name):
                 list_tags = [possible_tag.id]
                 for t in other_tags:
                     list_tags.append(t.id)
-                listings = Listing.objects.filter(tags__in=list_tags)
+                listings = Listing.objects.filter(tags__in=list_tags).distinct()
                 paginator = Paginator(listings, 10)
                 page = request.GET.get('page')
                 try:
@@ -93,7 +93,7 @@ def category_listings(request, tag_name):
                 except PageNotAnInteger:
                     listings = paginator.page(1)
                 except EmptyPage:
-                    listings = paginator.page(paginator.num_pages)
+                    listings = paginator.page(paginator.num_pages - 1)
                 context = {'listings': listings, 'title': possible_tag.tag_name, 'button_name': 'Read More',
                            'sub_categories': other_tags}
                 return render(request, 'index/category_listings.html', context)
