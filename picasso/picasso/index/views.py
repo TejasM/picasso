@@ -71,14 +71,15 @@ def get_listings(request):
         except:
             lats = []
             lons = []
-            paginator = Paginator(listings, 10)
-            page = request.GET.get('page')
-            try:
-                listings = paginator.page(page)
-            except PageNotAnInteger:
-                listings = paginator.page(1)
-            except EmptyPage:
-                listings = paginator.page(paginator.num_pages)
+            if listings.count() != 0:
+                paginator = Paginator(listings, 10)
+                page = request.GET.get('page')
+                try:
+                    listings = paginator.page(page)
+                except PageNotAnInteger:
+                    listings = paginator.page(1)
+                except EmptyPage:
+                    listings = paginator.page(paginator.num_pages)
         context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More', 'filters': True}
         context = RequestContext(request, context)
         t = get_template('index/listings.html')
