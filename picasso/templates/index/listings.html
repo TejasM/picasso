@@ -70,7 +70,8 @@
                                             <h4 style="font-size: 1.3em">
                                                 <strong>{% if listings.paginator %}
                                                     {{ listing.start_index|add:forloop.counter0 }}{% else %}
-                                                    {{ forloop.counter }}{% endif %}. {{ l.listing_name|unidecode }}</strong>
+                                                    {{ forloop.counter }}{% endif %}
+                                                    . {{ l.listing_name|unidecode }}</strong>
                                                 <br><span>{{ l.get_string_tags }}</span></h4>
                                         </a>
                                     </div>
@@ -116,9 +117,13 @@
                                     <li {% if not listings.has_previous %}class="disabled"{% endif %}>
                                         <a href="?page={{ contacts.previous_page_number }}">«</a>
                                     </li>
-                                    {% for n in listings.paginator.page_range %}
-                                        <li><a href="?page={{ n }}">{{ n }}</a></li>
-                                    {% endfor %}
+                                    {% if listings.paginator.num_pages < 10 %}
+                                        {% for n in listings.paginator.page_range %}
+                                            <li><a href="?page={{ n }}">{{ n }}</a></li>
+                                        {% endfor %}
+                                    {% else %}
+                                        <li class="disabled">{{ listings.number }} of {{ listings.paginator.num_pages }}</li>
+                                    {% endif %}
                                     <li {% if not listings.has_next %}class="disabled"{% endif %}><a
                                             href="?page={{ listings.next_page_number }}">»</a></li>
                                 </ul>
