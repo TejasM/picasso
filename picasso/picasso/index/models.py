@@ -149,22 +149,22 @@ class Listing(BaseModel):
 
     @property
     def get_string_tags(self):
-        if self.tags.count() != 0:
-            return ", ".join(self.tags.values_list('tag_name', flat=True))
+        if self.tags.filter(visible=True).count() != 0:
+            return ", ".join(self.tags.filter(visible=True).values_list('tag_name', flat=True))
         else:
             return "Unknown"
 
     @property
     def get_string_tags_no_comma(self):
-        if self.tags.count() != 0:
-            return " ".join(self.tags.values_list('tag_name', flat=True))
+        if self.tags.filter(visible=True).count() != 0:
+            return " ".join(self.tags.filter(visible=True).values_list('tag_name', flat=True))
         else:
             return "Unknown"
 
     @property
     def get_string_tags_no_space(self):
-        if self.tags.count() != 0:
-            return self.tags.all().order_by('?')[0].tag_name.replace(' ', '').replace(',', '').replace('-', '').replace(
+        if self.tags.filter(visible=True).count() != 0:
+            return self.tags.filter(visible=True).all().order_by('?')[0].tag_name.replace(' ', '').replace(',', '').replace('-', '').replace(
                 '/', '').lower().strip()
         else:
             return "Unknown"
@@ -172,8 +172,8 @@ class Listing(BaseModel):
     @property
     def get_unique_url(self):
         string = "/"
-        if self.tags.count() != 0:
-            string += self.tags.all().order_by('?')[0].dash_version
+        if self.tags.filter(visible=True).count() != 0:
+            string += self.tags.filter(visible=True).all().order_by('?')[0].dash_version
         else:
             string += "unknown"
         string += "/" + self.unique_url
@@ -185,16 +185,16 @@ class Listing(BaseModel):
 
     @property
     def get_photo_url(self):
-        if self.tags.count() != 0:
-            for tag in self.tags.all():
+        if self.tags.filter(visible=True).count() != 0:
+            for tag in self.tags.filter(visible=True).all():
                 if tag.tag_name.strip().lower() in STATIC_IMAGE_URLS:
                     return random.choice(STATIC_IMAGE_URLS[tag.tag_name.strip().lower()])
         return random.choice(STATIC_IMAGE_URLS['music'])
 
     @permalink
     def get_absolute_url(self):
-        if self.tags.count() != 0:
-            string = self.tags.all().order_by('?')[0].dash_version
+        if self.tags.filter(visible=True).count() != 0:
+            string = self.tags.filter(visible=True).all().order_by('?')[0].dash_version
         else:
             string = "unknown"
         return ('actual_listing', [string, self.unique_url])
@@ -235,7 +235,7 @@ class Review(BaseModel):
 
 watson.register(Listing,
                 fields=(
-                'tags__tag_name', 'listing_name', 'school_name', 'description', 'scraped_url', 'unique_url', 'email',
+                'get_string_tags', 'listing_name', 'school_name', 'description', 'scraped_url', 'unique_url', 'email',
                 'tags__parent_tag__tag_name'))
 watson.register(Tag)
 watson.register(Review)
