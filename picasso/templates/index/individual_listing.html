@@ -14,6 +14,14 @@
 %{% block content %}
     <div class="container mt50" id="listing-detail">
     <div class="row">
+        {% if listing.visible == False %}
+            <div class="col-sm-12 col-lg-6 col-lg-offset-3">
+            <div class="alert alert-info alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                This listing is only visible through the direct link because it is an ORMTA listing.
+            </div>
+            </div>
+        {% endif %}
         <!-- Slider -->
         <div class="col-sm-12">
             <h2 class="lined-heading"><span>{{ listing.listing_name|unidecode }}</span></h2>

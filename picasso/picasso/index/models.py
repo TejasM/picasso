@@ -118,6 +118,8 @@ class Listing(BaseModel):
     website = models.CharField(default="", max_length=1000)
     hash_key = models.CharField(max_length=40, default=hashlib.sha1(os.urandom(128)).hexdigest())
 
+    visible = models.BooleanField(default=True)
+
     level_of_expertise = models.CharField(default="All", max_length=100)
     price_min = models.FloatField(default=0)
     price_max = models.FloatField(default=0)
