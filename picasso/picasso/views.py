@@ -3,6 +3,7 @@ import logging
 from django.core.mail import EmailMessage
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
+from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import RequestContext
@@ -79,6 +80,7 @@ def send_claim_email(request, list_id):
 def category_listings(request, tag_name):
     if request.method == "GET":
         try:
+            order_by = request.GET.get('order_by', '')
             if tag_name != "unknown":
                 possible_tag = Tag.objects.get(dash_version=tag_name)
                 other_tags = Tag.objects.filter(parent_tag=possible_tag)
@@ -86,6 +88,8 @@ def category_listings(request, tag_name):
                 for t in other_tags:
                     list_tags.append(t.id)
                 listings = Listing.objects.filter(visible=True).filter(tags__in=list_tags).distinct()
+                if order_by != '':
+                    listings = listings.annotate(review_count=Count('review')).order_by(order_by)
                 paginator = Paginator(listings, 10)
                 page = request.GET.get('page')
                 try:
@@ -99,6 +103,8 @@ def category_listings(request, tag_name):
                 return render(request, 'index/category_listings.html', context)
             else:
                 listings = Listing.objects.filter(tags=None)
+                if order_by != '':
+                    listings = listings.annotate(review_count=Count('review')).order_by(order_by)
                 paginator = Paginator(listings, 10)
                 page = request.GET.get('page')
                 try:

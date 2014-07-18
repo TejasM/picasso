@@ -9,7 +9,7 @@ from django.core import serializers
 from django.core.mail import EmailMessage
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import IntegrityError
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext
@@ -42,6 +42,7 @@ def featured(request):
 def get_listings(request):
     if request.method == "GET":
         original_search = request.GET.get('term', '')
+        order_by = request.GET.get('order_by', '')
         try:
             location = original_search.split('----')[1]
         except IndexError:
@@ -54,11 +55,13 @@ def get_listings(request):
             current_point = geos.fromstr("POINT(%s %s)" % (lon, lat))
             temp_listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).distance(current_point,
                                                                                                        field_name='address__point').order_by(
-                'distance')
+                '-distance')
             if temp_listings.count() == 0:
                 raise Exception
             else:
                 listings = temp_listings
+            if order_by != '':
+                listings = listings.annotate(review_count=Count('review')).order_by(order_by)
             paginator = Paginator(listings, 10)
             page = request.GET.get('page')
             try:
@@ -73,6 +76,8 @@ def get_listings(request):
             lats = []
             lons = []
             if listings.count() != 0:
+                if order_by != '':
+                    listings = listings.annotate(review_count=Count('review')).order_by(order_by)
                 paginator = Paginator(listings, 10)
                 page = request.GET.get('page')
                 try:
@@ -82,7 +87,7 @@ def get_listings(request):
                 except EmptyPage:
                     listings = paginator.page(paginator.num_pages)
         context = {'listings': listings, 'title': 'Listings', 'button_name': 'Read More', 'filters': True,
-                   'term': original_search}
+                   'term': original_search, 'order_by': order_by}
         context = RequestContext(request, context)
         t = get_template('index/listings.html')
         names = [str(x.listing_name.encode('utf-8')) for x in listings]

@@ -74,19 +74,20 @@
                         <li><a href="#sign-in-lightbox" id="sign-up">Sign Up</a></li>
                         <li><a href="#sign-in-lightbox" id="login">Login</a></li>
                         <li class=""><a href="#sign-in-lightbox" id="add-listing">
-                            <button type="button" style="margin-top: -12px" class="btn btn-primary btn-block">&nbsp;&nbsp;Add
+                            <button type="button" style="margin-top: -5px" class="btn btn-primary btn-block">&nbsp;&nbsp;Add
                                 Listing&nbsp;&nbsp;</button>
                         </a>
 
                         </li>
                     {% else %}
-                        {% if user.owner.count == 0 %}
-                            <li class=""><a href="{% url 'profile:my_listings' %}">Add Listing</a>
-                            </li>
-                        {% endif %}
                         <li class=""><a href="{% url 'profile:profile' %}">Profile</a>
                         </li>
                         <li class=""><a href="{% url 'logout' %}">Logout</a>
+                        </li>
+                        <li class=""><a href="{% url 'profile:my_listings' %}">
+                            <button type="button" style="margin-top: -5px" class="btn btn-primary btn-block">&nbsp;&nbsp;Add
+                                Listing&nbsp;&nbsp;</button>
+                        </a>
                         </li>
                     {% endif %}
                 </ul>
@@ -119,9 +120,7 @@
                                     <i class="fa fa-2x fa-search"
                                        style="position: absolute; top: 10px; left: 25px; z-index: 1000;"></i>
                                     <input type="text" name="search" id="search-text"
-                                           value="What are you looking for?" onblur="if (this.value == '')
-                            this.value = this.defaultValue" onfocus="if (this.value == this.defaultValue)
-                            this.value = ''" class="form-control autocomplete"
+                                           placeholder="What are you looking for?" class="form-control autocomplete"
                                            style="font-size: 25px; height: 100%; padding-left: 55px; width: 100%">
                                 </div>
                             </div>
@@ -343,10 +342,14 @@ function search(e) {
     return false;
 }
 
-function custom_search(page_number, term) {
+function custom_search(page_number, term, options) {
     $main.empty();
     $main.append('<div class="container mt50" style="text-align: center; margin-bottom: 50px"><img src="{% static 'images/ui/AjaxLoader.gif' %}" alt="loading"></div>');
-    last_data = {'term': term, 'page': page_number};
+    last_data['term'] = term;
+    last_data['page'] = page_number;
+    if (options && options != null) {
+        $.extend(last_data, options);
+    }
     actual_search(last_data);
     return false;
 }
@@ -382,6 +385,21 @@ var last_data;
 var $main = $('#main-section');
 $(function () {
     $('#search-submisson').click(search);
+
+    $('#search-text').bind('keypress', function (e) {
+        var code = e.keyCode || e.which;
+        if (code == 13) {
+            $('#search-submisson').trigger('click');
+        }
+    });
+
+    $('#location-text').bind('keypress', function (e) {
+        var code = e.keyCode || e.which;
+        if (code == 13) {
+            $('#search-submisson').trigger('click');
+        }
+    });
+
     {% if not user.is_authenticated %}
         $('#sign-up').click(function () {
             $('#main-section').hide();

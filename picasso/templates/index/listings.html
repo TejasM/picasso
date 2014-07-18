@@ -66,6 +66,86 @@
 {% if not reviews %}
     <div class="col-sm-5">
         {% if listings.count != 0 %}
+            {% if title != 'Featured Listings' %}
+                <div class="row">
+                    <div class="col-lg-12" style="margin-bottom: 20px">
+                        <h4 style="text-align: center">Sort By:</h4>
+                        {% if request.is_ajax %}
+                            <a class="btn btn-sm btn-purple" href="#"
+                               onclick="custom_search(1, '{{ term }}');">Distance &nbsp;&nbsp;<i
+                                    class="fa fa-caret-up"></i></a>
+                            {% if order_by == '-price_min' %}
+                                <a class="btn btn-sm btn-purple" href="#"
+                                   onclick="custom_search(1, '{{ term }}', {'order_by': 'price_min'});">Price
+                                    &nbsp;&nbsp;<i
+                                            class="fa fa-caret-down"></i></a>
+                            {% else %}
+                                <a class="btn btn-sm btn-purple" href="#"
+                                   onclick="custom_search(1, '{{ term }}', {'order_by': '-price_min'});">Price
+                                    &nbsp;&nbsp;<i
+                                            class="fa fa-caret-up"></i></a>
+                            {% endif %}
+                            {% if order_by == '-create_time' %}
+                                <a class="btn btn-sm btn-purple" href="#"
+                                   onclick="custom_search(1, '{{ term }}', {'order_by': 'create_time'});">Date Added
+                                    &nbsp;&nbsp;<i
+                                            class="fa fa-caret-down"></i></a>
+                            {% else %}
+                                <a class="btn btn-sm btn-purple" href="#"
+                                   onclick="custom_search(1, '{{ term }}', {'order_by': '-create_time'});">Date Added
+                                    &nbsp;&nbsp;<i
+                                            class="fa fa-caret-up"></i></a>
+                            {% endif %}
+                            {% if order_by == '-review_count' %}
+                                <a class="btn btn-sm btn-purple" href="#"
+                                   onclick="custom_search(1, '{{ term }}', {'order_by': 'review_count'});">Number of
+                                    Reviews
+                                    &nbsp;&nbsp;<i
+                                            class="fa fa-caret-down"></i></a>
+                            {% else %}
+                                <a class="btn btn-sm btn-purple" href="#"
+                                   onclick="custom_search(1, '{{ term }}', {'order_by': '-review_count'});">Number of
+                                    Reviews
+                                    &nbsp;&nbsp;<i
+                                            class="fa fa-caret-up"></i></a>
+                            {% endif %}
+                        {% else %}
+                            <a class="btn btn-sm btn-purple" href="?page=1">Distance &nbsp;&nbsp;<i
+                                    class="fa fa-caret-up"></i></a>
+                            {% if order_by == '-price_min' %}
+                                <a class="btn btn-sm btn-purple" href="?page=1&order_by=price_min">Price
+                                    &nbsp;&nbsp;<i
+                                            class="fa fa-caret-down"></i></a>
+                            {% else %}
+                                <a class="btn btn-sm btn-purple" href="?page=1&order_by=-price_min">Price
+                                    &nbsp;&nbsp;<i
+                                            class="fa fa-caret-up"></i></a>
+                            {% endif %}
+                            {% if order_by == '-create_time' %}
+                                <a class="btn btn-sm btn-purple" href="?page=1&order_by=create_time">Date Added
+                                    &nbsp;&nbsp;<i
+                                            class="fa fa-caret-down"></i></a>
+                            {% else %}
+                                <a class="btn btn-sm btn-purple" href="?page=1&order_by=-create_time">Date Added
+                                    &nbsp;&nbsp;<i
+                                            class="fa fa-caret-up"></i></a>
+                            {% endif %}
+                            {% if order_by == '-review_count' %}
+                                <a class="btn btn-sm btn-purple" href="?page=1&order_by=review_count">Number of
+                                    Reviews
+                                    &nbsp;&nbsp;<i
+                                            class="fa fa-caret-down"></i></a>
+                            {% else %}
+                                <a class="btn btn-sm btn-purple" href="?page=1&order_by=-review_count">Number of
+                                    Reviews
+                                    &nbsp;&nbsp;<i
+                                            class="fa fa-caret-up"></i></a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+
             <div class="isotope gallery list">
                 {% for l in listings %}
                     <div class="row row-lg-height isotope-item {{ l.get_string_tags_no_comma }}"
