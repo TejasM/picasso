@@ -108,7 +108,7 @@ class Listing(BaseModel):
     listing_name = models.CharField(default="", max_length=500)
     school_name = models.CharField(default="", max_length=500)
     description = models.CharField(default="", max_length=10000)
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, related_name='listings')
     address = models.ForeignKey(Address, default=None, null=True)
     price = models.FloatField(default=0)
     scraped_url = models.CharField(default="", max_length=10000)
