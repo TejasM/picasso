@@ -69,6 +69,8 @@ def add_listing(request):
                                          phone=phone, active=active, owner=owner, created_by=request.user,
                                          level_of_expertise=l_o_e, price_min=price_min, price_max=price_max,
                                          email=email)
+        if not tags:
+            tags.append(Tag.objects.get(tag_name="Blank"))
         listing.tags = tags
         listing.save()
         return HttpResponse(json.dumps({'id': listing.id}), content_type='application/json')
@@ -124,8 +126,8 @@ def edit_listing(request, list_id):
                     tags.append(Tag.objects.get(dash_version=name).id)
                 except Tag.DoesNotExist:
                     tags.append(Tag.objects.create(dash_version=name, tag_name=cat).id)
-        # if not tags:
-        #     tags.append(Tag.objects.get())
+        if not tags:
+            tags.append(Tag.objects.get(tag_name="Blank"))
         listing.tags = tags
         if request.POST['owner'] == "true":
             listing.owner = request.user

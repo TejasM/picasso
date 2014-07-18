@@ -42,7 +42,10 @@ class Tag(BaseModel):
         super(Tag, self).save(**kwargs)
 
     def __unicode__(self):
-        return self.tag_name
+        if self.visible:
+            return self.tag_name
+        else:
+            return ''
 
 
 class Address(BaseModel):
