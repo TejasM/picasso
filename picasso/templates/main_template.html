@@ -299,7 +299,7 @@ function initialize() {
         center: new google.maps.LatLng(43.7, -79.4)
     };
 
-    var map = new google.maps.Map(document.getElementById('map-canvas'),
+    map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
 
     if (navigator.geolocation) {
@@ -317,6 +317,7 @@ function initialize() {
             visible: true,
             icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (i + 1).toString() + '|FF0000|000000'
         });
+        markers.push(marker);
     }
 }
 
@@ -328,9 +329,11 @@ function loadScript() {
     document.body.appendChild(script);
     script_loaded = true;
 }
+var map;
 var lats = [];
 var lons = [];
 var names = [];
+var markers = [];
 var geocoder = null;
 var script_loaded = false;
 var tags = {{ all_tags|safe }};
@@ -538,6 +541,17 @@ $(function () {
                 }
             });
         }
+    });
+
+    $main.on('mouseenter', '.isotope-item', function () {
+        var i = $('.isotope-item').index($(this));
+        markers[i].setIcon('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (i + 1).toString() + '|74A7D5|000000');
+        map.setCenter(markers[i].position);
+    });
+
+    $main.on('mouseleave', '.isotope-item', function () {
+        var i = $('.isotope-item').index($(this));
+        markers[i].setIcon('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (i + 1).toString() + '|FF0000|000000');
     });
 });
 </script>
