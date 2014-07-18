@@ -31,10 +31,11 @@ class BaseModel(models.Model):
 
 
 class Tag(BaseModel):
-    tag_name = models.CharField(default="", max_length=500)
+    tag_name = models.CharField(default="", max_length=500, blank=True)
     possible_folders = models.CharField(default="", max_length=500, blank=True)
     dash_version = models.CharField(default="", max_length=500, blank=True)
     parent_tag = models.ForeignKey('Tag', default=None, null=True, blank=True)
+    visible = models.BooleanField(default=True)
 
     def save(self, **kwargs):
         self.dash_version = re.sub(r'\W+', '-', self.tag_name).lower()

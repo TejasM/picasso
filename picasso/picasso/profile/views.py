@@ -124,6 +124,8 @@ def edit_listing(request, list_id):
                     tags.append(Tag.objects.get(dash_version=name).id)
                 except Tag.DoesNotExist:
                     tags.append(Tag.objects.create(dash_version=name, tag_name=cat).id)
+        # if not tags:
+        #     tags.append(Tag.objects.get())
         listing.tags = tags
         if request.POST['owner'] == "true":
             listing.owner = request.user
