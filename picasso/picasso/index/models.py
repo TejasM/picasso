@@ -172,7 +172,8 @@ class Listing(BaseModel):
     @property
     def get_string_tags_no_space(self):
         if self.tags.filter(visible=True).count() != 0:
-            return self.tags.filter(visible=True).order_by('?')[0].tag_name.replace(' ', '').replace(',', '').replace('-', '').replace(
+            return self.tags.filter(visible=True).order_by('?')[0].tag_name.replace(' ', '').replace(',', '').replace(
+                '-', '').replace(
                 '/', '').lower().strip()
         else:
             return "Unknown"
@@ -210,7 +211,7 @@ class Listing(BaseModel):
     def save(self, **kwargs):
         count = Listing.objects.filter(listing_name=self.listing_name).count()
         if self.address:
-            address = self.address.city.split(',')[0]
+            address = re.sub(r'\W+', '-', self.address.city.split(',')[0])
         else:
             address = ''
         if count == 1:
@@ -243,7 +244,8 @@ class Review(BaseModel):
 
 watson.register(Listing,
                 fields=(
-                'get_string_tags', 'listing_name', 'school_name', 'description', 'scraped_url', 'unique_url', 'email',))
+                    'get_string_tags', 'listing_name', 'school_name', 'description', 'scraped_url', 'unique_url',
+                    'email',))
 watson.register(Tag)
 watson.register(Review)
 watson.register(Address)
