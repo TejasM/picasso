@@ -150,21 +150,29 @@ class Listing(BaseModel):
     @property
     def get_string_tags(self):
         if self.tags.filter(visible=True).count() != 0:
-            return ", ".join(self.tags.filter(visible=True).values_list('tag_name', flat=True))
+            string_list = self.tags.filter(visible=True).values_list('tag_name', flat=True)
+            for t in self.tags.filter(visible=True):
+                if t.parent_tag is not None:
+                    string_list.append(t.parent_tag.tag_name)
+            return ", ".join(string_list)
         else:
             return "Unknown"
 
     @property
     def get_string_tags_no_comma(self):
         if self.tags.filter(visible=True).count() != 0:
-            return " ".join(self.tags.filter(visible=True).values_list('tag_name', flat=True))
+            string_list = self.tags.filter(visible=True).values_list('tag_name', flat=True)
+            for t in self.tags.filter(visible=True):
+                if t.parent_tag is not None:
+                    string_list.append(t.parent_tag.tag_name)
+            return " ".join(string_list)
         else:
             return "Unknown"
 
     @property
     def get_string_tags_no_space(self):
         if self.tags.filter(visible=True).count() != 0:
-            return self.tags.filter(visible=True).all().order_by('?')[0].tag_name.replace(' ', '').replace(',', '').replace('-', '').replace(
+            return self.tags.filter(visible=True).order_by('?')[0].tag_name.replace(' ', '').replace(',', '').replace('-', '').replace(
                 '/', '').lower().strip()
         else:
             return "Unknown"
@@ -173,7 +181,7 @@ class Listing(BaseModel):
     def get_unique_url(self):
         string = "/"
         if self.tags.filter(visible=True).count() != 0:
-            string += self.tags.filter(visible=True).all().order_by('?')[0].dash_version
+            string += self.tags.filter(visible=True).order_by('?')[0].dash_version
         else:
             string += "unknown"
         string += "/" + self.unique_url
