@@ -7,7 +7,7 @@
 {% endblock %}
 {% if category %}
     {% block category %}
-        {{ category }}
+        {{ category|lower }}
     {% endblock %}
 {% endif %}
 {% block scripts %}
