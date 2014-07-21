@@ -103,6 +103,8 @@
 
                         <p>{{ listing.description|safe }}</p>
 
+                        {% if listing.website != '' %}<p><strong>Website: </strong>{{ listing.website }}</p>{% endif %}
+
                         <p><strong>Address: </strong>{{ listing.address.get_obscure|safe }}</p>
 
                         <p><strong>Phone Number: </strong>{{ listing.phone }}</p>

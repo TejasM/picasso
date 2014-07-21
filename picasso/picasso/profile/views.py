@@ -34,6 +34,7 @@ def add_listing(request):
         country = request.POST['country']
         phone = request.POST['phone']
         owner = request.POST['owner']
+        site = request.POST['website']
         l_o_e = request.POST.getlist('level_of_expertise')
         categories = request.POST['categories'].split(',')
         tags = []
@@ -70,12 +71,12 @@ def add_listing(request):
             listing = Listing.objects.create(listing_name=listing_name, description=description, address=address,
                                              phone=phone, active=active, owner=owner, created_by=request.user,
                                              level_of_expertise=l_o_e, price_min=price_min, price_max=price_max,
-                                             email=email)
+                                             email=email, website=site)
         else:
             listing = Listing.objects.create(listing_name=listing_name, description=description, address=address,
                                              phone=phone, active=active, owner=owner,
                                              level_of_expertise=l_o_e, price_min=price_min, price_max=price_max,
-                                             email=email)
+                                             email=email, website=site)
         if not tags:
             tags.append(Tag.objects.get(tag_name="Blank"))
         listing.tags = tags
@@ -101,6 +102,7 @@ def edit_listing(request, list_id):
         listing.listing_name = request.POST['listing_name']
         listing.description = request.POST['description']
         listing.email = request.POST['email']
+        listing.website = request.POST['website']
         listing.address.location = request.POST['address']
         listing.address.postal = request.POST['postal']
         listing.address.city = request.POST['city']
