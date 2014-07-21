@@ -671,6 +671,10 @@
     display: none;
 }
 
-.navbar-nav  a {
+.navbar-nav a {
     font-weight: 800;
+}
+
+.label-default {
+    display: none;
 }
