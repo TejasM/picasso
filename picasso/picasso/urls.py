@@ -72,10 +72,11 @@ urlpatterns = patterns('',
 # Uncomment the next line to serve media files in dev.
 # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += patterns('',
+                        url(r'^hash-key/(?P<hash_key>[a-zA-z0-9]{40})/$',
+                            view=views.hash_listing, name='hash-key'),
                         url(r'^(?P<dash_version>.*)/(?P<list_name>.*)/$', view=views.individual_listing,
                             name='actual_listing'),
-                        url(r'^hash-key/(?P<hash_key>[a-zA-z0-9]{40})/$',
-                            view=views.hash_listing, name='hash-key'), )
+)
 if settings.DEBUG:
     import debug_toolbar
 
