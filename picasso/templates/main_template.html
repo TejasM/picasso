@@ -140,6 +140,15 @@
         </div>
     </section>
 {% endblock %}
+{% block messages %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-lg-offset-6 col-sm-12" id="messages">
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
 <div id="main-section">
     {% block content %}
     {% endblock %}
@@ -575,8 +584,8 @@ $(function () {
                 $main.hide();
                 $main.after(data);
             }
-            $("#are-owner").bootstrapSwitch();
-            $("#are-active").bootstrapSwitch();
+            $("#are-owner").bootstrapSwitch({onText: 'YES', offText: 'NO'});
+            $("#are-active").bootstrapSwitch({onText: 'YES', offText: 'NO'});
             $('#listing-level').chosen({width: '200px'});
             var $range = $("#slider-range");
             var values = [ 10, 100];
@@ -651,6 +660,7 @@ $(function () {
                     } else {
                         $main.show();
                     }
+                    $('#messages').append('<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Listing added!</div>');
                 });
     });
 });

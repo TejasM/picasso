@@ -240,8 +240,8 @@
             $.get(url, function (data) {
                 $('#listing-detail').hide();
                 $main.append(data);
-                $("#are-owner").bootstrapSwitch();
-                $("#are-active").bootstrapSwitch();
+                $("#are-owner").bootstrapSwitch({onText: 'YES', offText: 'NO'});
+                $("#are-active").bootstrapSwitch({onText: 'YES', offText: 'NO'});
                 $('#listing-level').chosen({width: '200px'});
                 var $range = $("#slider-range");
                 {% if listing.price_min != 0 and lisiting.price_max != 0 %}
