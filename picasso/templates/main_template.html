@@ -386,6 +386,7 @@ function actual_search(data) {
 }
 var last_data;
 var $main = $('#main-section');
+var scrolled = false;
 $(function () {
     $('#search-submisson').click(search);
 
@@ -488,6 +489,18 @@ $(function () {
                 $main.show();
             }, 5000);
         });
+    });
+
+    $(window).scroll(function () {
+        if ($('#map-canvas').offset().top - $(window).scrollTop() <= 0) {
+            if (scrolled == false) {
+                $('#map-cover').css({ position: 'fixed', top: 0, 'padding-top': '100px', right: 'auto', width: '25%'});
+                scrolled = true;
+            }
+        } else if (scrolled == true) {
+            $('#map-cover').css({ position: 'relative', 'padding-top': '0', width: '100%'});
+            scrolled = false;
+        }
     });
 
     $main.on('ifToggled', '.loe-check', function () {
