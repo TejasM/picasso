@@ -41,7 +41,10 @@ for i in range(1, 4):
             scraped_url = base_url + no_url_selector(listing)[0].attrib['href']
         r = requests.get(scraped_url)
         listing = html.fromstring(r.text)
-        name = name_selector(listing)[0].text.strip()
+        try:
+            name = name_selector(listing)[0].text.strip()
+        except IndexError:
+            print scraped_url
         phone = phone_selector(listing)
         if phone:
             phone = phone[0].attrib['telephone']
