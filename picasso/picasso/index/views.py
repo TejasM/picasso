@@ -137,7 +137,7 @@ def signin(request):
                 if claim != '':
                     try:
                         l = Listing.objects.get(pk=int(claim))
-                        logger.debug("Listing " + l.list_name + " was claimed")
+                        logger.debug("Listing " + l.listing_name + " was claimed")
                         l.owner = user
                         l.save()
                     except Listing.DoesNotExist:
