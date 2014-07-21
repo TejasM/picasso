@@ -36,10 +36,10 @@
                                                                 have recently started our own business called Picasso.
                                                                 Picasso is a review and recommendation site for
                                                                 extra-curricular instructors, such
-                                                                as {{ listing.get_parent_tag }}
+                                                                as {% if listing.get_parent_tag != None %}{{ listing.get_parent_tag }}{% endif %}
                                                                 instructors like <strong>you</strong>. Our site is
                                                                 completely free to
-                                                                use, and we have created a private listing for yourself
+                                                                use, and we have created a private listing for you
                                                                 already. Click on the link below to claim and customize
                                                                 your listing.
                                                             </p>

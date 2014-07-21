@@ -166,7 +166,7 @@ class Listing(BaseModel):
                 if t.parent_tag is not None:
                     return t.parent_tag.tag_name
         else:
-            return "Unknown"
+            return None
 
     @property
     def get_string_tags_no_comma(self):
