@@ -21,7 +21,7 @@ listing_selector = CSSSelector('.featured > div.cleared')
 url_selector = CSSSelector('.logodiv a')
 no_url_selector = CSSSelector('.nologo a')
 tag = Tag.objects.get_or_create(tag_name='Sports')
-golf = Tag.objects.get_or_create(tag_name='Gymnastics', parent_tag=tag)
+golf = Tag.objects.get_or_create(tag_name='Gymnastics', parent_tag=tag[0])
 
 name_selector = CSSSelector('h3 a')
 phone_selector = CSSSelector('.icons .telephone')
