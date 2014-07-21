@@ -674,3 +674,16 @@
 .navbar-nav a {
     font-weight: 800;
 }
+
+.star-rating {
+    display: inline-block;
+}
+
+.caption {
+    margin-left: 10px;
+    display: inline-block;
+}
+
+.caption .label {
+    font-size: 100%;
+}
