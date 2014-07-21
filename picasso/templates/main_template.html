@@ -413,25 +413,18 @@ $(function () {
 
     {% if not user.is_authenticated %}
         $('#sign-up').click(function () {
-            $('#main-section').hide();
-            $('#sign-in-lightbox').show();
-            $('#sign-up-stuff').show();
-            $('#type-signin').val('sign-up');
-            $('#signin-heading').text('Sign Up');
-            $('#sign-in-button').text('Sign Up');
-        });
+            $('#create-listing-div').remove();
 
-        $('#add-listing').click(function () {
             $('#main-section').hide();
             $('#sign-in-lightbox').show();
             $('#sign-up-stuff').show();
             $('#type-signin').val('sign-up');
-            $('#signupform').append('<input type="hidden" value="{% url 'profile:add_listing' %}" name="next" id="next_url">');
             $('#signin-heading').text('Sign Up');
             $('#sign-in-button').text('Sign Up');
         });
 
         $('#login').click(function () {
+            $('#create-listing-div').remove();
             $('#main-section').hide();
             $('#sign-in-lightbox').show();
             $('#sign-up-stuff').hide();
@@ -441,6 +434,7 @@ $(function () {
         });
 
         $('#sign-in-button').click(function () {
+            $('#create-listing-div').remove();
             var claim_id = $('input[name="claim-id"]').val() || '';
             $.post('{% url 'signup' %}', {'first-name': $('#first-name').val(),
                 'last-name': $('#last-name').val(), 'type': $('#type-signin').val(),
