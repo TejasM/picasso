@@ -190,16 +190,18 @@
                                     {% endif %}
                                 </a>
                             {% else %}
-                                This an unclaimed ORMTA listing. <a href="{{ l.scraped_url }}">Click here</a> for more information.
+                                This an unclaimed ORMTA listing. <a href="{{ l.scraped_url }}">Click here</a> for more
+                                information.
                             {% endif %}
                         </div>
                         <div class="col-lg-12 col-sm-12">
                             {% if l.get_rating == 'N/A' %}
                                 <div class="price"><input name="rating" class="form-control rating"
+                                                          data-defaultCaption="{{ l.review_set.count }}"
                                                           value="" disabled data-size="xs"></div>
                             {% else %}
                                 <div class="price"><input name="rating" class="form-control rating"
-                                                          data-size="xs"
+                                                          data-size="xs" data-defaultCaption="{{ l.review_set.count }}"
                                                           value="{{ l.get_rating }}" disabled></div>
                             {% endif %}
                             <hr style="margin-bottom: 0px; margin-top: 10px">
