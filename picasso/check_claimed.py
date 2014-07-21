@@ -3,4 +3,4 @@ from picasso.index.models import Listing
 from django.db.models import Q
 ls = Listing.objects.filter(~Q(owner=None))
 for l in ls:
-    print ls.get().listing_name
+    print l.listing_name
