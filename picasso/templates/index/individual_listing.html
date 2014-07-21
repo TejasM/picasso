@@ -119,27 +119,29 @@
 
                     <p><strong>Rating:</strong>{{ listing.get_rating }}</p>
 
-                    {% if listing.owner == user or listing.created_by == user %}
-                        <button type="button" class="btn btn-primary btn-block" id="edit-listing-button"
-                                data-url="{% url 'profile:edit_listing' listing.id %}">Edit
-                        </button>
-                    {% endif %}
+                    <div class="col-lg-6 col-lg-offset-3">
+                        {% if listing.owner == user or listing.created_by == user %}
+                            <button type="button" class="btn btn-primary btn-block" id="edit-listing-button"
+                                    data-url="{% url 'profile:edit_listing' listing.id %}">Edit
+                            </button>
+                        {% endif %}
 
-                    {% if listing not in user.profile.teachers.all %}
-                        <button type="button" class="btn btn-primary btn-block mt20" id="add-teacher">Add to
-                            Favourites
+                        {% if listing not in user.profile.teachers.all %}
+                            <button type="button" class="btn btn-primary btn-block mt20" id="add-teacher">Add to
+                                Favourites
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-primary btn-block mt20" disabled>Favourite
+                            </button>
+                        {% endif %}
+                        <button type="button" class="mt20 btn btn-primary btn-block" id="contact-button">Contact Teacher
                         </button>
-                    {% else %}
-                        <button type="button" class="btn btn-primary btn-block mt20" disabled>Favourite
-                        </button>
-                    {% endif %}
-                    <button type="button" class="mt20 btn btn-primary btn-block" id="contact-button">Contact Teacher
-                    </button>
-                    {% if not reviewed and listing.owner != user %}
-                        <button type="button" class="mt20 btn btn-primary btn-block" id="review-button">Write a
-                            Review
-                        </button>
-                    {% endif %}
+                        {% if not reviewed and listing.owner != user %}
+                            <button type="button" class="mt20 btn btn-primary btn-block" id="review-button">Write a
+                                Review
+                            </button>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </section>
