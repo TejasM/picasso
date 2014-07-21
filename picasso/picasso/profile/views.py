@@ -231,7 +231,7 @@ def send_contact_email(request, list_id):
             t = get_template('emails/contact_email.html')
             context = RequestContext(request, {'msg': msg, 'email': email})
             content = t.render(context)
-            msg = EmailMessage('Picasso - Claim your business', content, 'contact@findpicasso.com', [listing.email])
+            msg = EmailMessage('Picasso', content, 'contact@findpicasso.com', [listing.email])
             msg.content_subtype = "html"
             msg.send()
             logger.debug("Email to listing sent by " + email + ' to ' + listing.email)

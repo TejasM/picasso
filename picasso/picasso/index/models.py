@@ -86,7 +86,8 @@ class Address(BaseModel):
         if self.point is not None:
             try:
                 results = Geocoder.geocode(
-                    str(self.location + ' ' + self.state + ' ' + self.city + ' ' + self.country + ' ' + self.postal_code))
+                    str(
+                        self.location + ' ' + self.state + ' ' + self.city + ' ' + self.country + ' ' + self.postal_code))
                 lat, lon = results[0].coordinates
             except IndexError:
                 lat, lon = 43.7, -79.4
@@ -155,6 +156,15 @@ class Listing(BaseModel):
                 if t.parent_tag is not None:
                     string_list.append(t.parent_tag.tag_name)
             return ", ".join(string_list)
+        else:
+            return "Unknown"
+
+    @property
+    def get_parent_tag(self):
+        if self.tags.filter(visible=True).count() != 0:
+            for t in self.tags.filter(visible=True):
+                if t.parent_tag is not None:
+                    return t.parent_tag.tag_name
         else:
             return "Unknown"
 

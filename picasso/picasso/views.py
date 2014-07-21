@@ -1,5 +1,6 @@
 import json
 import logging
+import random
 from django.core.mail import EmailMessage
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
@@ -75,12 +76,14 @@ def send_claim_email(request, list_id):
     # TODO create email
     if request.method == "POST":
         listing = Listing.objects.get(pk=list_id)
-        logger.debug('Listing claim sending email to : ' + listing.email)
         if listing.email != '':
-            t = get_template('emails/claim_email.html')
+            emails = ['emails/claim_email.html', 'emails/claim_email_2.html']
+            choice = random.choice(emails)
+            logger.debug('Listing claim sending email to : ' + listing.email + ' with ' + choice)
+            t = get_template(choice)
             context = RequestContext(request, {'listing': listing})
             content = t.render(context)
-            msg = EmailMessage('Picasso - Message for your Business', content, 'contact@findpicasso.com',
+            msg = EmailMessage('Picasso - Claim your Business', content, 'contact@findpicasso.com',
                                [listing.email])
             msg.content_subtype = "html"
             msg.send()
