@@ -16,10 +16,10 @@
     <div class="row">
         {% if listing.visible == False %}
             <div class="col-sm-12 col-lg-6 col-lg-offset-3">
-            <div class="alert alert-info alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                This listing is only visible through the direct link because it is an unclaimed ORMTA listing.
-            </div>
+                <div class="alert alert-info alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    Only partial information is available for this listing because it is an unclaimed ORMTA listing.
+                </div>
             </div>
         {% endif %}
         <!-- Slider -->
@@ -93,27 +93,31 @@
                     </h3>
 
                     <p><strong>Subjects: </strong>{{ listing.get_string_tags }}</p>
+                    {% if listing.visible == True or listing.owner != None %}
+                        <p><strong>Teaches: </strong>{{ listing.level_of_expertise|safe }} level Students</p>
 
-                    <p><strong>Teaches: </strong>{{ listing.level_of_expertise|safe }} level Students</p>
+                        {% if listing.price_min != 0 and lisiting.price_max != 0 %}
+                            <p><strong>Price Range per Lesson: </strong>${{ listing.price_min|floatformat }}
+                                - {{ listing.price_max }}</p>
+                        {% else %}
+                            <p><strong>Price Range: </strong>Unknown</p>
+                        {% endif %}
 
-                    {% if listing.price_min != 0 and lisiting.price_max != 0 %}
-                        <p><strong>Price Range per Lesson: </strong>${{ listing.price_min|floatformat }}
-                            - {{ listing.price_max }}</p>
+                        <p>{{ listing.description|safe }}</p>
+
+                        <p><strong>Address: </strong>{{ listing.address.get_obscure|safe }}</p>
+
+                        <p><strong>Phone Number: </strong>{{ listing.phone }}</p>
+
+                        <span id="distance"></span>
+
+                        {% if listing.active %}<p>
+                            <strong>Currently Accepting Students: </strong><i class="fa fa-2x fa-check-circle"></i>
+                            </p>{% endif %}
                     {% else %}
-                        <p><strong>Price Range: </strong>Unknown</p>
+                        This an unclaimed ORMTA listing. <a href="{{ l.scraped_url }}">Click here</a> for more
+                        information.
                     {% endif %}
-
-                    <p>{{ listing.description|safe }}</p>
-
-                    <p><strong>Address: </strong>{{ listing.address.get_obscure|safe }}</p>
-
-                    <p><strong>Phone Number: </strong>{{ listing.phone }}</p>
-
-                    <span id="distance"></span>
-
-                    {% if listing.active %}<p>
-                        <strong>Currently Accepting Students: </strong><i class="fa fa-2x fa-check-circle"></i>
-                        </p>{% endif %}
 
                     <p><strong>Rating:</strong>{{ listing.get_rating }}</p>
 

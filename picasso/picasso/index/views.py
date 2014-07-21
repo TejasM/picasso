@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 def featured(request):
     if request.method == "GET":
-        featured_listings = Listing.objects.filter(visible=True).filter(~Q(address=None)).filter(
+        featured_listings = Listing.objects.filter(~Q(address=None)).filter(
             ~Q(address__point=None)).order_by('?')[:6]
         context = {'listings': featured_listings, 'title': 'Featured Listings', 'button_name': 'Read More',
                    'categories': True}
@@ -48,7 +48,7 @@ def get_listings(request):
         except IndexError:
             location = 'Toronto'
         search = original_search.split('----')[0]
-        listings = watson.filter(Listing, search).filter(visible=True).distinct()
+        listings = watson.filter(Listing, search).distinct()
         try:
             results = Geocoder.geocode(str(location + ' Canada'))
             lat, lon = results[0].coordinates

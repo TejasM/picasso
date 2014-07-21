@@ -100,7 +100,7 @@ def category_listings(request, tag_name):
                 list_tags = [possible_tag.id]
                 for t in other_tags:
                     list_tags.append(t.id)
-                listings = Listing.objects.filter(visible=True).filter(tags__in=list_tags).distinct()
+                listings = Listing.objects.filter(tags__in=list_tags).distinct()
                 if order_by != '':
                     listings = listings.annotate(review_count=Count('review')).order_by(order_by)
                 paginator = Paginator(listings, 10)
