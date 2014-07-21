@@ -85,7 +85,7 @@ class Address(BaseModel):
     def save(self, **kwargs):
         try:
             results = Geocoder.geocode(
-                str(self.location + ' ' + self.postal_code + ' ' + self.state + ' ' + self.country))
+                str(self.location + ' ' + self.state + ' ' + self.country + ' ' + self.postal_code))
             lat, lon = results[0].coordinates
         except IndexError:
             lat, lon = 43.7, 79.4
