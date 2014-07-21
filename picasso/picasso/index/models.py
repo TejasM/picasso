@@ -83,16 +83,15 @@ class Address(BaseModel):
         return string
 
     def save(self, **kwargs):
-        if self.point is None:
-            try:
-                results = Geocoder.geocode(
-                    str(self.location + ' ' + self.postal_code + ' ' + self.state + ' ' + self.country))
-                lat, lon = results[0].coordinates
-            except IndexError:
-                lat, lon = 43.7, 79.4
-            except GeocoderError:
-                lat, lon = 43.7, 79.4
-            self.point = "POINT(%s %s)" % (lon, lat)
+        try:
+            results = Geocoder.geocode(
+                str(self.location + ' ' + self.postal_code + ' ' + self.state + ' ' + self.country))
+            lat, lon = results[0].coordinates
+        except IndexError:
+            lat, lon = 43.7, 79.4
+        except GeocoderError:
+            lat, lon = 43.7, 79.4
+        self.point = "POINT(%s %s)" % (lon, lat)
         super(Address, self).save(**kwargs)
 
 
