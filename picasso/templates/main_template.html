@@ -73,23 +73,17 @@
                     {% if not user.is_authenticated %}
                         <li><a href="#sign-in-lightbox" id="sign-up">Sign Up</a></li>
                         <li><a href="#sign-in-lightbox" id="login">Login</a></li>
-                        <li class=""><a href="#sign-in-lightbox" id="add-listing">
-                            <button type="button" style="margin-top: -5px" class="btn btn-primary btn-block">&nbsp;&nbsp;Add
-                                Listing&nbsp;&nbsp;</button>
-                        </a>
-
-                        </li>
                     {% else %}
                         <li class=""><a href="{% url 'profile:profile' %}">Profile</a>
                         </li>
                         <li class=""><a href="{% url 'logout' %}">Logout</a>
                         </li>
-                        <li class=""><a href="{% url 'profile:my_listings' %}">
-                            <button type="button" style="margin-top: -5px" class="btn btn-primary btn-block">&nbsp;&nbsp;Add
-                                Listing&nbsp;&nbsp;</button>
-                        </a>
-                        </li>
                     {% endif %}
+                    <li class=""><a href="#main-section" id="add-list">
+                        <button type="button" style="margin-top: -5px" class="btn btn-primary btn-block">&nbsp;&nbsp;Add
+                            Listing&nbsp;&nbsp;</button>
+                    </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -266,6 +260,8 @@
     </div>
 </footer>
 </body>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="{% static 'css/chosen.min.css' %}">
 <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/bootstrap-hover-dropdown.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/owl.carousel.min.js' %}"></script>
@@ -286,6 +282,8 @@
 <script type="text/javascript" src="{% static 'js/typehead.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/icheck.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/bloodhound.js' %}"></script>
+<script src="{% static 'js/chosen.jquery.min.js' %}"></script>
+<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -566,7 +564,103 @@ $(function () {
         var i = $('.isotope-item').index($(this));
         markers[i].setIcon('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (i + 1).toString() + '|FF0000|000000');
     });
+
+    $('#add-list').click(function () {
+        $.get('{% url 'profile:add_listing' %}', function (data) {
+            $('#create-listing-div').remove();
+            if (typeof $my_listings !== 'undefined') {
+                $my_listings.hide();
+                $main.append(data);
+            } else {
+                $main.hide();
+                $main.after(data);
+            }
+            $("#are-owner").bootstrapSwitch();
+            $("#are-active").bootstrapSwitch();
+            $('#listing-level').chosen({width: '200px'});
+            var $range = $("#slider-range");
+            var values = [ 10, 100];
+            $range.slider({
+                range: true,
+                min: 0,
+                max: 500,
+                values: values,
+                slide: function (event, ui) {
+                    $("#listing-price").val("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
+                }
+            });
+            $("#listing-price").val("$" + $range.slider("values", 0) +
+                    " - $" + $range.slider("values", 1));
+            $('#listing-categories').bind("keydown", function (event) {
+                if (event.keyCode === $.ui.keyCode.TAB &&
+                        $(this).autocomplete("instance").menu.active) {
+                    event.preventDefault();
+                }
+            })
+                    .autocomplete({
+                        minLength: 0,
+                        source: function (request, response) {
+                            // delegate back to autocomplete, but extract the last term
+                            response($.ui.autocomplete.filter(
+                                    tags, extractLast(request.term)));
+                        },
+                        focus: function () {
+                            // prevent value inserted on focus
+                            return false;
+                        },
+                        select: function (event, ui) {
+                            var terms = split(this.value);
+                            // remove the current input
+                            terms.pop();
+                            // add the selected item
+                            terms.push(ui.item.value);
+                            // add placeholder to get the comma-and-space at the end
+                            terms.push("");
+                            this.value = terms.join(", ");
+                            return false;
+                        }
+                    });
+        });
+    });
+
+    $('body').on('click', '#submit-create-listing', function () {
+        var url = $(this).data('url');
+        var $range = $("#slider-range");
+        $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
+                    'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
+                    'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
+                    'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
+                    'active': $('#are-active').is(':checked'),
+                    'price_min': $range.slider("values", 0), 'price_max': $range.slider("values", 1),
+                    'level_of_expertise[]': $('#listing-level').val() || [],
+                    'categories': $('#listing-categories').val(), 'email': $('#listing-email').val(),
+                    'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
+                function (data) {
+                    $('#create-listing-div').remove();
+                    $.get('/get-listing/' + data['id'], function (data2) {
+                        if (typeof $my_listings !== 'undefined') {
+                            $my_listings.find('.rooms').append(data2);
+                        }
+                    });
+                    if (typeof $my_listings !== 'undefined') {
+                        $my_listings.show();
+                        {% if user.owner.count == 0 %}
+                            window.location.href = '/';
+                        {% endif %}
+
+                    } else {
+                        $main.show();
+                    }
+                });
+    });
 });
+function split(val) {
+    return val.split(/,\s*/);
+}
+
+function extractLast(term) {
+    return split(term).pop();
+}
 </script>
 {% block scripts %}
 

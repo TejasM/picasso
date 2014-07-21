@@ -84,14 +84,16 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6 col-sm-12">
-                <div class="form-group">
-                    <label for="are-owner" accesskey="S"><span class="required">*</span>Is this your own
-                        listing?</label>
-                    <br>
-                    <input id="are-owner" type="checkbox" class="form-control" checked>
+            {% if user.is_authenticated %}
+                <div class="col-lg-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="are-owner" accesskey="S"><span class="required">*</span>Is this your own
+                            listing?</label>
+                        <br>
+                        <input id="are-owner" type="checkbox" class="form-control" checked>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
             <div class="col-lg-6 col-sm-12">
                 <div class="form-group">
                     <label for="are-active" accesskey="S"><span class="required">*</span>Currently Active</label>

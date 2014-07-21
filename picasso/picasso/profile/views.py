@@ -21,7 +21,6 @@ from picasso.index.models import Listing, Address, Tag
 logger = logging.getLogger(__name__)
 
 
-@login_required
 def add_listing(request):
     if request.method == "POST":
         listing_name = request.POST['listing_name']
@@ -65,10 +64,16 @@ def add_listing(request):
             owner = request.user
         else:
             owner = None
-        listing = Listing.objects.create(listing_name=listing_name, description=description, address=address,
-                                         phone=phone, active=active, owner=owner, created_by=request.user,
-                                         level_of_expertise=l_o_e, price_min=price_min, price_max=price_max,
-                                         email=email)
+        if not request.user.is_anonymous():
+            listing = Listing.objects.create(listing_name=listing_name, description=description, address=address,
+                                             phone=phone, active=active, owner=owner, created_by=request.user,
+                                             level_of_expertise=l_o_e, price_min=price_min, price_max=price_max,
+                                             email=email)
+        else:
+            listing = Listing.objects.create(listing_name=listing_name, description=description, address=address,
+                                             phone=phone, active=active, owner=owner,
+                                             level_of_expertise=l_o_e, price_min=price_min, price_max=price_max,
+                                             email=email)
         if not tags:
             tags.append(Tag.objects.get(tag_name="Blank"))
         listing.tags = tags
@@ -159,7 +164,7 @@ def profile(request):
             RequestContext(request, {'listings': listings, 'title': 'Favourite Teachers', 'button_name': 'View'}))
         reviews = request.user.review_set.all()
         reviewes = t.render(RequestContext(request, {'reviews': reviews}))
-        me_listings = Listing.objects.filter(Q(created_by=request.user) | Q(owner=request.user))
+        me_listings = Listing.objects.filter(Q(owner=request.user))
         return render(request, 'profile.html',
                       {'favs': favs, 'reviews': reviewes, 'my_listings': me_listings})
     else:

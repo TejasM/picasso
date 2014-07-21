@@ -1,8 +1,6 @@
 {% extends 'main_template.html' %}
 {% load staticfiles %}
 {% block additionalStyles %}
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
-    <link rel="stylesheet" href="{% static 'css/chosen.min.css' %}">
 {% endblock %}
 {% block content %}
     <div id="my-listings">
@@ -21,8 +19,6 @@
     </div>
 {% endblock %}
 {% block scripts %}
-    <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
-    <script src="{% static 'js/chosen.jquery.min.js' %}"></script>
     <script>
         $(function () {
             var $main = $('#main-section');
@@ -165,14 +161,6 @@
             {% if user.owner.count == 0 %}
                 $('#create-listing-button').trigger('click');
             {% endif %}
-            function split(val) {
-                return val.split(/,\s*/);
-            }
-
-            function extractLast(term) {
-                return split(term).pop();
-            }
-
         });
     </script>
 {% endblock %}
