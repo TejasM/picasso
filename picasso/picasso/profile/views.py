@@ -18,6 +18,8 @@ from pygeolib import GeocoderError
 from picasso.index.models import Listing, Address, Tag
 
 # TODO: For all addresses get geocoder
+from picasso.profile.models import UserProfile
+
 logger = logging.getLogger(__name__)
 
 
@@ -158,7 +160,11 @@ def my_listings(request):
 @login_required
 def profile(request):
     if request.method == "GET":
-        listings = request.user.profile.teachers.all()
+        try:
+            profile_inner = request.user.profile
+        except:
+            profile_inner = UserProfile.objects.create(user=request.user)
+        listings = profile_inner.teachers.all()
         t = get_template('index/listings.html')
         favs = t.render(
             RequestContext(request, {'listings': listings, 'title': 'Favourite Teachers', 'button_name': 'View'}))
