@@ -414,273 +414,277 @@ function actual_search(data) {
         $(".rating").rating({'min': 0, 'max': 5, 'step': 0.5, size: 'xs', showCaption: false, showClear: false});
     });
 }
+
+function add_listing() {
+    $.get('{% url 'profile:add_listing' %}', function (data) {
+        $('#create-listing-div').remove();
+        if (typeof $my_listings !== 'undefined') {
+            $my_listings.hide();
+            $main.append(data);
+        } else {
+            $main.hide();
+            $main.after(data);
+        }
+        $("#are-owner").bootstrapSwitch({onText: 'YES', offText: 'NO'});
+        $("#are-active").bootstrapSwitch({onText: 'YES', offText: 'NO'});
+        $('#listing-level').chosen({width: '200px'});
+        var $range = $("#slider-range");
+        var values = [ 10, 100];
+        $range.slider({
+            range: true,
+            min: 0,
+            max: 500,
+            values: values,
+            slide: function (event, ui) {
+                $("#listing-price").val("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
+            }
+        });
+        $("#listing-price").val("$" + $range.slider("values", 0) +
+                " - $" + $range.slider("values", 1));
+        $('#listing-categories').bind("keydown", function (event) {
+            if (event.keyCode === $.ui.keyCode.TAB &&
+                    $(this).autocomplete("instance").menu.active) {
+                event.preventDefault();
+            }
+        })
+                .autocomplete({
+                    minLength: 0,
+                    source: function (request, response) {
+                        // delegate back to autocomplete, but extract the last term
+                        response($.ui.autocomplete.filter(
+                                tags, extractLast(request.term)));
+                    },
+                    focus: function () {
+                        // prevent value inserted on focus
+                        return false;
+                    },
+                    select: function (event, ui) {
+                        var terms = split(this.value);
+                        // remove the current input
+                        terms.pop();
+                        // add the selected item
+                        terms.push(ui.item.value);
+                        // add placeholder to get the comma-and-space at the end
+                        terms.push("");
+                        this.value = terms.join(", ");
+                        return false;
+                    }
+                });
+    });
+}
 var last_data;
 var $main = $('#main-section');
 var scrolled = false;
 $(function () {
-    $('#search-submisson').click(search);
+            $('#search-submisson').click(search);
 
-    $('#search-text').bind('keypress', function (e) {
-        var code = e.keyCode || e.which;
-        if (code == 13) {
-            $('#search-submisson').trigger('click');
-        }
-    });
-
-    $('#location-text').bind('keypress', function (e) {
-        var code = e.keyCode || e.which;
-        if (code == 13) {
-            $('#search-submisson').trigger('click');
-        }
-    });
-
-    {% if not user.is_authenticated %}
-        $('#sign-up').click(function () {
-            $('#create-listing-div').remove();
-
-            $('#main-section').hide();
-            $('#sign-in-lightbox').show();
-            $('#sign-up-stuff').show();
-            $('#type-signin').val('sign-up');
-            $('#signin-heading').text('Sign Up');
-            $('#sign-in-button').text('Sign Up');
-        });
-
-        $('#login').click(function () {
-            $('#create-listing-div').remove();
-            $('#main-section').hide();
-            $('#sign-in-lightbox').show();
-            $('#sign-up-stuff').hide();
-            $('#type-signin').val('login');
-            $('#signin-heading').text('Login');
-            $('#sign-in-button').text('Login');
-        });
-        $('#sign-in-button').click(function () {
-            $('#create-listing-div').remove();
-            var claim_id = $('input[name="claim-id"]').val() || '';
-            $.post('{% url 'signup' %}', {'first-name': $('#first-name').val(),
-                'last-name': $('#last-name').val(), 'type': $('#type-signin').val(),
-                'email': $('#email').val(), 'password': $('#password').val(),
-                'claim-id': claim_id,
-                'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
-                if (parseInt(data['success']) == 0) {
-                    $('.error_message').text(data['error']);
-                } else {
-                    var $next = $('#next-url');
-                    if ($next.length != 0) {
-                        document.location.href = $next.val();
-                    }
-                    document.location.href = '{{ request.get_full_path }}';
+            $('#search-text').bind('keypress', function (e) {
+                var code = e.keyCode || e.which;
+                if (code == 13) {
+                    $('#search-submisson').trigger('click');
                 }
             });
-        });
-    {% endif %}
-    // constructs the suggestion engine
-    var tags_blood = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        // `states` is an array of state names defined in "The Basics"
-        local: $.map(tags, function (state) {
-            return { value: state };
-        })
-    });
-    tags_blood.initialize();
 
-    $('.autocomplete').typeahead({
-                hint: true,
-                highlight: true,
-                minLength: 1
-            },
-            {
-                name: 'tags',
-                displayKey: 'value',
-                source: tags_blood.ttAdapter()
-            });
-    var $contact_div = $('#contact-us-div');
-    $('#contact-us-click').click(function () {
-        $main.hide();
-        $contact_div.show();
-    });
-    $('#contact-us-submit').click(function () {
-        $.post('{% url 'contact' %}', {'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val(),
-            'email': $('#contact-email').val(), 'comment': $('#contact-comments').val()
-        }, function (res) {
-            $contact_div.empty();
-            $contact_div.append('<div class="container mt20" style="text-align: center"><h2>Thank you for your message! We will try and get back to you as soon as possible.</h2></div>');
-            setTimeout(function () {
-                $contact_div.hide();
-                $main.show();
-            }, 5000);
-        });
-    });
-
-    $(window).scroll(function () {
-        if ($('#map-canvas').offset().top - $(window).scrollTop() <= 0) {
-            if (scrolled == false) {
-                $('#map-cover').css({ position: 'fixed', top: 0, 'padding-top': '100px', right: 'auto', width: '25%'});
-                scrolled = true;
-            }
-        } else if (scrolled == true) {
-            $('#map-cover').css({ position: 'relative', 'padding-top': '0', width: '100%'});
-            scrolled = false;
-        }
-    });
-
-    $main.on('ifToggled', '.loe-check', function () {
-        var $checked = $('.loe-check:checked');
-        var $items = $('.isotope-item');
-        if ($checked.length == 0) {
-            $('.loe-check').iCheck('check');
-            $checked = $('.loe-check:checked');
-        }
-        if ($checked.length == 3) {
-            $items.show();
-        } else {
-            $.each($items, function (index) {
-                var $teach = $(this).find('.teaches');
-                var t = $teach.text();
-                if (t == "All") {
-                    $(this).show();
-                } else {
-                    var done = false;
-                    for (var i = 0; i < $checked.length; i++) {
-                        if (t.indexOf($checked[i].val()) > -1) {
-                            $(this).show();
-                            done = true;
-                            break;
-                        }
-                    }
-                    if (!done) {
-                        $(this).hide();
-                    }
+            $('#location-text').bind('keypress', function (e) {
+                var code = e.keyCode || e.which;
+                if (code == 13) {
+                    $('#search-submisson').trigger('click');
                 }
             });
-        }
-    });
-    $main.on('ifChecked', 'input[name="review-radio"]', function () {
-        var val = $(this).val();
-        var $items = $('.isotope-item');
-        if (val == -1) {
-            $items.show();
-        } else {
-            $.each($items, function (index) {
-                var $r = $(this).find('.review');
-                var r = parseInt($r.text());
-                if (!isNaN(r)) {
-                    if (r < val) {
-                        $(this).hide();
-                    } else {
-                        $(this).show();
-                    }
-                } else {
-                    $(this).hide();
-                }
-            });
-        }
-    });
 
-    $main.on('mouseenter', '.isotope-item', function () {
-        var i = $('.isotope-item').index($(this));
-        markers[i].setIcon('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (i + 1).toString() + '|74A7D5|000000');
-        map.setCenter(markers[i].position);
-    });
-
-    $main.on('mouseleave', '.isotope-item', function () {
-        var i = $('.isotope-item').index($(this));
-        markers[i].setIcon('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (i + 1).toString() + '|FF0000|000000');
-    });
-
-    $('#add-list').click(function () {
-        $.get('{% url 'profile:add_listing' %}', function (data) {
-            $('#create-listing-div').remove();
-            if (typeof $my_listings !== 'undefined') {
-                $my_listings.hide();
-                $main.append(data);
-            } else {
-                $main.hide();
-                $main.after(data);
-            }
-            $("#are-owner").bootstrapSwitch({onText: 'YES', offText: 'NO'});
-            $("#are-active").bootstrapSwitch({onText: 'YES', offText: 'NO'});
-            $('#listing-level').chosen({width: '200px'});
-            var $range = $("#slider-range");
-            var values = [ 10, 100];
-            $range.slider({
-                range: true,
-                min: 0,
-                max: 500,
-                values: values,
-                slide: function (event, ui) {
-                    $("#listing-price").val("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
-                }
-            });
-            $("#listing-price").val("$" + $range.slider("values", 0) +
-                    " - $" + $range.slider("values", 1));
-            $('#listing-categories').bind("keydown", function (event) {
-                if (event.keyCode === $.ui.keyCode.TAB &&
-                        $(this).autocomplete("instance").menu.active) {
-                    event.preventDefault();
-                }
-            })
-                    .autocomplete({
-                        minLength: 0,
-                        source: function (request, response) {
-                            // delegate back to autocomplete, but extract the last term
-                            response($.ui.autocomplete.filter(
-                                    tags, extractLast(request.term)));
-                        },
-                        focus: function () {
-                            // prevent value inserted on focus
-                            return false;
-                        },
-                        select: function (event, ui) {
-                            var terms = split(this.value);
-                            // remove the current input
-                            terms.pop();
-                            // add the selected item
-                            terms.push(ui.item.value);
-                            // add placeholder to get the comma-and-space at the end
-                            terms.push("");
-                            this.value = terms.join(", ");
-                            return false;
-                        }
-                    });
-        });
-    });
-
-    $('body').on('click', '#submit-create-listing', function () {
-        var url = $(this).data('url');
-        var $range = $("#slider-range");
-        $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
-                    'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
-                    'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
-                    'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
-                    'active': $('#are-active').is(':checked'),
-                    'price_min': $range.slider("values", 0), 'price_max': $range.slider("values", 1),
-                    'level_of_expertise[]': $('#listing-level').val() || [],
-                    'categories': $('#listing-categories').val(), 'email': $('#listing-email').val(),
-                    'website': $('#listing-website').val(),
-                    'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
-                function (data) {
+            {% if not user.is_authenticated %}
+                $('#sign-up').click(function () {
                     $('#create-listing-div').remove();
-                    $.get('/get-listing/' + data['id'], function (data2) {
-                        if (typeof $my_listings !== 'undefined') {
-                            $my_listings.find('.rooms').append(data2);
+
+                    $('#main-section').hide();
+                    $('#sign-in-lightbox').show();
+                    $('#sign-up-stuff').show();
+                    $('#type-signin').val('sign-up');
+                    $('#signin-heading').text('Sign Up');
+                    $('#sign-in-button').text('Sign Up');
+                });
+
+                $('#login').click(function () {
+                    $('#create-listing-div').remove();
+                    $('#main-section').hide();
+                    $('#sign-in-lightbox').show();
+                    $('#sign-up-stuff').hide();
+                    $('#type-signin').val('login');
+                    $('#signin-heading').text('Login');
+                    $('#sign-in-button').text('Login');
+                });
+                $('#sign-in-button').click(function () {
+                    $('#create-listing-div').remove();
+                    var claim_id = $('input[name="claim-id"]').val() || '';
+                    $.post('{% url 'signup' %}', {'first-name': $('#first-name').val(),
+                        'last-name': $('#last-name').val(), 'type': $('#type-signin').val(),
+                        'email': $('#email').val(), 'password': $('#password').val(),
+                        'claim-id': claim_id,
+                        'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
+                        if (parseInt(data['success']) == 0) {
+                            $('.error_message').text(data['error']);
+                        } else {
+                            var $next = $('#next-url');
+                            if ($next.length != 0) {
+                                document.location.href = $next.val();
+                            }
+                            document.location.href = '{{ request.get_full_path }}';
                         }
                     });
-                    if (typeof $my_listings !== 'undefined') {
-                        $my_listings.show();
-                        {% if user.owner.count == 0 %}
-                            window.location.href = '/';
-                        {% endif %}
-
-                    } else {
-                        $main.show();
-                    }
-                    $('#messages').append('<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Listing added!</div>');
                 });
-    });
-});
+            {% endif %}
+            // constructs the suggestion engine
+            var tags_blood = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                // `states` is an array of state names defined in "The Basics"
+                local: $.map(tags, function (state) {
+                    return { value: state };
+                })
+            });
+            tags_blood.initialize();
+
+            $('.autocomplete').typeahead({
+                        hint: true,
+                        highlight: true,
+                        minLength: 1
+                    },
+                    {
+                        name: 'tags',
+                        displayKey: 'value',
+                        source: tags_blood.ttAdapter()
+                    });
+            var $contact_div = $('#contact-us-div');
+            $('#contact-us-click').click(function () {
+                $main.hide();
+                $contact_div.show();
+            });
+            $('#contact-us-submit').click(function () {
+                $.post('{% url 'contact' %}', {'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val(),
+                    'email': $('#contact-email').val(), 'comment': $('#contact-comments').val()
+                }, function (res) {
+                    $contact_div.empty();
+                    $contact_div.append('<div class="container mt20" style="text-align: center"><h2>Thank you for your message! We will try and get back to you as soon as possible.</h2></div>');
+                    setTimeout(function () {
+                        $contact_div.hide();
+                        $main.show();
+                    }, 5000);
+                });
+            });
+
+            $(window).scroll(function () {
+                if ($('#map-canvas').offset().top - $(window).scrollTop() <= 0) {
+                    if (scrolled == false) {
+                        $('#map-cover').css({ position: 'fixed', top: 0, 'padding-top': '100px', right: 'auto', width: '25%'});
+                        scrolled = true;
+                    }
+                } else if (scrolled == true) {
+                    $('#map-cover').css({ position: 'relative', 'padding-top': '0', width: '100%'});
+                    scrolled = false;
+                }
+            });
+
+            $main.on('ifToggled', '.loe-check', function () {
+                var $checked = $('.loe-check:checked');
+                var $items = $('.isotope-item');
+                if ($checked.length == 0) {
+                    $('.loe-check').iCheck('check');
+                    $checked = $('.loe-check:checked');
+                }
+                if ($checked.length == 3) {
+                    $items.show();
+                } else {
+                    $.each($items, function (index) {
+                        var $teach = $(this).find('.teaches');
+                        var t = $teach.text();
+                        if (t == "All") {
+                            $(this).show();
+                        } else {
+                            var done = false;
+                            for (var i = 0; i < $checked.length; i++) {
+                                if (t.indexOf($checked[i].val()) > -1) {
+                                    $(this).show();
+                                    done = true;
+                                    break;
+                                }
+                            }
+                            if (!done) {
+                                $(this).hide();
+                            }
+                        }
+                    });
+                }
+            });
+            $main.on('ifChecked', 'input[name="review-radio"]', function () {
+                var val = $(this).val();
+                var $items = $('.isotope-item');
+                if (val == -1) {
+                    $items.show();
+                } else {
+                    $.each($items, function (index) {
+                        var $r = $(this).find('.review');
+                        var r = parseInt($r.text());
+                        if (!isNaN(r)) {
+                            if (r < val) {
+                                $(this).hide();
+                            } else {
+                                $(this).show();
+                            }
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                }
+            });
+
+            $main.on('mouseenter', '.isotope-item', function () {
+                var i = $('.isotope-item').index($(this));
+                markers[i].setIcon('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (i + 1).toString() + '|74A7D5|000000');
+                map.setCenter(markers[i].position);
+            });
+
+            $main.on('mouseleave', '.isotope-item', function () {
+                var i = $('.isotope-item').index($(this));
+                markers[i].setIcon('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (i + 1).toString() + '|FF0000|000000');
+            });
+            $main.on('click', '.add-list', add_listing);
+            $('#add-list').click(add_listing);
+
+            $('body').on('click', '#submit-create-listing', function () {
+                var url = $(this).data('url');
+                var $range = $("#slider-range");
+                $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
+                            'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
+                            'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
+                            'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
+                            'active': $('#are-active').is(':checked'),
+                            'price_min': $range.slider("values", 0), 'price_max': $range.slider("values", 1),
+                            'level_of_expertise[]': $('#listing-level').val() || [],
+                            'categories': $('#listing-categories').val(), 'email': $('#listing-email').val(),
+                            'website': $('#listing-website').val(),
+                            'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
+                        function (data) {
+                            $('#create-listing-div').remove();
+                            $.get('/get-listing/' + data['id'], function (data2) {
+                                if (typeof $my_listings !== 'undefined') {
+                                    $my_listings.find('.rooms').append(data2);
+                                }
+                            });
+                            if (typeof $my_listings !== 'undefined') {
+                                $my_listings.show();
+                                {% if user.owner.count == 0 %}
+                                    window.location.href = '/';
+                                {% endif %}
+
+                            } else {
+                                $main.show();
+                            }
+                            $('#messages').append('<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Listing added!</div>');
+                        });
+            });
+        }
+)
+;
 function split(val) {
     return val.split(/,\s*/);
 }

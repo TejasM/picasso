@@ -65,202 +65,207 @@
 <!-- Room -->
 {% if not reviews %}
     <div class="col-sm-5">
-        {% if listings.count != 0 %}
-            {% if title != 'Featured Listings' %}
-                <div class="row">
-                    <div class="col-lg-12" style="margin-bottom: 20px">
-                        <h4 style="text-align: center">Sort By:</h4>
-                        {% if request.is_ajax %}
+    {% if listings.count != 0 %}
+        {% if title != 'Featured Listings' %}
+            <div class="row">
+                <div class="col-lg-12" style="margin-bottom: 20px">
+                    <h4 style="text-align: center">Sort By:</h4>
+                    {% if request.is_ajax %}
+                        <a class="btn btn-sm btn-purple" href="#"
+                           onclick="custom_search(1, '{{ term }}');">Distance &nbsp;&nbsp;<i
+                                class="fa fa-caret-up"></i></a>
+                        {% if order_by == '-price_min' %}
                             <a class="btn btn-sm btn-purple" href="#"
-                               onclick="custom_search(1, '{{ term }}');">Distance &nbsp;&nbsp;<i
-                                    class="fa fa-caret-up"></i></a>
-                            {% if order_by == '-price_min' %}
-                                <a class="btn btn-sm btn-purple" href="#"
-                                   onclick="custom_search(1, '{{ term }}', {'order_by': 'price_min'});">Price
-                                    &nbsp;&nbsp;<i
-                                            class="fa fa-caret-down"></i></a>
-                            {% else %}
-                                <a class="btn btn-sm btn-purple" href="#"
-                                   onclick="custom_search(1, '{{ term }}', {'order_by': '-price_min'});">Price
-                                    &nbsp;&nbsp;<i
-                                            class="fa fa-caret-up"></i></a>
-                            {% endif %}
-                            {% if order_by == '-create_time' %}
-                                <a class="btn btn-sm btn-purple" href="#"
-                                   onclick="custom_search(1, '{{ term }}', {'order_by': 'create_time'});">Date Added
-                                    &nbsp;&nbsp;<i
-                                            class="fa fa-caret-down"></i></a>
-                            {% else %}
-                                <a class="btn btn-sm btn-purple" href="#"
-                                   onclick="custom_search(1, '{{ term }}', {'order_by': '-create_time'});">Date Added
-                                    &nbsp;&nbsp;<i
-                                            class="fa fa-caret-up"></i></a>
-                            {% endif %}
-                            {% if order_by == '-review_count' %}
-                                <a class="btn btn-sm btn-purple" href="#"
-                                   onclick="custom_search(1, '{{ term }}', {'order_by': 'review_count'});">Number of
-                                    Reviews
-                                    &nbsp;&nbsp;<i
-                                            class="fa fa-caret-down"></i></a>
-                            {% else %}
-                                <a class="btn btn-sm btn-purple" href="#"
-                                   onclick="custom_search(1, '{{ term }}', {'order_by': '-review_count'});">Number of
-                                    Reviews
-                                    &nbsp;&nbsp;<i
-                                            class="fa fa-caret-up"></i></a>
-                            {% endif %}
+                               onclick="custom_search(1, '{{ term }}', {'order_by': 'price_min'});">Price
+                                &nbsp;&nbsp;<i
+                                        class="fa fa-caret-down"></i></a>
                         {% else %}
-                            <a class="btn btn-sm btn-purple" href="?page=1">Distance &nbsp;&nbsp;<i
-                                    class="fa fa-caret-up"></i></a>
-                            {% if order_by == '-price_min' %}
-                                <a class="btn btn-sm btn-purple" href="?page=1&order_by=price_min">Price
-                                    &nbsp;&nbsp;<i
-                                            class="fa fa-caret-down"></i></a>
-                            {% else %}
-                                <a class="btn btn-sm btn-purple" href="?page=1&order_by=-price_min">Price
-                                    &nbsp;&nbsp;<i
-                                            class="fa fa-caret-up"></i></a>
-                            {% endif %}
-                            {% if order_by == '-create_time' %}
-                                <a class="btn btn-sm btn-purple" href="?page=1&order_by=create_time">Date Added
-                                    &nbsp;&nbsp;<i
-                                            class="fa fa-caret-down"></i></a>
-                            {% else %}
-                                <a class="btn btn-sm btn-purple" href="?page=1&order_by=-create_time">Date Added
-                                    &nbsp;&nbsp;<i
-                                            class="fa fa-caret-up"></i></a>
-                            {% endif %}
-                            {% if order_by == '-review_count' %}
-                                <a class="btn btn-sm btn-purple" href="?page=1&order_by=review_count">Number of
-                                    Reviews
-                                    &nbsp;&nbsp;<i
-                                            class="fa fa-caret-down"></i></a>
-                            {% else %}
-                                <a class="btn btn-sm btn-purple" href="?page=1&order_by=-review_count">Number of
-                                    Reviews
-                                    &nbsp;&nbsp;<i
-                                            class="fa fa-caret-up"></i></a>
-                            {% endif %}
+                            <a class="btn btn-sm btn-purple" href="#"
+                               onclick="custom_search(1, '{{ term }}', {'order_by': '-price_min'});">Price
+                                &nbsp;&nbsp;<i
+                                        class="fa fa-caret-up"></i></a>
                         {% endif %}
+                        {% if order_by == '-create_time' %}
+                            <a class="btn btn-sm btn-purple" href="#"
+                               onclick="custom_search(1, '{{ term }}', {'order_by': 'create_time'});">Date Added
+                                &nbsp;&nbsp;<i
+                                        class="fa fa-caret-down"></i></a>
+                        {% else %}
+                            <a class="btn btn-sm btn-purple" href="#"
+                               onclick="custom_search(1, '{{ term }}', {'order_by': '-create_time'});">Date Added
+                                &nbsp;&nbsp;<i
+                                        class="fa fa-caret-up"></i></a>
+                        {% endif %}
+                        {% if order_by == '-review_count' %}
+                            <a class="btn btn-sm btn-purple" href="#"
+                               onclick="custom_search(1, '{{ term }}', {'order_by': 'review_count'});">Number of
+                                Reviews
+                                &nbsp;&nbsp;<i
+                                        class="fa fa-caret-down"></i></a>
+                        {% else %}
+                            <a class="btn btn-sm btn-purple" href="#"
+                               onclick="custom_search(1, '{{ term }}', {'order_by': '-review_count'});">Number of
+                                Reviews
+                                &nbsp;&nbsp;<i
+                                        class="fa fa-caret-up"></i></a>
+                        {% endif %}
+                    {% else %}
+                        <a class="btn btn-sm btn-purple" href="?page=1">Distance &nbsp;&nbsp;<i
+                                class="fa fa-caret-up"></i></a>
+                        {% if order_by == '-price_min' %}
+                            <a class="btn btn-sm btn-purple" href="?page=1&order_by=price_min">Price
+                                &nbsp;&nbsp;<i
+                                        class="fa fa-caret-down"></i></a>
+                        {% else %}
+                            <a class="btn btn-sm btn-purple" href="?page=1&order_by=-price_min">Price
+                                &nbsp;&nbsp;<i
+                                        class="fa fa-caret-up"></i></a>
+                        {% endif %}
+                        {% if order_by == '-create_time' %}
+                            <a class="btn btn-sm btn-purple" href="?page=1&order_by=create_time">Date Added
+                                &nbsp;&nbsp;<i
+                                        class="fa fa-caret-down"></i></a>
+                        {% else %}
+                            <a class="btn btn-sm btn-purple" href="?page=1&order_by=-create_time">Date Added
+                                &nbsp;&nbsp;<i
+                                        class="fa fa-caret-up"></i></a>
+                        {% endif %}
+                        {% if order_by == '-review_count' %}
+                            <a class="btn btn-sm btn-purple" href="?page=1&order_by=review_count">Number of
+                                Reviews
+                                &nbsp;&nbsp;<i
+                                        class="fa fa-caret-down"></i></a>
+                        {% else %}
+                            <a class="btn btn-sm btn-purple" href="?page=1&order_by=-review_count">Number of
+                                Reviews
+                                &nbsp;&nbsp;<i
+                                        class="fa fa-caret-up"></i></a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="isotope gallery list">
+            {% for l in listings %}
+                <div class="row row-lg-height isotope-item {{ l.get_string_tags_no_comma }}"
+                     style="width: 100%;">
+                    <div class="col-sm-12 col-lg-6 col-middle">
+                        <a href="{{ l.get_unique_url }}"><img src="{{ l.get_photo_url }}"
+                                                              alt="{{ l.listing_name|unidecode }}"
+                                                              width="140px"
+                                                              height="100"/>
+
+                            <h4 style="font-size: 1.3em">
+                                <strong>{% if listings.paginator %}
+                                    {{ forloop.counter0|add:listings.start_index }}.{% else %}
+                                    {{ forloop.counter }}.{% endif %}
+                                    {{ l.listing_name|unidecode }}</strong>
+                                <br><span>{{ l.get_string_tags }}</span></h4>
+                        </a>
+                    </div>
+                    <div class="col-sm-12 col-lg-6">
+                        {% if l.visible == True or l.owner != None %}
+                            <a href="{{ l.get_unique_url }}" style="color: #333">
+                                <p><strong>Teaches: </strong><span
+                                        class="teaches">{{ l.level_of_expertise }}</span> level of students
+                                </p>
+                                {% if l.price_min == 0 and l.price_max == 0 %}
+                                    <p><strong>Price per lesson: </strong><span
+                                            class="price">Unspecified</span></p>
+                                {% else %}
+                                    <p><strong>Price per lesson: </strong><span
+                                            class="price">${{ l.price_min }} - {{ l.price_max }}</span></p>
+                                {% endif %}
+
+                                <p><strong>Address: </strong>{{ l.address.get_obscure|safe }}</p>
+
+                                {% if l.distance %}
+                                    <p><strong>Distance: </strong>{{ l.distance.km|floatformat }} km</p>
+                                {% endif %}
+                                {% if l.description != '' %}
+                                    <p>
+                                        <strong>Description: </strong>{{ l.description|truncatewords:20|safe }}
+                                    </p>
+                                {% endif %}
+                            </a>
+                        {% else %}
+                            This an unclaimed ORMTA listing. <a href="{{ l.scraped_url }}">Click here</a> for more
+                            information.
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-12 col-sm-12">
+                        {% if l.get_rating == 'N/A' %}
+                            <div class="price"><input name="rating" class="form-control rating"
+                                                      value="" disabled data-size="xs">
+
+                                <div class="caption"><span
+                                        class="label label-default">{{ l.review_set.count }} Reviews</span></div>
+                            </div>
+                        {% else %}
+                            <div class="price"><input name="rating" class="form-control rating"
+                                                      data-size="xs"
+                                                      value="{{ l.get_rating }}" disabled>
+
+                                <div class="caption"><span
+                                        class="label label-default">{{ l.review_set.count }} Reviews</span></div>
+                            </div>
+                        {% endif %}
+                        <hr style="margin-bottom: 0px; margin-top: 10px">
                     </div>
                 </div>
+            {% endfor %}
+            {% if listings.paginator and listings.paginator.num_pages > 1 %}
+                <ul class="pagination clearfix">
+                    {% if not listings.has_previous %}
+                        <li class="disabled">
+                            <a href="#">«</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            {% if request.is_ajax %}
+                                <a href="#"
+                                   onclick="custom_search({{ listings.previous_page_number }}, '{{ term }}');">«</a>
+                            {% else %}
+                                <a href="?page={{ listings.previous_page_number }}">«</a>
+                            {% endif %}
+                        </li>
+                    {% endif %}
+                    {% if listings.paginator.num_pages < 10 %}
+                        {% for n in listings.paginator.page_range %}
+                            <li>{% if request.is_ajax %}
+                                <a href="#" onclick="custom_search({{ n }}, '{{ term }}');">{{ n }}</a>
+                                {% else %}<a href="?page={{ n }}">{{ n }}</a>{% endif %}</li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="disabled"><a href="#">{{ listings.number }}
+                            of {{ listings.paginator.num_pages }}</a></li>
+                    {% endif %}
+                    {% if not listings.has_next %}
+                        <li class="disabled">
+                            <a href="#">»</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            {% if request.is_ajax %}
+                                <a href="#"
+                                   onclick="custom_search({{ listings.next_page_number }}, '{{ term }}');">»</a>
+                                {% else %}<a
+                                        href="?page={{ listings.next_page_number }}">»</a>{% endif %}</li>
+                    {% endif %}
+                </ul>
             {% endif %}
+        </div>
+    {% else %}
+        <h2>Sorry your search turned up nothing. We are constantly adding new listings so please check
+            back
+            often! Or add your own listing below!</h2>
 
-            <div class="isotope gallery list">
-                {% for l in listings %}
-                    <div class="row row-lg-height isotope-item {{ l.get_string_tags_no_comma }}"
-                         style="width: 100%;">
-                        <div class="col-sm-12 col-lg-6 col-middle">
-                            <a href="{{ l.get_unique_url }}"><img src="{{ l.get_photo_url }}"
-                                                                  alt="{{ l.listing_name|unidecode }}"
-                                                                  width="140px"
-                                                                  height="100"/>
-
-                                <h4 style="font-size: 1.3em">
-                                    <strong>{% if listings.paginator %}
-                                        {{ forloop.counter0|add:listings.start_index }}.{% else %}
-                                        {{ forloop.counter }}.{% endif %}
-                                        {{ l.listing_name|unidecode }}</strong>
-                                    <br><span>{{ l.get_string_tags }}</span></h4>
-                            </a>
-                        </div>
-                        <div class="col-sm-12 col-lg-6">
-                            {% if l.visible == True or l.owner != None %}
-                                <a href="{{ l.get_unique_url }}" style="color: #333">
-                                    <p><strong>Teaches: </strong><span
-                                            class="teaches">{{ l.level_of_expertise }}</span> level of students
-                                    </p>
-                                    {% if l.price_min == 0 and l.price_max == 0 %}
-                                        <p><strong>Price per lesson: </strong><span
-                                                class="price">Unspecified</span></p>
-                                    {% else %}
-                                        <p><strong>Price per lesson: </strong><span
-                                                class="price">${{ l.price_min }} - {{ l.price_max }}</span></p>
-                                    {% endif %}
-
-                                    <p><strong>Address: </strong>{{ l.address.get_obscure|safe }}</p>
-
-                                    {% if l.distance %}
-                                        <p><strong>Distance: </strong>{{ l.distance.km|floatformat }} km</p>
-                                    {% endif %}
-                                    {% if l.description != '' %}
-                                        <p>
-                                            <strong>Description: </strong>{{ l.description|truncatewords:20|safe }}
-                                        </p>
-                                    {% endif %}
-                                </a>
-                            {% else %}
-                                This an unclaimed ORMTA listing. <a href="{{ l.scraped_url }}">Click here</a> for more
-                                information.
-                            {% endif %}
-                        </div>
-                        <div class="col-lg-12 col-sm-12">
-                            {% if l.get_rating == 'N/A' %}
-                                <div class="price"><input name="rating" class="form-control rating"
-                                                          value="" disabled data-size="xs">
-
-                                    <div class="caption"><span
-                                            class="label label-default">{{ l.review_set.count }} Reviews</span></div>
-                                </div>
-                            {% else %}
-                                <div class="price"><input name="rating" class="form-control rating"
-                                                          data-size="xs"
-                                                          value="{{ l.get_rating }}" disabled>
-
-                                    <div class="caption"><span
-                                            class="label label-default">{{ l.review_set.count }} Reviews</span></div>
-                                </div>
-                            {% endif %}
-                            <hr style="margin-bottom: 0px; margin-top: 10px">
-                        </div>
-                    </div>
-                {% endfor %}
-                {% if listings.paginator and listings.paginator.num_pages > 1 %}
-                    <ul class="pagination clearfix">
-                        {% if not listings.has_previous %}
-                            <li class="disabled">
-                                <a href="#">«</a>
-                            </li>
-                        {% else %}
-                            <li>
-                                {% if request.is_ajax %}
-                                    <a href="#"
-                                       onclick="custom_search({{ listings.previous_page_number }}, '{{ term }}');">«</a>
-                                {% else %}
-                                    <a href="?page={{ listings.previous_page_number }}">«</a>
-                                {% endif %}
-                            </li>
-                        {% endif %}
-                        {% if listings.paginator.num_pages < 10 %}
-                            {% for n in listings.paginator.page_range %}
-                                <li>{% if request.is_ajax %}
-                                    <a href="#" onclick="custom_search({{ n }}, '{{ term }}');">{{ n }}</a>
-                                    {% else %}<a href="?page={{ n }}">{{ n }}</a>{% endif %}</li>
-                            {% endfor %}
-                        {% else %}
-                            <li class="disabled"><a href="#">{{ listings.number }}
-                                of {{ listings.paginator.num_pages }}</a></li>
-                        {% endif %}
-                        {% if not listings.has_next %}
-                            <li class="disabled">
-                                <a href="#">»</a>
-                            </li>
-                        {% else %}
-                            <li>
-                                {% if request.is_ajax %}
-                                    <a href="#"
-                                       onclick="custom_search({{ listings.next_page_number }}, '{{ term }}');">»</a>
-                                    {% else %}<a
-                                            href="?page={{ listings.next_page_number }}">»</a>{% endif %}</li>
-                        {% endif %}
-                    </ul>
-                {% endif %}
-            </div>
-        {% else %}
-            <h2>Sorry your search turned up nothing. We are constantly adding new listings so please check
-                back
-                often!</h2>
-        {% endif %}
+        <a href="#main-section" class="add-list">
+            <button type="button" style="margin-top: -5px" class="btn btn-primary btn-block">&nbsp;&nbsp;Add
+                Listing&nbsp;&nbsp;</button>
+        </a>
+    {% endif %}
     </div>
     <div class="col-sm-5">
         <div id="map-cover" style="position:relative;">
