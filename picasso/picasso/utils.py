@@ -3,6 +3,7 @@ import random
 from django.core.mail import EmailMessage
 from django.template import RequestContext
 from django.template.loader import get_template
+from picasso.index.models import Listing
 
 __author__ = 'tmehta'
 
@@ -11,6 +12,11 @@ logger = logging.getLogger(__name__)
 
 def send_claim_email(listing):
     if listing.email != '':
+        try:
+            l = Listing.objects.get(hash_key=listing.hash_key)
+        except Exception as e:
+            print e
+            return "Fail"
         emails = ['emails/claim_email.html', 'emails/claim_email_2.html']
         choice = random.choice(emails)
         logger.debug('Listing claim sending email to : ' + listing.email + ' with ' + choice)
