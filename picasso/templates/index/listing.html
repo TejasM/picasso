@@ -1,10 +1,11 @@
 {% load staticfiles %}
 {% load mathfilters %}
+{% load utilfilters %}
 <div class="container mt50" id="listing-detail">
     <div class="row">
         <!-- Slider -->
         <div class="col-sm-12">
-            <h2 class="lined-heading"><span>{{ listing.listing_name }}</span></h2>
+            <h2 class="lined-heading"><span>{{ listing.listing_name|unidecode }}</span></h2>
         </div>
         <section class="standard-slider room-slider">
             <div class="col-sm-12 col-md-6 col-lg-6">
@@ -24,53 +25,109 @@
             </div>
             <div class="col-sm-12 col-md-6 col-lg-6">
                 <div class="tab-pane fade in active" id="overview">
-                    <div class="tp-leftarrow tparrows default detail-back"></div>
+                    <div style="float: right;">
+                        {% if listing.owner == None  and listing.email != '' %}
+                            {% if claimable %}
+                                <div class="popover-icon" data-container="body" data-toggle="popover"
+                                     data-trigger="hover"
+                                     data-placement="top"
+                                     data-content="You can edit any incorrect information after claiming the business"
+                                     data-original-title=""
+                                     title="">
+                                    <button type="button" class="btn btn-primary btn-block"
+                                            id="claim-listing-button">
+                                        &nbsp;&nbsp;Sign Up to Claim Your Listing&nbsp;&nbsp;
+                                    </button>
+                                </div>
+                                <div class="popover-icon" data-container="body" data-toggle="popover"
+                                     data-trigger="hover"
+                                     data-placement="top"
+                                     data-content="We will review and confirm the request as soon as possible to ensure prompt removal"
+                                     data-original-title=""
+                                     title="">
+                                    <button type="button" class="btn btn-primary btn-block"
+                                            id="remove-listing-button">
+                                        &nbsp;&nbsp;Remove
+                                        Listing&nbsp;&nbsp;
+                                    </button>
+                                </div>
+                            {% else %}
+                                <div class="popover-icon" data-container="body" data-toggle="popover"
+                                     data-trigger="hover"
+                                     data-placement="top"
+                                     data-content="You can edit or remove any incorrect information after claiming the business"
+                                     data-original-title=""
+                                     title="">
+                                    <button type="button" class="btn btn-primary btn-block"
+                                            id="send-claim-button">
+                                        &nbsp;&nbsp;Claim
+                                        Listing&nbsp;&nbsp;
+                                    </button>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
                     <h3>
                         Overview
                     </h3>
 
                     <p><strong>Subjects: </strong>{{ listing.get_string_tags }}</p>
+                    {% if listing.visible == True or listing.owner != None %}
+                        <p><strong>Teaches: </strong>{{ listing.level_of_expertise|safe }} level Students</p>
 
-                    <p><strong>Teaches: </strong>{{ listing.level_of_expertise|safe }} level Students</p>
-
-                    {% if listing.price_min != 0 and lisiting.price_max != 0 %}
-                        <p><strong>Price Range per Lesson: </strong>${{ listing.price_min|floatformat }}
-                            - {{ listing.price_max }}</p>
-                    {% else %}
-                        <p><strong>Price Range: </strong>Unknown</p>
-                    {% endif %}
-
-                    <p>{{ listing.description|safe }}</p>
-
-                    <p><strong>Address: </strong>{{ listing.address.get_obscure|safe }}</p>
-
-                    {% if listing.active %}<p>
-                        <strong>Currently Accepting Students: </strong><i class="fa fa-2x fa-check-circle"></i>
-                        </p>{% endif %}
-
-                    {% if listing.phone != "" %}<p><strong>Phone: </strong>{{ listing.phone }}</p>{% endif %}
-                    <p><strong>Rating:</strong>{{ listing.get_rating }}</p>
-
-                    {% if listing.owner == user or listing.created_by == user %}
-                        <button type="button" class="btn btn-primary btn-block" id="edit-listing-button"
-                                data-url="{% url 'profile:edit_listing' listing.id %}">Edit
-                        </button>
-                    {% endif %}
-
-                    {% if user.is_authenticated %}
-                        {% if listing not in user.profile.teachers.all %}
-                            <button type="button" class="btn btn-primary btn-block mt20" id="add-teacher">Add to
-                                Favourites
-                            </button>
+                        {% if listing.price_min != 0 and lisiting.price_max != 0 %}
+                            <p><strong>Price Range per Lesson: </strong>${{ listing.price_min|floatformat }}
+                                - {{ listing.price_max }}</p>
                         {% else %}
-                            <button type="button" class="btn btn-primary btn-block mt20" disabled>Favourite
-                            </button>
+                            <p><strong>Price Range: </strong>Unknown</p>
                         {% endif %}
 
-                        <button type="button" class="mt20 btn btn-primary btn-block" id="review-button">Write a
-                            Review
-                        </button>
+                        <p>{{ listing.description|safe }}</p>
+
+                        {% if listing.website != '' %}<p><strong>Website: </strong>{{ listing.website }}</p>
+                        {% endif %}
+
+                        <p><strong>Address: </strong>{{ listing.address.get_obscure|safe }}</p>
+
+                        <p><strong>Phone Number: </strong>{{ listing.phone }}</p>
+
+                        <span id="distance"></span>
+
+                        {% if listing.active %}<p>
+                            <strong>Currently Accepting Students: </strong><i class="fa fa-2x fa-check-circle"></i>
+                            </p>{% endif %}
+                    {% else %}
+                        This an unclaimed ORMTA listing. <a href="{{ listing.scraped_url }}">Click here</a> for more
+                        information.
                     {% endif %}
+
+                    <p><strong>Rating:</strong>{{ listing.get_rating }}</p>
+
+                    <div class="col-lg-6 col-lg-offset-3">
+                        {% if listing.owner == user or listing.created_by == user %}
+                            <button type="button" class="btn btn-primary btn-block" id="edit-listing-button"
+                                    data-url="{% url 'profile:edit_listing' listing.id %}">Edit
+                            </button>
+                        {% endif %}
+                        {% if  user.is_authenticated %}
+                            {% if listing not in user.profile.teachers.all %}
+                                <button type="button" class="btn btn-primary btn-block mt20" id="add-teacher">Add to
+                                    Favourites
+                                </button>
+                            {% else %}
+                                <button type="button" class="btn btn-primary btn-block mt20" disabled>Favourite
+                                </button>
+                            {% endif %}
+                        {% endif %}
+                        <button type="button" class="mt20 btn btn-primary btn-block" id="contact-button">Contact
+                            Teacher
+                        </button>
+                        {% if not reviewed and listing.owner != user %}
+                            <button type="button" class="mt20 btn btn-primary btn-block" id="review-button">Write a
+                                Review
+                            </button>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </section>
