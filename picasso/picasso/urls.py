@@ -36,6 +36,7 @@ urlpatterns = patterns('',
                        url(r'^detail-listing/(?P<list_id>\w+)$', detail_listing, name='detail_listing'),
                        url(r'^sign-in/$', signin, name='signup'),
                        url(r'^review-listing/(?P<list_id>\w+)/$', review_listing, name='review_listing'),
+                       url(r'^edit-review-listing/(?P<review_id>\w+)/$', edit_review_listing, name='edit_review_listing'),
 
                        # Others
                        url(r'^user/', include('picasso.profile.urls', namespace='profile')),

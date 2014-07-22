@@ -687,3 +687,11 @@
 .caption .label {
     font-size: 100%;
 }
+
+.text-balloon .star-rating .caption {
+    display: none;
+}
+
+.text-balloon .star-rating .clear-rating {
+    display: none;
+}

@@ -23,8 +23,8 @@ def individual_listing(request, dash_version, list_name):
             listing = Listing.objects.get(unique_url=list_name)
             if request.user.is_authenticated():
                 try:
-                    Review.objects.get(user=request.user, listing=listing)
-                    context = {'listing': listing, 'reviewed': True}
+                    r = Review.objects.get(user=request.user, listing=listing)
+                    context = {'listing': listing, 'reviewed': True, 'r': r}
                 except Review.DoesNotExist:
                     context = {'listing': listing}
                 except Review.MultipleObjectsReturned:
@@ -38,8 +38,8 @@ def individual_listing(request, dash_version, list_name):
             listing = Listing.objects.filter(unique_url=list_name)[0]
             if request.user.is_authenticated():
                 try:
-                    Review.objects.get(user=request.user, listing=listing)
-                    context = {'listing': listing, 'reviewed': True}
+                    r = Review.objects.get(user=request.user, listing=listing)
+                    context = {'listing': listing, 'reviewed': True, 'r': r}
                 except Review.DoesNotExist:
                     context = {'listing': listing}
                 except Review.MultipleObjectsReturned:

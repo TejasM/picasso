@@ -206,6 +206,21 @@ def review_listing(request, list_id):
         return render(request, 'index/review.html', context)
 
 
+@login_required
+def edit_review_listing(request, review_id):
+    if request.method == "POST":
+        r = Review.objects.get(pk=int(review_id))
+        r.comment = request.POST['comment']
+        r.rating = request.POST['rating']
+        r.save()
+        context = {'review': r, 'count': r.listing.review_set.count()}
+        return render(request, 'index/review.html', context)
+    else:
+        r = Review.objects.get(pk=int(review_id))
+        context = {'review': r, 'count': r.listing.review_set.count()}
+        return render(request, 'index/edit-review.html', context)
+
+
 def contact(request):
     if request.method == "POST":
         message = request.POST.get('comment', '')

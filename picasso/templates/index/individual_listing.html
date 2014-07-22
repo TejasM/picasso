@@ -135,7 +135,7 @@
                         information.
                     {% endif %}
 
-                    <p><strong>Rating:</strong>{{ listing.get_rating }}</p>
+                    <p><strong>Rating: </strong>{{ listing.get_rating }}</p>
 
                     <div class="col-lg-6 col-lg-offset-3">
                         {% if listing.owner == user or listing.created_by == user %}
@@ -225,7 +225,7 @@
                              style="width: 2440px; left: 0px; display: block; transition: all 1000ms ease; -webkit-transition: all 1000ms ease; -webkit-transform: translate3d(0px, 0px, 0px);">
                             {% for review in listing.review_set.all %}
                                 {% if forloop.counter0|mod:2 == 0 %}
-                                    <div class="owl-item" style="width: 610px;">
+                                    <div class="owl-item" style="width: 610px;" id="review-{{ review.id }}">
                                 {% endif %}
                             {% include 'index/review.html' with review=review count=forloop.counter %}
                             {% if forloop.counter0|mod:2 == 1 %}
@@ -330,7 +330,7 @@
             $('#contact_form').show();
             var divPosition = $('#contact_form').offset();
             $('html, body').animate({scrollTop: divPosition.top}, "slow");
-            $("#review-rating").rating({'min': 0, 'max': 5, 'step': 0.5});
+            $("#review-rating").rating({'min': 0, 'max': 5, 'step': 0.5, showCaption: false, showClear: false});
         });
 
         $main.on('click', '#cancel-contact-button', function () {
@@ -416,7 +416,7 @@
                 $('#review_form').show();
                 var divPosition = $('#review_form').offset();
                 $('html, body').animate({scrollTop: divPosition.top}, "slow");
-                $("#review-rating").rating({'min': 0, 'max': 5, 'step': 0.5});
+                $("#review-rating").rating({'min': 0, 'max': 5, 'step': 0.5, showCaption: false, showClear: false});
             {% else %}
                 $('#main-section').hide();
                 $('#sign-in-choice-lightbox').show();
@@ -490,6 +490,38 @@
             });
             e.preventDefault();
         });
+        {% if r %}
+            $main.on('click', '#edit-review', function (e) {
+                $.get('{% url 'edit_review_listing' r.id %}', function (data) {
+                    $main.append(data);
+                    $('#reviews-box').hide();
+                    $(".rating").rating({'min': 0, 'max': 5, 'step': 0.5, size: 'xs', showClear: false, showCaption: false});
+                    $('#edit_review_form').show();
+                });
+            });
+
+            $main.on('click', '#edit-review-submit', function () {
+                var url = $(this).data('url');
+                $.post(url, {'comment': $('#edit-review-comment').val(), 'rating': $('#edit-review-rating').val(),
+                    'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()}, function (data) {
+                    $('#review-{{ r.id }}').remove();
+                    var $owls = $('.owl-item');
+                    var $items = $owls.find('.item');
+                    if ($owls.length == 0) {
+                        $('.owl-wrapper').append('<div class="owl-item" style="width: 610px;">' + data + '</div>');
+                    } else {
+                        if ($items.length % 2 == 1) {
+                            $($owls[$owls.length - 1]).append(data);
+                        } else {
+                            $('.owl-wrapper').append('<div class="owl-item" style="width: 610px;">' + data + '</div>');
+                        }
+                    }
+                    $('#edit_review_form').remove();
+                    $(".rating").rating({'min': 0, 'max': 5, 'step': 0.5, size: 'xs', showClear: false, showCaption: false});
+                    $('#reviews-box').show();
+                });
+            });
+        {% endif %}
     });
 
     function split(val) {

@@ -1,19 +1,24 @@
 {% load staticfiles %}
 <div class="item">
     <div class="row">
-        <div class="col-lg-3 col-md-4 col-sm-2 col-xs-12">
-            {% if review.user.profile.photo %}
-                <img src="/media/{{ user.profile.photo.name }}"
-                     style="width: 100px; height: 100px" alt="Review {{ count }}"
-                     class="img-circle">
-            {% else %}
-                <img src="{% static 'images/musician-349790_1280.jpg' %}"
-                     style="width: 100px; height: 100px" alt="Review {{ count }}"
-                     class="img-circle">
-            {% endif %}
+        <div class="col-lg-3 col-md-4 col-sm-2 col-xs-12">{% if review.user.profile.photo %}
+            <img src="/media/{{ review.user.profile.photo.name }}"
+                 style="width: 100px; height: 100px" alt="Review {{ count }}"
+                 class="img-circle">
+        {% else %}
+            <img src="{% static 'images/musician-349790_1280.jpg' %}"
+                 style="width: 100px; height: 100px" alt="Review {{ count }}"
+                 class="img-circle">
+        {% endif %}
         </div>
         <div class="col-lg-9 col-md-8 col-sm-10 col-xs-12">
-            <div class="text-balloon">{{ review.comment }}<span>{{ review.user.first_name }} {{ review.user.last_name }}</span>
+            <div class="text-balloon">{{ review.comment }}<span>
+                <input name="rating" class="form-control rating" style="font-size: 10px"
+                       data-size="xs"
+                       value="{{ review.rating }}" disabled><br>
+            {{ review.user.first_name }} {{ review.user.last_name }}</span>
+                {% if review.user == user %}
+                    <button id="edit-review" class="btn btn-sm btn-primary mt20">Edit Review</button>{% endif %}
             </div>
         </div>
     </div>
