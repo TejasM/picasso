@@ -1,10 +1,16 @@
 {% load staticfiles %}
 <div class="item">
     <div class="row">
-        <div class="col-lg-3 col-md-4 col-sm-2 col-xs-12"><img
-                src="{% static 'images/reviews/100x100.gif' %}"
-                alt="Review {{ count }}"
-                class="img-circle">
+        <div class="col-lg-3 col-md-4 col-sm-2 col-xs-12">
+            {% if review.user.profile.photo %}
+                <img src="/media/{{ user.profile.photo.name }}"
+                     style="width: 100px; height: 100px" alt="Review {{ count }}"
+                     class="img-circle">
+            {% else %}
+                <img src="{% static 'images/musician-349790_1280.jpg' %}"
+                     style="width: 100px; height: 100px" alt="Review {{ count }}"
+                     class="img-circle">
+            {% endif %}
         </div>
         <div class="col-lg-9 col-md-8 col-sm-10 col-xs-12">
             <div class="text-balloon">{{ review.comment }}<span>{{ review.user.first_name }} {{ review.user.last_name }}</span>
