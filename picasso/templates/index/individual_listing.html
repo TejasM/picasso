@@ -11,6 +11,48 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="{% static 'css/chosen.min.css' %}">
 {% endblock %}
+{% block search_block %}
+    <li style="float: right">
+        <i class="fa fa-3x fa-search" style="color: #6CD0DD; margin-top: 20px; cursor: pointer"
+           id="search-icon"></i>
+    </li>
+{% endblock %}
+{% block additional_search %}
+    <form class="form-inline reservation-horizontal clearfix" role="form" method="post"
+          action="" name="reservationform" id="reservationform" onsubmit="javascript:void (0);"
+          style="padding: 10px 10px; display: none">
+        <div id="message"></div>
+        <!-- Error message display -->
+        <div class="row row-xs-height">
+            <div class="col-lg-6 col-sm-12 col-lg-height">
+                <div class="form-group" style=" width: 100%">
+                    <i class="fa fa-2x fa-search"
+                       style="position: absolute; top: 10px; left: 25px; z-index: 1000;"></i>
+                    <input type="text" name="search" id="search-text"
+                           placeholder="What are you looking for?" class="form-control autocomplete"
+                           style="font-size: 25px; height: 100%; padding-left: 55px; width: 100%">
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-12 col-lg-height">
+                <div class="form-group">
+                    <i class="fa fa-2x fa-map-marker"
+                       style="position: absolute; top: 12px; left: 30px; z-index: 1000;"></i>
+                    <input type="text" name="location" id="location-text" value="Toronto" onblur="if (this.value == '')
+                            this.value = this.defaultValue" onfocus="if (this.value == this.defaultValue)
+                            this.value = ''" class="form-control" style="font-size: 25px; height: 100%;
+                            padding-left: 40px">
+                </div>
+            </div>
+            <div class="col-lg-2 col-sm-12 col-lg-height">
+                <button type="button" class="btn btn-primary btn-block" id="search-submisson"
+                        style="margin-top: 0; height: 45px">Search Now
+                </button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+{% block res_form %}
+{% endblock %}
 %{% block content %}
     <div class="container mt50" id="listing-detail">
     <div class="row">
@@ -32,9 +74,6 @@
                     <div class="col-sm-12">
                         <div class="item">
                             {% if listing.photo == None %}
-                                <img id="listing-img"
-                                     src="{{ listing.get_photo_url }}" alt="{{ listing.get_string_tags }}"
-                                     class="img-responsive">
                             {% else %}
                                 <img id="listing-img"
                                      src="/media/{{ listing.photo.name }}" alt="{{ listing.get_string_tags }}"
@@ -45,8 +84,9 @@
                                     {% csrf_token %}
                                     <input type="file" id="listing-pic" name="listing-pic">
                                 </form>
-                                <button type="button" id="listing-pic-edit" class="btn btn-lg btn-primary mt20">Change
-                                    Picture
+                                <button type="button" id="listing-pic-edit" class="btn btn-lg btn-primary mt20">
+                                    {% if listing.photo == None %}Add Picture{% else %}
+                                        Change Picture{% endif %}
                                 </button>
                             {% endif %}
                         </div>
@@ -102,10 +142,22 @@
                             {% endif %}
                         {% endif %}
                     </div>
-                    <h3>
-                        Overview
-                    </h3>
+                    {% if listing.get_rating == 'N/A' %}
+                        <div class="other-price"><input name="rating" class="form-control rating"
+                                                        value="" disabled data-size="xs">
 
+                            <div class="caption"><span
+                                    class="label label-default">{{ listing.review_set.count }} Reviews</span></div>
+                        </div>
+                    {% else %}
+                        <div class="other-price"><input name="rating" class="form-control rating"
+                                                        data-size="xs"
+                                                        value="{{ listing.get_rating }}" disabled>
+
+                            <div class="caption"><span
+                                    class="label label-default">{{ listing.review_set.count }} Reviews</span></div>
+                        </div>
+                    {% endif %}
                     <p><strong>Subjects: </strong>{{ listing.get_string_tags }}</p>
                     {% if listing.visible == True or listing.owner != None %}
                         <p><strong>Teaches: </strong>{{ listing.level_of_expertise|safe }} level Students</p>
@@ -123,12 +175,13 @@
 
                         <p><strong>Address: </strong>{{ listing.address.get_obscure|safe }}</p>
 
-                        <p><strong>Phone Number: </strong>{{ listing.phone }}</p>
+                        {% if listing.phone != '' %}<p><strong>Phone Number: </strong>{{ listing.phone }}</p>{% endif %}
 
                         <span id="distance"></span>
 
                         {% if listing.active %}<p>
-                            <strong>Currently Accepting Students: </strong><i class="fa fa-2x fa-check-circle"></i>
+                            <strong>Currently Accepting Students: </strong>&nbsp;<i class="fa fa-2x fa-check-circle"
+                                                                                    style="color: green"></i>
                             </p>{% endif %}
                     {% else %}
                         This an unclaimed ORMTA listing. <a href="{{ listing.scraped_url }}">Click here</a> for more
@@ -217,7 +270,7 @@
         <!-- Testimonials -->
         <section class="testimonials mt50">
             <div class="col-md-12 col-sm-12">
-                <h3 class="lined-heading"><span>Testimonials</span></h3>
+                <h3 class="lined-heading"><span>Reviews</span></h3>
 
                 <div id="owl-reviews" class="owl-carousel mt30 owl-theme" style="display: block; opacity: 1;">
                     <div class="owl-wrapper-outer">
@@ -489,6 +542,14 @@
                 }
             });
             e.preventDefault();
+        });
+        $('#search-icon').click(function () {
+            $('#reservationform').toggle();
+            if ($('#reservationform').is(":visible")) {
+                $('#sticky-sticky-wrapper').css('height', '153px');
+            } else {
+                $('#sticky-sticky-wrapper').css('height', '84px');
+            }
         });
         {% if r %}
             $main.on('click', '#edit-review', function (e) {

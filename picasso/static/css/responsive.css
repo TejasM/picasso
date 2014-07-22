@@ -695,3 +695,11 @@
 .text-balloon .star-rating .clear-rating {
     display: none;
 }
+
+.other-price .star-rating .clear-rating {
+    display: none;
+}
+
+.other-price .star-rating .caption {
+    display: none;
+}

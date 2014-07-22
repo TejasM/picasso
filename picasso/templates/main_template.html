@@ -68,7 +68,7 @@
                              style="height:44px;"></div>
                 </a></div>
             <div id="navbar-collapse-grid" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav" style="right: 0; position: absolute;">
                     <li class="active"><a href="/">Home</a>
                     </li>
                     {% if not user.is_authenticated %}
@@ -85,8 +85,12 @@
                             Listing&nbsp;&nbsp;</button>
                     </a>
                     </li>
+                    {% block search_block %}
+                    {% endblock %}
                 </ul>
             </div>
+            {% block additional_search %}
+            {% endblock %}
         </div>
     </div>
 </header>
@@ -210,6 +214,7 @@
                             <input name="password" id="password" class="form-control" type="password">
                         </div>
                         <input type="hidden" id="next-url" value="{{ request.get_full_path }}">
+
                         <div class="error_message">
 
                         </div>
