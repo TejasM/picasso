@@ -137,7 +137,15 @@ def signin(request):
                 if claim != '':
                     try:
                         l = Listing.objects.get(pk=int(claim))
+                        l.visible = False
                         logger.debug("Listing " + l.listing_name + " was claimed")
+                        t = get_template('emails/confirm_claim_email.html')
+                        context = RequestContext({}, {'listing': l})
+                        content_email = t.render(context)
+                        msg = EmailMessage('Picasso - Thank You', content_email, 'contact@findpicasso.com',
+                                           [l.email])
+                        msg.content_subtype = "html"
+                        msg.send()
                         l.owner = user
                         l.save()
                     except Listing.DoesNotExist:
@@ -163,6 +171,15 @@ def signin(request):
                     if claim != '':
                         try:
                             l = Listing.objects.get(pk=int(claim))
+                            l.visible = False
+                            logger.debug("Listing " + l.listing_name + " was claimed")
+                            t = get_template('emails/confirm_claim_email.html')
+                            context = RequestContext({}, {'listing': l})
+                            content_email = t.render(context)
+                            msg = EmailMessage('Picasso - Thank You', content_email, 'contact@findpicasso.com',
+                                               [l.email])
+                            msg.content_subtype = "html"
+                            msg.send()
                             l.owner = user
                             l.save()
                         except Listing.DoesNotExist:

@@ -1,0 +1,65 @@
+{% extends 'emails/email_template.html' %}
+{% block content %}
+    <tr>
+        <td align="center" valign="top">
+
+            <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                   style="border-collapse:collapse;background-color:#ffffff;border-top:0;border-bottom:0">
+                <tbody>
+                <tr>
+                    <td align="center" valign="top">
+                        <table border="0" cellpadding="0" cellspacing="0" width="600"
+                               style="border-collapse:collapse">
+                            <tbody>
+                            <tr>
+                                <td valign="top" style="padding-top:10px;padding-bottom:10px">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                                           style="border-collapse:collapse">
+                                        <tbody>
+                                        <tr>
+                                            <td valign="top">
+
+                                                <table align="left" border="0" cellpadding="0"
+                                                       cellspacing="0" width="600"
+                                                       style="border-collapse:collapse">
+                                                    <tbody>
+                                                    <tr>
+
+                                                        <td valign="top"
+                                                            style="padding-top:9px;padding-right:18px;padding-bottom:9px;padding-left:18px;color:#606060;font-family:Helvetica;font-size:15px;line-height:150%;text-align:left">
+
+                                                            <h1 style="margin:0;padding:0;display:block;font-family:Helvetica;font-size:40px;font-style:normal;font-weight:bold;line-height:125%;letter-spacing:-1px;text-align:left;color:#606060!important">
+                                                                Hello {{ listing.listing_name }},</h1>
+
+                                                            <p style="margin:1em 0;padding:0;color:#606060;font-family:Helvetica;font-size:15px;line-height:150%;text-align:left">
+                                                                Thank you for claiming your listing on Picasso. Please reply to this email if you have any concerns or questions.</p>
+
+                                                            <p style="margin:1em 0;padding:0;color:#606060;font-family:Helvetica;font-size:15px;line-height:150%;text-align:left">
+                                                                <br>
+                                                                Let us know what you think of Picasso by
+                                                                replying to this email.<br>
+                                                                <br>
+                                                                Cheers,<br>
+                                                                <strong>Picasso Team</strong></p>
+
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </td>
+    </tr>
+{% endblock %}
