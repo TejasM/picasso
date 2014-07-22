@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 
 
 def send_claim_email(listing):
-    logger.debug('Listing claim sending email to : ' + listing.email)
     if listing.email != '':
         emails = ['emails/claim_email.html', 'emails/claim_email_2.html']
         choice = random.choice(emails)

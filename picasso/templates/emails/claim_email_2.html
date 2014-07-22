@@ -32,11 +32,17 @@
                                                                 Hello {{ listing.listing_name }},</h1>
 
                                                             <p style="margin:1em 0;padding:0;color:#606060;font-family:Helvetica;font-size:15px;line-height:150%;text-align:left">
+                                                                Our sincere apologizes for sending you an incorrect
+                                                                email earlier. Here is one with an updated link.
+                                                            </p>
+
+                                                            <p style="margin:1em 0;padding:0;color:#606060;font-family:Helvetica;font-size:15px;line-height:150%;text-align:left">
                                                                 We’re recent graduates from University of Toronto, who
                                                                 have recently started our own business called Picasso.
                                                                 Picasso is a review and recommendation site for
                                                                 extra-curricular instructors, such
-                                                                as {% if listing.get_parent_tag != None %}{{ listing.get_parent_tag }}{% endif %}
+                                                                as {% if listing.get_parent_tag != None %}
+                                                                {{ listing.get_parent_tag }}{% endif %}
                                                                 instructors like <strong>you</strong>. Our site is
                                                                 completely free to
                                                                 use, and we have created a private listing for you
