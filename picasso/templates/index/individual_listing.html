@@ -127,14 +127,15 @@
                                     data-url="{% url 'profile:edit_listing' listing.id %}">Edit
                             </button>
                         {% endif %}
-
-                        {% if listing not in user.profile.teachers.all %}
-                            <button type="button" class="btn btn-primary btn-block mt20" id="add-teacher">Add to
-                                Favourites
-                            </button>
-                        {% else %}
-                            <button type="button" class="btn btn-primary btn-block mt20" disabled>Favourite
-                            </button>
+                        {% if  user.is_authenticated %}
+                            {% if listing not in user.profile.teachers.all %}
+                                <button type="button" class="btn btn-primary btn-block mt20" id="add-teacher">Add to
+                                    Favourites
+                                </button>
+                            {% else %}
+                                <button type="button" class="btn btn-primary btn-block mt20" disabled>Favourite
+                                </button>
+                            {% endif %}
                         {% endif %}
                         <button type="button" class="mt20 btn btn-primary btn-block" id="contact-button">Contact Teacher
                         </button>
