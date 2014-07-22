@@ -340,6 +340,7 @@
                         'price_min': $range.slider("values", 0), 'price_max': $range.slider("values", 1),
                         'level_of_expertise[]': $('#listing-level').val() || [],
                         'categories': $('#listing-categories').val(), 'email': $('#listing-email').val(),
+                        'website': $('#listing-website').val(),
                         'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
                     function (data) {
                         $('#edit-listing-div').remove();
