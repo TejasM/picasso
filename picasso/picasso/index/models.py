@@ -121,7 +121,9 @@ class Listing(BaseModel):
     unique_url = models.CharField(max_length=1000, default="")
     last_modified = models.DateTimeField(default=timezone.now())
     website = models.CharField(default="", max_length=1000)
-    hash_key = models.CharField(max_length=40, default=hashlib.sha1(os.urandom(128)).hexdigest())
+
+    hash_key = models.CharField(max_length=40, default=hashlib.sha1(os.urandom(128)).hexdigest(), unique=True)
+
     photo = models.ImageField(upload_to='listings/', null=True, blank=True)
     visible = models.BooleanField(default=True)
 
