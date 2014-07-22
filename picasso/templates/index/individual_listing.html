@@ -423,7 +423,7 @@
             {% endif %}
         });
 
-        $main.on('click', '#start-signup', function () {
+        $('#start-signup').click(function () {
             $('#main-section').hide();
             $('#sign-in-choice-lightbox').hide();
             $('#sign-in-lightbox').show();
@@ -433,7 +433,7 @@
             $('#sign-in-button').text('Sign Up');
         });
 
-        $main.on('click', '#start-login', function () {
+        $('#start-login').click(function () {
             $('#main-section').hide();
             $('#sign-in-choice-lightbox').hide();
             $('#sign-in-lightbox').show();
