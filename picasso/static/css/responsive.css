@@ -703,3 +703,18 @@
 .other-price .star-rating .caption {
     display: none;
 }
+
+#map-canvas {
+    width: 100%;
+    min-height: 600px;
+}
+
+@media (min-width: 320px)
+and (max-width: 480px) {
+
+    #map-canvas {
+        width: 70%;
+        margin: 0 auto;
+        min-height: 300px;
+    }
+}
