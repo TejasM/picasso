@@ -256,3 +256,14 @@ def change_pic(request):
         user.profile.save()
         return render(request, 'profile/_profile.html')
     return HttpResponseForbidden('allowed only via POST')
+
+
+@login_required
+def pic_change_listing(request, listing_id):
+    if request.method == "POST":
+        l = Listing.objects.get(pk=listing_id)
+        f = ContentFile(request.FILES['listing-pic'].read(), name=l.listing_name + '.png')
+        l.photo = f
+        l.save()
+        return HttpResponse(json.dumps({'path': l.photo.name}), content_type='application/json')
+    return HttpResponseForbidden('allowed only via POST')

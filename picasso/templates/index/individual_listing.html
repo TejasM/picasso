@@ -30,9 +30,25 @@
             <div class="col-sm-12 col-md-6 col-lg-6">
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="item"><img
-                                src="{{ listing.get_photo_url }}" alt="{{ listing.get_string_tags }}"
-                                class="img-responsive">
+                        <div class="item">
+                            {% if listing.photo == None %}
+                                <img id="listing-img"
+                                     src="{{ listing.get_photo_url }}" alt="{{ listing.get_string_tags }}"
+                                     class="img-responsive">
+                            {% else %}
+                                <img id="listing-img"
+                                     src="/media/{{ listing.photo.name }}" alt="{{ listing.get_string_tags }}"
+                                     class="img-responsive">
+                            {% endif %}
+                            {% if listing.owner == user %}
+                                <form id="listing-pic-upload" style="display:none;" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="file" id="listing-pic" name="listing-pic">
+                                </form>
+                                <button type="button" id="listing-pic-edit" class="btn btn-lg btn-primary mt20">Change
+                                    Picture
+                                </button>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -454,7 +470,26 @@
             loadScript();
         {% endif %}
 
+        $main.on('click', '#listing-pic-edit', function () {
+            $('#listing-pic').trigger('click');
+        });
+        $main.on('change', '#listing-pic', function () {
+            $('#listing-pic-upload').trigger('submit');
+        });
 
+        $main.on('submit', '#listing-pic-upload', function (e) {
+            $.ajax({
+                url: '{% url 'profile:pic_change_listing' listing.id %}',
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    $('#listing-img').attr('src', '/media/' + data['path']);
+                }
+            });
+            e.preventDefault();
+        });
     });
 
     function split(val) {
