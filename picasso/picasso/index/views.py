@@ -27,7 +27,8 @@ def featured(request):
         featured_listings = Listing.objects.filter(~Q(address=None)).filter(~Q(owner=None)).filter(
             ~Q(address__point=None)).filter(~Q(listing_name__contains='Test')).filter(
             ~Q(listing_name__contains='test')).filter(~Q(listing_name__contains='Tejas')).filter(
-            ~Q(listing_name__contains='Cheng'))[:6]
+            ~Q(listing_name__contains='Cheng')).filter(~Q(listing_name__contains='tejas')).filter(
+            ~Q(listing_name__contains='Albert'))[:6]
         context = {'listings': featured_listings, 'title': 'Featured Listings', 'button_name': 'Read More',
                    'categories': True}
         context = RequestContext(request, context)
