@@ -21,7 +21,8 @@ def get_env_setting(setting):
 
 # ######### HOST CONFIGURATION
 # See: https://docs.djangoproject.com/en/1.5/releases/1.5/#allowed-hosts-required-in-production
-ALLOWED_HOSTS = ['findpicasso.com', 'www.findpicasso.com', '127.0.0.1', 'localhost', '104.130.8.124']
+ALLOWED_HOSTS = ['findpicasso.com', 'www.findpicasso.com', '127.0.0.1', 'localhost', '104.130.8.124',
+                 'www.findpicasso.com', 'www.google.com']
 # ######### END HOST CONFIGURATION
 
 # ######### EMAIL CONFIGURATION
@@ -131,4 +132,4 @@ AUTHENTICATION_BACKENDS = (
 # ######### SECRET CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = r"08j&v!ycz^l4nsiw=2&jgv$hb)8)$8zfb!c2p(^9&6bufzcud1"
-########## END SECRET CONFIGURATION
+# ######### END SECRET CONFIGURATION
