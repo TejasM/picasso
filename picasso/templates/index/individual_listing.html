@@ -403,13 +403,30 @@
                 $("#review-rating").rating({'min': 0, 'max': 5, 'step': 0.5});
             {% else %}
                 $('#main-section').hide();
-                $('#sign-in-lightbox').show();
-                $('#sign-up-stuff').show();
-                $('#signin-heading').text('Sign Up');
-                $('#type-signin').val('sign-up');
-                $('#sign-in-button').text('Sign Up');
+                $('#sign-in-choice-lightbox').show();
             {% endif %}
         });
+
+        $main.on('click', '#start-signup', function () {
+            $('#main-section').hide();
+            $('#sign-in-choice-lightbox').hide();
+            $('#sign-in-lightbox').show();
+            $('#sign-up-stuff').show();
+            $('#signin-heading').text('Sign Up');
+            $('#type-signin').val('sign-up');
+            $('#sign-in-button').text('Sign Up');
+        });
+
+        $main.on('click', '#start-login', function () {
+            $('#main-section').hide();
+            $('#sign-in-choice-lightbox').hide();
+            $('#sign-in-lightbox').show();
+            $('#sign-up-stuff').hide();
+            $('#type-signin').val('login');
+            $('#signin-heading').text('Login');
+            $('#sign-in-button').text('Login');
+        });
+
         $main.on('click', '#cancel-review-button', function () {
             $('#review_form').hide();
         });
