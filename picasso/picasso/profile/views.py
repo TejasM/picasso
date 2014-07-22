@@ -259,9 +259,9 @@ def change_pic(request):
 
 
 @login_required
-def pic_change_listing(request, listing_id):
+def pic_change_listing(request, list_id):
     if request.method == "POST":
-        l = Listing.objects.get(pk=listing_id)
+        l = Listing.objects.get(pk=list_id)
         f = ContentFile(request.FILES['listing-pic'].read(), name=l.listing_name + '.png')
         l.photo = f
         l.save()
