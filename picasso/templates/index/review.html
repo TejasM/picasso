@@ -5,6 +5,11 @@
             <img src="/media/{{ review.user.profile.photo.name }}"
                  style="width: 100px; height: 100px" alt="Review {{ count }}"
                  class="img-circle">
+            <span class="no-caption">
+                <input name="rating" class="form-control rating" style="font-size: 10px"
+                       data-size="xs"
+                       value="{{ review.rating }}" disabled><br>
+            <strong style="text-align: center;">{{ review.user.first_name }} {{ review.user.last_name }}</strong></span>
         {% else %}
             <img src="{% static 'images/musician-349790_1280.jpg' %}"
                  style="width: 100px; height: 100px" alt="Review {{ count }}"
@@ -17,7 +22,7 @@
         {% endif %}
         </div>
         <div class="col-lg-10 col-md-7 col-sm-10 col-xs-12">
-            <div class="text-balloon">{{ review.comment }}
+            <div class="text-balloon">{{ review.comment }}{% if review.comment == '' %}No Comment{% endif %}
                 {% if review.user == user %}
                     <button id="edit-review" class="btn btn-sm btn-primary mt20">Edit Review</button>{% endif %}
             </div>
