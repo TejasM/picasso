@@ -188,8 +188,6 @@
                         information.
                     {% endif %}
 
-                    <p><strong>Rating: </strong>{{ listing.get_rating }}</p>
-
                     <div class="col-lg-6 col-lg-offset-3">
                         {% if listing.owner == user or listing.created_by == user %}
                             <button type="button" class="btn btn-primary btn-block" id="edit-listing-button"

@@ -58,7 +58,7 @@ def get_listings(request):
             current_point = geos.fromstr("POINT(%s %s)" % (lon, lat))
             temp_listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).distance(current_point,
                                                                                                        field_name='address__point').order_by(
-                '-distance')
+                'distance')
             if temp_listings.count() == 0:
                 raise Exception
             else:
