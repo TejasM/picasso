@@ -5,6 +5,7 @@ import re
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
 from django.core.mail import EmailMessage
+from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render
@@ -81,7 +82,7 @@ def add_listing(request):
             tags.append(Tag.objects.get(tag_name="Blank"))
         listing.tags = tags
         listing.save()
-        return HttpResponse(json.dumps({'id': listing.id}), content_type='application/json')
+        return HttpResponse(json.dumps({'id': listing.id, 'url': listing.get_unique_url}), content_type='application/json')
     else:
         return render(request, 'profile/create_listing.html')
 

@@ -675,21 +675,7 @@ $(function () {
                             'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
                         function (data) {
                             $('#create-listing-div').remove();
-                            $.get('/get-listing/' + data['id'], function (data2) {
-                                if (typeof $my_listings !== 'undefined') {
-                                    $my_listings.find('.rooms').append(data2);
-                                }
-                            });
-                            if (typeof $my_listings !== 'undefined') {
-                                $my_listings.show();
-                                {% if user.owner.count == 0 %}
-                                    window.location.href = '/';
-                                {% endif %}
-
-                            } else {
-                                $main.show();
-                            }
-                            $('#messages').append('<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Listing added!</div>');
+                            window.location.href = data['url'];
                         });
             });
         }
