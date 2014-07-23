@@ -184,6 +184,12 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
+                    <a href="{% url 'social:begin' 'facebook' %}?next={{ request.get_full_path }}" class="btn btn-primary btn-block" id="facebook-heading">
+                        Sign Up with Facebook
+                    </a>
+
+                    <h3 class="lined-heading" style="margin-top: 20px; margin-bottom: 20px"><span id="">OR</span></h3>
+
                     <form class="clearfix" role="form" method="post" action="{% url 'signup' %}"
                           id="signupform" onsubmit="javascript:void(0)">
                         {% csrf_token %}
@@ -500,6 +506,7 @@ $(function () {
                     $('#sign-in-lightbox').show();
                     $('#sign-up-stuff').show();
                     $('#type-signin').val('sign-up');
+                    $('#facebook-heading').text('Sign Up with Facebook');
                     $('#signin-heading').text('Sign Up');
                     $('#sign-in-button').text('Sign Up');
                 });
@@ -510,6 +517,7 @@ $(function () {
                     $('#sign-in-lightbox').show();
                     $('#sign-up-stuff').hide();
                     $('#type-signin').val('login');
+                     $('#facebook-heading').text('Login with Facebook');
                     $('#signin-heading').text('Login');
                     $('#sign-in-button').text('Login');
                 });

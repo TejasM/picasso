@@ -42,7 +42,7 @@ MANAGERS = ADMINS
 # ######### END MANAGER CONFIGURATION
 
 
-########## DATABASE CONFIGURATION
+# ######### DATABASE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
     'default': {
@@ -54,10 +54,10 @@ DATABASES = {
         'PORT': '',
     }
 }
-########## END DATABASE CONFIGURATION
+# ######### END DATABASE CONFIGURATION
 
 
-########## GENERAL CONFIGURATION
+# ######### GENERAL CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#time-zone
 TIME_ZONE = 'America/Los_Angeles'
 
@@ -141,6 +141,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.request',
     'picasso.context_processor.get_current_tags',
+    'social.apps.django_app.context_processors.backends',
+    'social.apps.django_app.context_processors.login_redirect',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
@@ -197,7 +199,13 @@ DJANGO_APPS = (
     'django.contrib.admin',
     'mathfilters',
     'watson',
+    'social.apps.django_app.default',
     # 'django.contrib.admindocs',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'social.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 # Apps specific for this project go here.
@@ -260,7 +268,11 @@ INSTALLED_APPS += (
 SOUTH_TESTS_MIGRATE = False
 ########## END SOUTH CONFIGURATION
 
+SOCIAL_AUTH_FACEBOOK_KEY = '856572641039282'
+SOCIAL_AUTH_FACEBOOK_SECRET = '2134eafbc73719f00ea8c366fa38019a'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 
+LOGIN_URL = '/'
 ########## SITE FRAMEWORK CONFIGURATION
 SITE_ID = 1
 ########## END SITE FRAMEWORK CONFIGURATION

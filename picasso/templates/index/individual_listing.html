@@ -420,28 +420,14 @@
                     });
         });
 
-        $('#add-teacher').click(function () {
-            {% if user.is_authenticated %}
-                $.post('{% url 'profile:add_teacher' listing.id %}', function () {
-                    var $add = $('#add-teacher');
-                    $add.text('Favourite');
-                    $add.prop('disabled', true);
-                });
-            {% else %}
-                $('#main-section').hide();
-                $('#sign-in-lightbox').show();
-                $('#sign-up-stuff').show();
-                $('#signin-heading').text('Sign Up');
-                $('#type-signin').val('sign-up');
-                $('#sign-in-button').text('Sign Up');
-            {% endif %}
-        });
+        $('#add-teacher').click(add_listing);
 
         $main.on('click', '#claim-listing-button', function () {
             $('#main-section').hide();
             $('#sign-in-lightbox').show();
             $('#sign-in-lightbox').find('form').append('<input type="hidden" name="claim-id" value="{{ listing.id }}">');
             $('#sign-up-stuff').show();
+            $('#facebook-heading').text('Sign Up with Facebook');
             $('#signin-heading').text('Sign Up');
             $('#type-signin').val('sign-up');
             $('#sign-in-button').text('Sign Up');
@@ -479,6 +465,7 @@
             $('#sign-in-choice-lightbox').hide();
             $('#sign-in-lightbox').show();
             $('#sign-up-stuff').show();
+            $('#facebook-heading').text('Sign Up with Facebook');
             $('#signin-heading').text('Sign Up');
             $('#type-signin').val('sign-up');
             $('#sign-in-button').text('Sign Up');
@@ -490,6 +477,7 @@
             $('#sign-in-lightbox').show();
             $('#sign-up-stuff').hide();
             $('#type-signin').val('login');
+            $('#facebook-heading').text('Login with Facebook');
             $('#signin-heading').text('Login');
             $('#sign-in-button').text('Login');
         });
