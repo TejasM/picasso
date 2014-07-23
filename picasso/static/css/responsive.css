@@ -696,6 +696,14 @@
     display: none;
 }
 
+.no-caption .star-rating .caption {
+    display: none;
+}
+
+.no-caption .star-rating .clear-rating {
+    display: none;
+}
+
 .other-price .star-rating .clear-rating {
     display: none;
 }

@@ -73,7 +73,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="item">
-                            {% if listing.photo == None %}
+                            {% if not listing.photo %}
                             {% else %}
                                 <img id="listing-img"
                                      src="/media/{{ listing.photo.name }}" alt="{{ listing.get_string_tags }}"
