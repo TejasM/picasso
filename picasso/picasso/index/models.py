@@ -158,9 +158,9 @@ class Listing(BaseModel):
     def get_string_tags(self):
         if self.tags.filter(visible=True).count() != 0:
             string_list = self.tags.filter(visible=True).values_list('tag_name', flat=True)
-            for t in self.tags.filter(visible=True):
-                if t.parent_tag is not None:
-                    string_list.append(t.parent_tag.tag_name)
+            # for t in self.tags.filter(visible=True):
+            #     if t.parent_tag is not None:
+            #         string_list.append(t.parent_tag.tag_name)
             return ", ".join(string_list)
         else:
             return "Unknown"
