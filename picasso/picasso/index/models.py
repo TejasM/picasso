@@ -105,6 +105,10 @@ def get_unique_url(instance):
         return instance.listing_name.replace(' ', '-').replace(',', '-').replace('/', '-') + str(count)
 
 
+def generate_hash():
+    return hashlib.sha1(os.urandom(128)).hexdigest()
+
+
 class Listing(BaseModel):
     listing_name = models.CharField(default="", max_length=500)
     school_name = models.CharField(default="", max_length=500)
@@ -122,7 +126,7 @@ class Listing(BaseModel):
     last_modified = models.DateTimeField(default=timezone.now())
     website = models.CharField(default="", max_length=1000)
 
-    hash_key = models.CharField(max_length=40, default=hashlib.sha1(os.urandom(128)).hexdigest(), unique=True)
+    hash_key = models.CharField(max_length=40, default=generate_hash, unique=True)
 
     photo = models.ImageField(upload_to='listings/', null=True, blank=True)
     visible = models.BooleanField(default=True)
