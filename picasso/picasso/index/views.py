@@ -31,8 +31,7 @@ def featured(request):
             ~Q(listing_name__contains='Albert'))
         featured_listings = featured_listings.filter(~Q(owner=None) |
                                                      ~Q(review=None))
-        featured_listings = Listing.objects.filter(~Q(address=None)).filter(
-            ~Q(address__point=None)).order_by('?')[:6]
+        featured_listings = featured_listings.order_by('?')[:6]
         context = {'listings': featured_listings, 'title': 'Featured Listings', 'button_name': 'Read More',
                    'categories': True}
         context = RequestContext(request, context)
