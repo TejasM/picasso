@@ -24,14 +24,13 @@ logger = logging.getLogger(__name__)
 
 def featured(request):
     if request.method == "GET":
-        featured_listings = Listing.objects.filter(~Q(address=None)).filter(~Q(owner=None)).filter(
+        featured_listings = Listing.objects.filter(~Q(address=None)).filter(
             ~Q(address__point=None)).filter(~Q(listing_name__contains='Test')).filter(
             ~Q(listing_name__contains='test')).filter(~Q(listing_name__contains='Tejas')).filter(
             ~Q(listing_name__contains='Cheng')).filter(~Q(listing_name__contains='tejas')).filter(
             ~Q(listing_name__contains='Albert'))
-        featured_listings = featured_listings | Listing.objects.filter(~Q(address=None)).filter(
-            ~Q(review=None)).filter(
-            ~Q(address__point=None))
+        featured_listings = featured_listings.filter(~Q(owner=None)) | featured_listings.filter(
+            ~Q(review=None))
         featured_listings = featured_listings.distinct()[:6]
         context = {'listings': featured_listings, 'title': 'Featured Listings', 'button_name': 'Read More',
                    'categories': True}
