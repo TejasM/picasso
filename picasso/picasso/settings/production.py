@@ -125,9 +125,6 @@ LOGGING = {
     }
 }
 # ######### END CACHE CONFIGURATION
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-)
 
 # ######### SECRET CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
