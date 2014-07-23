@@ -184,7 +184,8 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <a href="{% url 'social:begin' 'facebook' %}?next={{ request.get_full_path }}" class="btn btn-primary btn-block" id="facebook-heading">
+                    <a href="{% url 'social:begin' 'facebook' %}?next={{ request.get_full_path }}"
+                       class="btn btn-primary btn-block" id="facebook-heading">
                         Sign Up with Facebook
                     </a>
 
@@ -517,7 +518,7 @@ $(function () {
                     $('#sign-in-lightbox').show();
                     $('#sign-up-stuff').hide();
                     $('#type-signin').val('login');
-                     $('#facebook-heading').text('Login with Facebook');
+                    $('#facebook-heading').text('Login with Facebook');
                     $('#signin-heading').text('Login');
                     $('#sign-in-button').text('Login');
                 });
@@ -581,15 +582,16 @@ $(function () {
             });
 
             $(window).scroll(function () {
-                if ($('#map-canvas').offset().top - $(window).scrollTop() <= 0) {
-                    if (scrolled == false) {
-                        $('#map-cover').css({ position: 'fixed', top: 0, 'padding-top': '100px', right: 'auto', width: '25%'});
-                        scrolled = true;
-                    }
-                } else if (scrolled == true) {
-                    $('#map-cover').css({ position: 'relative', 'padding-top': '0', width: '100%'});
-                    scrolled = false;
-                }
+                var $map = $('#map-cover');
+                var locMin = 0;
+                var locMax = $('.isotope').height() - $map.height();
+                var dif = $(window).height() / 2 - $map.height() / 2;
+                var loc = dif + $(window).scrollTop() - $map.parent().offset().top;
+                if (loc > locMax)
+                    loc = locMax;
+                if (loc < locMin)
+                    loc = locMin;
+                $map.css('top', loc);
             });
 
             $main.on('ifToggled', '.loe-check', function () {
