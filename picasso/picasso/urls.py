@@ -22,7 +22,7 @@ sitemaps = {
 
 urlpatterns = patterns('',
                        url(r'^$', TemplateView.as_view(template_name='base.html'), name='index'),
-                       url('', include('social.apps.django_app.urls', namespace='social')),
+                       url('^social$', include('social.apps.django_app.urls', namespace='social')),
 
                        # main
                        url(r'^logout$', user_logout, name='logout'),
