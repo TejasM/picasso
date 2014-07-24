@@ -189,7 +189,7 @@
                     {% endif %}
 
                     <div class="col-lg-6 col-lg-offset-3">
-                        {% if listing.owner == user or listing.created_by == user %}
+                        {% if listing.owner == user or listing.created_by == user or user.is_superuser %}
                             <button type="button" class="btn btn-primary btn-block" id="edit-listing-button"
                                     data-url="{% url 'profile:edit_listing' listing.id %}">Edit
                             </button>
