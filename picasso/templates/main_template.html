@@ -184,6 +184,13 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
+                    <a href="{% url 'social:begin' 'facebook' %}?next={{ request.get_full_path }}"
+                       class="btn btn-primary btn-block" id="facebook-heading">
+                        Sign Up with Facebook
+                    </a>
+
+                    <h3 class="lined-heading" style="margin-top: 20px; margin-bottom: 20px"><span id="">OR</span></h3>
+
                     <form class="clearfix" role="form" method="post" action="{% url 'signup' %}"
                           id="signupform" onsubmit="javascript:void(0)">
                         {% csrf_token %}
@@ -500,6 +507,7 @@ $(function () {
                     $('#sign-in-lightbox').show();
                     $('#sign-up-stuff').show();
                     $('#type-signin').val('sign-up');
+                    $('#facebook-heading').text('Sign Up with Facebook');
                     $('#signin-heading').text('Sign Up');
                     $('#sign-in-button').text('Sign Up');
                 });
@@ -510,6 +518,7 @@ $(function () {
                     $('#sign-in-lightbox').show();
                     $('#sign-up-stuff').hide();
                     $('#type-signin').val('login');
+                    $('#facebook-heading').text('Login with Facebook');
                     $('#signin-heading').text('Login');
                     $('#sign-in-button').text('Login');
                 });
@@ -573,15 +582,16 @@ $(function () {
             });
 
             $(window).scroll(function () {
-                if ($('#map-canvas').offset().top - $(window).scrollTop() <= 0) {
-                    if (scrolled == false) {
-                        $('#map-cover').css({ position: 'fixed', top: 0, 'padding-top': '100px', right: 'auto', width: '25%'});
-                        scrolled = true;
-                    }
-                } else if (scrolled == true) {
-                    $('#map-cover').css({ position: 'relative', 'padding-top': '0', width: '100%'});
-                    scrolled = false;
-                }
+                var $map = $('#map-cover');
+                var locMin = 0;
+                var locMax = $('.isotope').height() - $map.height();
+                var dif = $(window).height() / 2 - $map.height() / 2;
+                var loc = dif + $(window).scrollTop() - $map.parent().offset().top;
+                if (loc > locMax)
+                    loc = locMax;
+                if (loc < locMin)
+                    loc = locMin;
+                $map.css('top', loc);
             });
 
             $main.on('ifToggled', '.loe-check', function () {
@@ -665,21 +675,7 @@ $(function () {
                             'csrfmiddlewaretoken': $($('input[name="csrfmiddlewaretoken"]')[0]).val()},
                         function (data) {
                             $('#create-listing-div').remove();
-                            $.get('/get-listing/' + data['id'], function (data2) {
-                                if (typeof $my_listings !== 'undefined') {
-                                    $my_listings.find('.rooms').append(data2);
-                                }
-                            });
-                            if (typeof $my_listings !== 'undefined') {
-                                $my_listings.show();
-                                {% if user.owner.count == 0 %}
-                                    window.location.href = '/';
-                                {% endif %}
-
-                            } else {
-                                $main.show();
-                            }
-                            $('#messages').append('<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Listing added!</div>');
+                            window.location.href = data['url'];
                         });
             });
         }
