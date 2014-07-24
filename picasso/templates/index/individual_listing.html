@@ -278,7 +278,7 @@
                                 {% if forloop.counter0|mod:2 == 0 %}
                                     <div class="owl-item" style="width: 610px;" id="review-{{ review.id }}">
                                 {% endif %}
-                            {% include 'index/review.html' with review=review count=forloop.counter %}
+                            {% include 'index/review.html' with review=review count=forloop.counter margin=forloop.counter0|mod:2 %}
                             {% if forloop.counter0|mod:2 == 1 %}
                                 </div>
                             {% endif %}
