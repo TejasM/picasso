@@ -1,18 +1,20 @@
 {% load staticfiles %}
 {% load mathfilters %}
 {% load utilfilters %}
-<div class="container mt50" id="listing-detail">
+
+<div itemscope itemtype="http://schema.org/Organization">
+    <div class="container mt50" id="listing-detail">
     <div class="row">
         <!-- Slider -->
         <div class="col-sm-12">
-            <h2 class="lined-heading"><span>{{ listing.listing_name|unidecode }}</span></h2>
+            <h2 class="lined-heading"><span itemprop="name">{{ listing.listing_name|unidecode }}</span></h2>
         </div>
         <section class="standard-slider room-slider">
             <div class="col-sm-12 col-md-6 col-lg-6">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="item"><img
-                                src="{{ listing.get_photo_url }}" alt="{{ listing.get_string_tags }}"
+                                src="{{ listing.get_photo_url }}" alt="{{ listing.get_string_tags }}" itemprop="logo"
                                 class="img-responsive">
                         </div>
                     </div>
@@ -81,12 +83,20 @@
 
                         <p>{{ listing.description|safe }}</p>
 
-                        {% if listing.website != '' %}<p><strong>Website: </strong>{{ listing.website }}</p>
+                        {% if listing.website != '' %}<p><strong>Website: </strong><a href="{{ listing.website }}"
+                                                                                      itemprop="url">{{ listing.website }}</a>
+                            </p>
                         {% endif %}
 
-                        <p><strong>Address: </strong>{{ listing.address.get_obscure|safe }}</p>
+                        <p><strong>Address: </strong>
+                        <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+                                <span itemprop="streetAddress">
+                                    {{ listing.address.get_obscure|safe }}
+                                </span>
+                        </div>
+                        </p>
 
-                        <p><strong>Phone Number: </strong>{{ listing.phone }}</p>
+                        <p><strong>Phone Number: </strong><span itemprop="telephone">{{ listing.phone }}</span></p>
 
                         <span id="distance"></span>
 
@@ -187,4 +197,5 @@
             </div>
         </section>
     </div>
-</div>l
+    </div>
+</div>
