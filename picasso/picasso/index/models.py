@@ -111,7 +111,8 @@ def generate_hash():
 
 class Listing(BaseModel):
     listing_name = models.CharField(default="", max_length=500)
-    school_name = models.CharField(default="", max_length=500)
+    class_name = models.CharField(default="", max_length=500)
+    place_name = models.CharField(default="", max_length=500)
     description = models.CharField(default="", max_length=10000)
     tags = models.ManyToManyField(Tag, related_name='listings')
     address = models.ForeignKey(Address, default=None, null=True)
@@ -159,7 +160,7 @@ class Listing(BaseModel):
         if self.tags.filter(visible=True).count() != 0:
             string_list = self.tags.filter(visible=True).values_list('tag_name', flat=True)
             # for t in self.tags.filter(visible=True):
-            #     if t.parent_tag is not None:
+            # if t.parent_tag is not None:
             #         string_list.append(t.parent_tag.tag_name)
             return ", ".join(string_list)
         else:
@@ -260,7 +261,8 @@ class Review(BaseModel):
 
 watson.register(Listing,
                 fields=(
-                    'tags__tag_name', 'listing_name', 'school_name', 'description', 'scraped_url', 'unique_url',
+                    'tags__tag_name', 'listing_name', 'class_name', 'place_name', 'description', 'scraped_url',
+                    'unique_url',
                     'email',))
 watson.register(Tag)
 watson.register(Review)

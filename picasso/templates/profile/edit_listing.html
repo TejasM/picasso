@@ -2,9 +2,40 @@
     <form class="clearfix" role="form" method="post" action="{% url 'profile:edit_listing' listing.id %}"
           id="editlistingform" onsubmit="return false;">
         {% csrf_token %}
-        <div class="form-group">
-            <label for="listing-name" accesskey="S"><span class="required">*</span>Listing Name:</label>
-            <input id="listing-name" class="form-control" value="{{ listing.listing_name }}">
+        <div class="row">
+            <div class="col-lg-4 col-sm-12">
+                <div class="form-group">
+                    <label for="listing-name" accesskey="S">Instructor
+                        Name:</label>
+                    <input id="listing-name" class="form-control" value="{{ listing.listing_name }}">
+                </div>
+            </div>
+            <div class="col-lg-1 col-sm-12">
+                <div class="form-group">
+                    <label accesskey="S">and/or</label>
+                    <input class="form-control" value="for" disabled>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-12">
+                <div class="form-group">
+                    <label for="class-name" accesskey="S">Class
+                        Name:</label>
+                    <input id="class-name" class="form-control" value="">
+                </div>
+            </div>
+            <div class="col-lg-1 col-sm-12">
+                <div class="form-group">
+                    <label accesskey="S">and/or</label>
+                    <input class="form-control" value="at" disabled>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-12">
+                <div class="form-group">
+                    <label for="place-name" accesskey="S">School/Place
+                        Name:</label>
+                    <input id="place-name" class="form-control" value="">
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <label for="listing-description" accesskey="S"><span class="required">*</span>Description:</label>

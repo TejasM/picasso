@@ -27,6 +27,8 @@ logger = logging.getLogger(__name__)
 def add_listing(request):
     if request.method == "POST":
         listing_name = request.POST['listing_name']
+        class_name = request.POST['class_name']
+        place_name = request.POST['place_name']
         description = request.POST['description']
         address = request.POST['address']
         postal = request.POST['postal']
@@ -72,17 +74,18 @@ def add_listing(request):
             listing = Listing.objects.create(listing_name=listing_name, description=description, address=address,
                                              phone=phone, active=active, owner=owner, created_by=request.user,
                                              level_of_expertise=l_o_e, price_min=price_min, price_max=price_max,
-                                             email=email, website=site)
+                                             email=email, website=site, place_name=place_name, class_name=class_name)
         else:
             listing = Listing.objects.create(listing_name=listing_name, description=description, address=address,
                                              phone=phone, active=active, owner=owner,
                                              level_of_expertise=l_o_e, price_min=price_min, price_max=price_max,
-                                             email=email, website=site)
+                                             email=email, website=site, place_name=place_name, class_name=class_name)
         if not tags:
             tags.append(Tag.objects.get(tag_name="Blank"))
         listing.tags = tags
         listing.save()
-        return HttpResponse(json.dumps({'id': listing.id, 'url': listing.get_unique_url}), content_type='application/json')
+        return HttpResponse(json.dumps({'id': listing.id, 'url': listing.get_unique_url}),
+                            content_type='application/json')
     else:
         return render(request, 'profile/create_listing.html')
 
@@ -101,6 +104,8 @@ def edit_listing(request, list_id):
     if request.method == "POST":
         listing = Listing.objects.get(pk=int(list_id))
         listing.listing_name = request.POST['listing_name']
+        listing.class_name = request.POST['class_name']
+        listing.place_name = request.POST['place_name']
         listing.description = request.POST['description']
         listing.email = request.POST['email']
         listing.website = request.POST['website']

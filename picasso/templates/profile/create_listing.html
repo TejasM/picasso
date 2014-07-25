@@ -2,16 +2,47 @@
     <form class="clearfix" role="form" method="post" action="{% url 'profile:add_listing' %}"
           id="createlistingform" onsubmit="return false;">
         {% csrf_token %}
-        <div class="form-group">
-            <label for="listing-name" accesskey="S"><span class="required">*</span>Listing Name:</label>
-            <input id="listing-name" class="form-control" value="{{ user.first_name }} {{ user.last_name }}">
+        <div class="row">
+            <div class="col-lg-4 col-sm-12">
+                <div class="form-group">
+                    <label for="listing-name" accesskey="S">Instructor
+                        Name:</label>
+                    <input id="listing-name" class="form-control" value="">
+                </div>
+            </div>
+            <div class="col-lg-1 col-sm-12">
+                <div class="form-group">
+                    <label accesskey="S">and/or</label>
+                    <input class="form-control" value="for" disabled>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-12">
+                <div class="form-group">
+                    <label for="class-name" accesskey="S">Class
+                        Name:</label>
+                    <input id="class-name" class="form-control" value="">
+                </div>
+            </div>
+            <div class="col-lg-1 col-sm-12">
+                <div class="form-group">
+                    <label accesskey="S">and/or</label>
+                    <input class="form-control" value="at" disabled>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-12">
+                <div class="form-group">
+                    <label for="place-name" accesskey="S">School/Place
+                        Name:</label>
+                    <input id="place-name" class="form-control" value="">
+                </div>
+            </div>
         </div>
         <div class="form-group">
-            <label for="listing-description" accesskey="S"><span class="required">*</span>Description:</label>
+            <label for="listing-description" accesskey="S">Description:</label>
             <textarea id="listing-description" class="form-control"></textarea>
         </div>
         <div class="form-group">
-            <label for="listing-email" accesskey="S"><span class="required">*</span>Email:</label>
+            <label for="listing-email" accesskey="S">Email:</label>
             <input id="listing-email" class="form-control" type="email">
         </div>
         <div class="row">
@@ -25,7 +56,7 @@
         <div class="row">
             <div class="col-lg-6 col-sm-12">
                 <div class="form-group">
-                    <label for="listing-level" accesskey="S"><span class="required">*</span>Teach:</label>
+                    <label for="listing-level" accesskey="S">Teach:</label>
                     <select id="listing-level" multiple class="form-control">
                         <option value="All">All</option>
                         <option value="Beginner">
@@ -41,7 +72,7 @@
             </div>
             <div class="col-lg-6 col-sm-12">
                 <div class="form-group">
-                    <label for="listing-price" accesskey="S"><span class="required">*</span>Price Range per
+                    <label for="listing-price" accesskey="S">Price Range per
                         Lesson:</label>
                     <input type="text" id="listing-price" readonly style="border:0; color:#f6931f; font-weight:bold;">
 
@@ -96,7 +127,7 @@
             {% if user.is_authenticated %}
                 <div class="col-lg-6 col-sm-12">
                     <div class="form-group">
-                        <label for="are-owner" accesskey="S"><span class="required">*</span>Is this your own
+                        <label for="are-owner" accesskey="S">Is this your own
                             listing?</label>
                         <br>
                         <input id="are-owner" type="checkbox" class="form-control" checked>
@@ -105,7 +136,7 @@
             {% endif %}
             <div class="col-lg-6 col-sm-12">
                 <div class="form-group">
-                    <label for="are-active" accesskey="S"><span class="required">*</span>Currently Accepting
+                    <label for="are-active" accesskey="S">Currently Accepting
                         Students:</label>
                     <br>
                     <input id="are-active" type="checkbox" class="form-control" checked>

@@ -399,8 +399,10 @@
         $main.on('click', '#save-edit-listing', function () {
             var url = $(this).data('url');
             var $range = $("#slider-range");
-            $.post(url, {'listing_name': $('#listing-name').val(), 'description': $('#listing-description').val(),
-                        'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
+            $.post(url, {'listing_name': $('#listing-name').val(), 'place_name': $('#place-name').val(),
+                        'class_name': $('#class-name').val(),
+                        'description': $('#listing-description').val(), 'address': $('#listing-address').val(),
+                        'postal': $('#listing-postal').val(),
                         'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
                         'phone': $('#listing-phone').val(), 'owner': $('#are-owner').is(':checked'),
                         'active': $('#are-active').is(':checked'),
