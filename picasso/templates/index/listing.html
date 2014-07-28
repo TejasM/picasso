@@ -2,200 +2,208 @@
 {% load mathfilters %}
 {% load utilfilters %}
 
+<h2 style="margin-bottom: 20px">Submit a review for a class or instructor by August 10
+    for a chance
+    to win an <b>iPad Mini</b>!<br>
+    Each review is an eligible ballot.
+    See <a href="{% url 'promotion' %}">Terms and Conditions.</a>
+</h2>
+
 <div itemscope itemtype="http://schema.org/Organization">
     <div class="container mt50" id="listing-detail">
-    <div class="row">
-        <!-- Slider -->
-        <div class="col-sm-12">
-            <h2 class="lined-heading"><span itemprop="name">{{ listing.listing_name|unidecode }}</span></h2>
-        </div>
-        <section class="standard-slider room-slider">
-            <div class="col-sm-12 col-md-6 col-lg-6">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="item"><img
-                                src="{{ listing.get_photo_url }}" alt="{{ listing.get_string_tags }}" itemprop="logo"
-                                class="img-responsive">
+        <div class="row">
+            <!-- Slider -->
+            <div class="col-sm-12">
+                <h2 class="lined-heading"><span itemprop="name">{{ listing.listing_name|unidecode }}</span></h2>
+            </div>
+            <section class="standard-slider room-slider">
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="item"><img
+                                    src="{{ listing.get_photo_url }}" alt="{{ listing.get_string_tags }}"
+                                    itemprop="logo"
+                                    class="img-responsive">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt20">
+                        <div class="col-sm-12">
+                            <div id="map-canvas" style="width: 100%; min-height: 300px"></div>
                         </div>
                     </div>
                 </div>
-                <div class="row mt20">
-                    <div class="col-sm-12">
-                        <div id="map-canvas" style="width: 100%; min-height: 300px"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-6">
-                <div class="tab-pane fade in active" id="overview">
-                    <div style="float: right;">
-                        {% if listing.owner == None  and listing.email != '' %}
-                            {% if claimable %}
-                                <div class="popover-icon" data-container="body" data-toggle="popover"
-                                     data-trigger="hover"
-                                     data-placement="top"
-                                     data-content="You can edit any incorrect information after claiming the business"
-                                     data-original-title=""
-                                     title="">
-                                    <button type="button" class="btn btn-primary btn-block"
-                                            id="claim-listing-button">
-                                        &nbsp;&nbsp;Sign Up to Claim Your Listing&nbsp;&nbsp;
-                                    </button>
-                                </div>
-                                <div class="popover-icon" data-container="body" data-toggle="popover"
-                                     data-trigger="hover"
-                                     data-placement="top"
-                                     data-content="We will review and confirm the request as soon as possible to ensure prompt removal"
-                                     data-original-title=""
-                                     title="">
-                                    <button type="button" class="btn btn-primary btn-block"
-                                            id="remove-listing-button">
-                                        &nbsp;&nbsp;Remove
-                                        Listing&nbsp;&nbsp;
-                                    </button>
-                                </div>
-                            {% else %}
-                                <div class="popover-icon" data-container="body" data-toggle="popover"
-                                     data-trigger="hover"
-                                     data-placement="top"
-                                     data-content="You can edit or remove any incorrect information after claiming the business"
-                                     data-original-title=""
-                                     title="">
-                                    <button type="button" class="btn btn-primary btn-block"
-                                            id="send-claim-button">
-                                        &nbsp;&nbsp;Claim
-                                        Listing&nbsp;&nbsp;
-                                    </button>
-                                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <div class="tab-pane fade in active" id="overview">
+                        <div style="float: right;">
+                            {% if listing.owner == None  and listing.email != '' %}
+                                {% if claimable %}
+                                    <div class="popover-icon" data-container="body" data-toggle="popover"
+                                         data-trigger="hover"
+                                         data-placement="top"
+                                         data-content="You can edit any incorrect information after claiming the business"
+                                         data-original-title=""
+                                         title="">
+                                        <button type="button" class="btn btn-primary btn-block"
+                                                id="claim-listing-button">
+                                            &nbsp;&nbsp;Sign Up to Claim Your Listing&nbsp;&nbsp;
+                                        </button>
+                                    </div>
+                                    <div class="popover-icon" data-container="body" data-toggle="popover"
+                                         data-trigger="hover"
+                                         data-placement="top"
+                                         data-content="We will review and confirm the request as soon as possible to ensure prompt removal"
+                                         data-original-title=""
+                                         title="">
+                                        <button type="button" class="btn btn-primary btn-block"
+                                                id="remove-listing-button">
+                                            &nbsp;&nbsp;Remove
+                                            Listing&nbsp;&nbsp;
+                                        </button>
+                                    </div>
+                                {% else %}
+                                    <div class="popover-icon" data-container="body" data-toggle="popover"
+                                         data-trigger="hover"
+                                         data-placement="top"
+                                         data-content="You can edit or remove any incorrect information after claiming the business"
+                                         data-original-title=""
+                                         title="">
+                                        <button type="button" class="btn btn-primary btn-block"
+                                                id="send-claim-button">
+                                            &nbsp;&nbsp;Claim
+                                            Listing&nbsp;&nbsp;
+                                        </button>
+                                    </div>
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-                    </div>
+                        </div>
 
-                    <p><strong>Subjects: </strong>{{ listing.get_string_tags }}</p>
-                    {% if listing.visible == True or listing.owner != None %}
-                        <p><strong>Teaches: </strong>{{ listing.level_of_expertise|safe }} level Students</p>
+                        <p><strong>Subjects: </strong>{{ listing.get_string_tags }}</p>
+                        {% if listing.visible == True or listing.owner != None %}
+                            <p><strong>Teaches: </strong>{{ listing.level_of_expertise|safe }} level Students</p>
 
-                        {% if listing.price_min != 0 and lisiting.price_max != 0 %}
-                            <p><strong>Price Range per Lesson: </strong>${{ listing.price_min|floatformat }}
-                                - {{ listing.price_max }}</p>
-                        {% else %}
-                            <p><strong>Price Range: </strong>Unknown</p>
-                        {% endif %}
+                            {% if listing.price_min != 0 and lisiting.price_max != 0 %}
+                                <p><strong>Price Range per Lesson: </strong>${{ listing.price_min|floatformat }}
+                                    - {{ listing.price_max }}</p>
+                            {% else %}
+                                <p><strong>Price Range: </strong>Unknown</p>
+                            {% endif %}
 
-                        <p>{{ listing.description|safe }}</p>
+                            <p>{{ listing.description|safe }}</p>
 
-                        {% if listing.website != '' %}<p><strong>Website: </strong><a href="{{ listing.website }}"
-                                                                                      itemprop="url">{{ listing.website }}</a>
-                            </p>
-                        {% endif %}
+                            {% if listing.website != '' %}<p><strong>Website: </strong><a href="{{ listing.website }}"
+                                                                                          itemprop="url">{{ listing.website }}</a>
+                                </p>
+                            {% endif %}
 
-                        <p><strong>Address: </strong>
-                        <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+                            <p><strong>Address: </strong>
+                            <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
                                 <span itemprop="streetAddress">
                                     {{ listing.address.get_obscure|safe }}
                                 </span>
-                        </div>
-                        </p>
+                            </div>
+                            </p>
 
-                        <p><strong>Phone Number: </strong><span itemprop="telephone">{{ listing.phone }}</span></p>
+                            <p><strong>Phone Number: </strong><span itemprop="telephone">{{ listing.phone }}</span></p>
 
-                        <span id="distance"></span>
+                            <span id="distance"></span>
 
-                        {% if listing.active %}<p>
-                            <strong>Currently Accepting Students: </strong><i class="fa fa-2x fa-check-circle"></i>
-                            </p>{% endif %}
-                    {% else %}
-                        This an unclaimed ORMTA listing. <a href="{{ listing.scraped_url }}">Click here</a> for more
-                        information.
-                    {% endif %}
-
-                    <p><strong>Rating:</strong>{{ listing.get_rating }}</p>
-
-                    <div class="col-lg-6 col-lg-offset-3">
-                        {% if listing.owner == user or listing.created_by == user %}
-                            <button type="button" class="btn btn-primary btn-block" id="edit-listing-button"
-                                    data-url="{% url 'profile:edit_listing' listing.id %}">Edit
-                            </button>
+                            {% if listing.active %}<p>
+                                <strong>Currently Accepting Students: </strong><i class="fa fa-2x fa-check-circle"></i>
+                                </p>{% endif %}
+                        {% else %}
+                            This an unclaimed ORMTA listing. <a href="{{ listing.scraped_url }}">Click here</a> for more
+                            information.
                         {% endif %}
-                        {% if  user.is_authenticated %}
-                            {% if listing not in user.profile.teachers.all %}
-                                <button type="button" class="btn btn-primary btn-block mt20" id="add-teacher">Add to
-                                    Favourites
-                                </button>
-                            {% else %}
-                                <button type="button" class="btn btn-primary btn-block mt20" disabled>Favourite
+
+                        <p><strong>Rating:</strong>{{ listing.get_rating }}</p>
+
+                        <div class="col-lg-6 col-lg-offset-3">
+                            {% if listing.owner == user or listing.created_by == user %}
+                                <button type="button" class="btn btn-primary btn-block" id="edit-listing-button"
+                                        data-url="{% url 'profile:edit_listing' listing.id %}">Edit
                                 </button>
                             {% endif %}
-                        {% endif %}
-                        <button type="button" class="mt20 btn btn-primary btn-block" id="contact-button">Contact
-                            Teacher
-                        </button>
-                        {% if not reviewed and listing.owner != user %}
-                            <button type="button" class="mt20 btn btn-primary btn-block" id="review-button">Write a
-                                Review
-                            </button>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-    {% if not reviewed and listing.owner != user %}
-        <div class="row mt20" id="review_form" style="display: none">
-            <form class="clearfix mt50" role="form" method="post"
-                  action="{% url 'review_listing' listing.id %}"
-                  id="reviewform" onsubmit="javascript:void(0)">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="review-comment" accesskey="S"><span class="required">*</span>Comment</label>
-                    <textarea name="comment" id="review-comment" class="form-control"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="review-rating" accesskey="S"><span class="required">*</span>Rating</label>
-                    <input id="review-rating" name="rating" class="form-control">
-                </div>
-                <div class="error_message">
-
-                </div>
-                <button type="button" class="btn  btn-lg btn-primary" id="cancel-review-button">Cancel</button>
-                <button type="button" class="btn  btn-lg btn-primary" id="review-submit"
-                        data-url="{% url 'review_listing' listing.id %}">
-                    Submit Review
-                </button>
-            </form>
-        </div>
-    {% endif %}
-    <div class="row" {% if listing.review_set.count == 0 %}style="display:none;"{% endif %} id="reviews-box">
-        <!-- Testimonials -->
-        <section class="testimonials mt50">
-            <div class="col-md-12 col-sm-12">
-                <h3 class="lined-heading"><span>Testimonials</span></h3>
-
-                <div id="owl-reviews" class="owl-carousel mt30 owl-theme" style="display: block; opacity: 1;">
-                    <div class="owl-wrapper-outer">
-                        <div class="owl-wrapper"
-                             style="width: 2440px; left: 0px; display: block; transition: all 1000ms ease; -webkit-transition: all 1000ms ease; -webkit-transform: translate3d(0px, 0px, 0px);">
-                            {% for review in listing.review_set.all %}
-                                {% if forloop.counter0|mod:2 == 0 %}
-                                    <div class="owl-item" style="width: 610px;">
+                            {% if  user.is_authenticated %}
+                                {% if listing not in user.profile.teachers.all %}
+                                    <button type="button" class="btn btn-primary btn-block mt20" id="add-teacher">Add to
+                                        Favourites
+                                    </button>
+                                {% else %}
+                                    <button type="button" class="btn btn-primary btn-block mt20" disabled>Favourite
+                                    </button>
                                 {% endif %}
-                            {% include 'index/review.html' with review=review count=forloop.counter %}
-                            {% if forloop.counter0|mod:2 == 1 %}
-                                </div>
                             {% endif %}
-                            {% endfor %}
+                            <button type="button" class="mt20 btn btn-primary btn-block" id="contact-button">Contact
+                                Teacher
+                            </button>
+                            {% if not reviewed and listing.owner != user %}
+                                <button type="button" class="mt20 btn btn-primary btn-block" id="review-button">Write a
+                                    Review
+                                </button>
+                            {% endif %}
                         </div>
                     </div>
-                    {% if listing.review_set.count >= 3 %}
-                        <div class="owl-controls clickable">
-                            <div class="owl-buttons">
-                                <div class="owl-prev"><i class="fa fa-angle-left fa-3x"></i></div>
-                                <div class="owl-next"><i class="fa fa-angle-right fa-3x"></i></div>
+                </div>
+            </section>
+        </div>
+        {% if not reviewed and listing.owner != user %}
+            <div class="row mt20" id="review_form" style="display: none">
+                <form class="clearfix mt50" role="form" method="post"
+                      action="{% url 'review_listing' listing.id %}"
+                      id="reviewform" onsubmit="javascript:void(0)">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="review-comment" accesskey="S"><span class="required">*</span>Comment</label>
+                        <textarea name="comment" id="review-comment" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="review-rating" accesskey="S"><span class="required">*</span>Rating</label>
+                        <input id="review-rating" name="rating" class="form-control">
+                    </div>
+                    <div class="error_message">
+
+                    </div>
+                    <button type="button" class="btn  btn-lg btn-primary" id="cancel-review-button">Cancel</button>
+                    <button type="button" class="btn  btn-lg btn-primary" id="review-submit"
+                            data-url="{% url 'review_listing' listing.id %}">
+                        Submit Review
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+        <div class="row" {% if listing.review_set.count == 0 %}style="display:none;"{% endif %} id="reviews-box">
+            <!-- Testimonials -->
+            <section class="testimonials mt50">
+                <div class="col-md-12 col-sm-12">
+                    <h3 class="lined-heading"><span>Testimonials</span></h3>
+
+                    <div id="owl-reviews" class="owl-carousel mt30 owl-theme" style="display: block; opacity: 1;">
+                        <div class="owl-wrapper-outer">
+                            <div class="owl-wrapper"
+                                 style="width: 2440px; left: 0px; display: block; transition: all 1000ms ease; -webkit-transition: all 1000ms ease; -webkit-transform: translate3d(0px, 0px, 0px);">
+                                {% for review in listing.review_set.all %}
+                                    {% if forloop.counter0|mod:2 == 0 %}
+                                        <div class="owl-item" style="width: 610px;">
+                                    {% endif %}
+                                {% include 'index/review.html' with review=review count=forloop.counter %}
+                                {% if forloop.counter0|mod:2 == 1 %}
+                                    </div>
+                                {% endif %}
+                                {% endfor %}
                             </div>
                         </div>
-                    {% endif %}
+                        {% if listing.review_set.count >= 3 %}
+                            <div class="owl-controls clickable">
+                                <div class="owl-buttons">
+                                    <div class="owl-prev"><i class="fa fa-angle-left fa-3x"></i></div>
+                                    <div class="owl-next"><i class="fa fa-angle-right fa-3x"></i></div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
-        </section>
-    </div>
+            </section>
+        </div>
     </div>
 </div>
