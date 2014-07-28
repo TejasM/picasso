@@ -5,19 +5,19 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.gis import geos
-from django.core import serializers
 from django.core.mail import EmailMessage
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import IntegrityError
 from django.db.models import Q, Count
 from django.http import HttpResponse
-from django.shortcuts import render, redirect, render_to_response
+from django.shortcuts import render, redirect
 from django.template import RequestContext
 from django.template.loader import get_template
-from pygeocoder import Geocoder
 import watson
 
+from pygeocoder import Geocoder
 from picasso.index.models import Listing, Review
+
 
 logger = logging.getLogger(__name__)
 
@@ -256,6 +256,9 @@ def privacy(request):
 def terms(request):
     return render(request, 'terms.html')
 
+
+def promotion(request):
+    return render(request, 'promotion.html')
 
 def content(request):
     return render(request, 'content.html')

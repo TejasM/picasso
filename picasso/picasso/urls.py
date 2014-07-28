@@ -1,15 +1,10 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
-from django.http.response import HttpResponse
-from django.views.generic import TemplateView
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
-from picasso import index
 from picasso.index.sitemaps import ListingSitemap, StaticViewSitemap
 import views
-from django.http import HttpResponse
-from picasso.index.models import Tag
 from picasso.index.views import *
 from django.views.generic import TemplateView
 
@@ -29,6 +24,7 @@ urlpatterns = patterns('',
                        url(r'^about$', about, name='about'),
                        url(r'^privacy$', privacy, name='privacy'),
                        url(r'^terms$', terms, name='terms'),
+                       url(r'^promotion$', promotion, name='promotion'),
                        url(r'^content$', content, name='content'),
                        url(r'^contact$', contact, name='contact'),
                        url(r'^featured$', featured, name='featured'),
