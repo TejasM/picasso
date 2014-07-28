@@ -6,3 +6,4 @@ Disallow: /accounts/
 Disallow: /claim_account/
 Disallow: /review-listing/
 Disallow: /get-listings/
+Disallow: /media/
