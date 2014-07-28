@@ -141,6 +141,10 @@
                             </div>
                         </div>
                     </form>
+
+                    <h4 style="margin-bottom: 20px">Submit a review for a class or instructor by August 10 for a chance
+                        to win an <b>iPad Mini</b>! Each review is an eligible ballot.</h4>
+
                 </div>
             </div>
         </div>
@@ -674,7 +678,7 @@ $(function () {
                 var url = $(this).data('url');
                 var $range = $("#slider-range");
                 $.post(url, {'listing_name': $('#listing-name').val(), 'place_name': $('#place-name').val(),
-                        'class_name': $('#class-name').val(),
+                            'class_name': $('#class-name').val(),
                             'description': $('#listing-description').val(),
                             'address': $('#listing-address').val(), 'postal': $('#listing-postal').val(),
                             'city': $('#listing-city').val(), 'country': $('#listing-country').val(),
