@@ -147,14 +147,12 @@ class Listing(BaseModel):
     def get_full_listing_name(self):
         string = ''
         string += self.listing_name
-        if string != '':
+        if string != '' and self.class_name != '':
             string += ' for ' + self.class_name
         else:
             string += self.class_name
-        if string != '':
+        if string != '' and self.place_name != '':
             string += ' at ' + self.place_name
-        else:
-            string += self.place_name
         return string
 
     @property
