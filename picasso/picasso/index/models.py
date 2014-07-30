@@ -144,6 +144,23 @@ class Listing(BaseModel):
     place = models.CharField(max_length=3, choices=PLACE_CHOICES, default='Pri')
 
     @property
+    def get_listing_name(self):
+        string = ''
+        if self.listing_name != '':
+            string += self.listing_name
+        if self.class_name != '':
+            if string != '':
+                string += ' for ' + self.class_name
+            else:
+                string += self.class_name
+        if self.place_name != '':
+            if string != '':
+                string += ' at ' + self.place_name
+            else:
+                string += self.place_name
+        return string
+
+    @property
     def get_price(self):
         if self.price != 0:
             return self.price
@@ -161,7 +178,7 @@ class Listing(BaseModel):
             string_list = self.tags.filter(visible=True).values_list('tag_name', flat=True)
             # for t in self.tags.filter(visible=True):
             # if t.parent_tag is not None:
-            #         string_list.append(t.parent_tag.tag_name)
+            # string_list.append(t.parent_tag.tag_name)
             return ", ".join(string_list)
         else:
             return "Unknown"

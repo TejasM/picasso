@@ -1,6 +1,7 @@
 import json
 import logging
 import re
+from django.conf import settings
 
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
@@ -80,7 +81,7 @@ def add_listing(request):
                                              phone=phone, active=active, owner=owner,
                                              level_of_expertise=l_o_e, price_min=price_min, price_max=price_max,
                                              email=email, website=site, place_name=place_name, class_name=class_name)
-        if not tags:
+        if settings.DEBUG is False and not tags:
             tags.append(Tag.objects.get(tag_name="Blank"))
         listing.tags = tags
         listing.save()
