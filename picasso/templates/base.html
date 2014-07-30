@@ -46,8 +46,6 @@
                 }
                 loadFilters();
                 $(".rating").rating({'min': 0, 'max': 5, 'step': 0.5, size: 'xs', showClear: false, showCaption: false});
-                History.pushState({state: state_number}, "State " + state_number.toString(), "?state=" + state_number.toString());
-                state_number++;
             });
 
             $main.on('click', '.detail-back', function () {

@@ -80,7 +80,7 @@
                         <li class=""><a href="{% url 'logout' %}">Logout</a>
                         </li>
                     {% endif %}
-                    <li class=""><a href="#main-section" id="add-list">
+                    <li class=""><a href="#create-listing-div" id="add-list">
                         <button type="button" style="margin-top: -5px" class="btn btn-primary btn-block">&nbsp;&nbsp;Add
                             Listing&nbsp;&nbsp;</button>
                     </a>
@@ -331,7 +331,6 @@
 <script type="text/javascript" src="{% static 'js/bloodhound.js' %}"></script>
 <script src="{% static 'js/chosen.jquery.min.js' %}"></script>
 <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
-<script src="{% static 'js/jquery.history.js' %}"></script>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -367,10 +366,6 @@ function initialize() {
     }
 }
 
-
-History.Adapter.bind(window, 'statechange', function () { // Note: We are using statechange instead of popstate
-    var State = History.getState(); // Note: We are using History.getState() instead of event.state
-});
 
 function loadScript() {
     var script = document.createElement('script');
@@ -435,8 +430,6 @@ function actual_search(data) {
             });
         });
         $(".rating").rating({'min': 0, 'max': 5, 'step': 0.5, size: 'xs', showCaption: false, showClear: false});
-        History.pushState({state: state_number}, "State " + state_number.toString(), "?state=" + state_number.toString());
-        state_number++;
     });
 }
 
@@ -495,6 +488,9 @@ function add_listing() {
                         return false;
                     }
                 });
+        $('html,body').animate({
+            scrollTop: $("#create-listing-div").offset().top - 100
+        });
     });
 }
 var last_data;
