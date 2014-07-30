@@ -144,20 +144,17 @@ class Listing(BaseModel):
     place = models.CharField(max_length=3, choices=PLACE_CHOICES, default='Pri')
 
     @property
-    def get_listing_name(self):
+    def get_full_listing_name(self):
         string = ''
-        if self.listing_name != '':
-            string += self.listing_name
-        if self.class_name != '':
-            if string != '':
-                string += ' for ' + self.class_name
-            else:
-                string += self.class_name
-        if self.place_name != '':
-            if string != '':
-                string += ' at ' + self.place_name
-            else:
-                string += self.place_name
+        string += self.listing_name
+        if string != '':
+            string += ' for ' + self.class_name
+        else:
+            string += self.class_name
+        if string != '':
+            string += ' at ' + self.place_name
+        else:
+            string += self.place_name
         return string
 
     @property

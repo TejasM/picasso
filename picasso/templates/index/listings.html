@@ -160,7 +160,7 @@
                                 <strong>{% if listings.paginator %}
                                     {{ forloop.counter0|add:listings.start_index }}.{% else %}
                                     {{ forloop.counter }}.{% endif %}
-                                    {{ l.listing_name|unidecode }}</strong>
+                                    {{ l.get_full_listing_name|unidecode }}</strong>
                                 <br><span>{{ l.get_string_tags }}</span></h4>
                         </a>
                     </div>
