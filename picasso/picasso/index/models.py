@@ -243,21 +243,20 @@ class Listing(BaseModel):
             address = re.sub(r'\W+', '-', self.address.city.split(',')[0])
         else:
             address = ''
-        self.unique_url = ''
-        # if count == 1:
-        #     if address != '':
-        #         self.unique_url = re.sub(r'\W+', '-', self.get_full_listing_name) + "-" + address
-        #     else:
-        #         self.unique_url = re.sub(r'\W+', '-', self.get_full_listing_name) + "-" + str(count)
-        # else:
-        #     count = 0
-        #     for l in Listing.objects.filter(listing_name=self.listing_name):
-        #         if l.unique_url != '':
-        #             count += 1
-        #     if address != '':
-        #         self.unique_url = re.sub(r'\W+', '-', self.get_full_listing_name) + "-" + address + "-" + str(count)
-        #     else:
-        #         self.unique_url = re.sub(r'\W+', '-', self.get_full_listing_name) + "-" + str(count)
+        if count == 1:
+            if address != '':
+                self.unique_url = re.sub(r'\W+', '-', self.get_full_listing_name) + "-" + address
+            else:
+                self.unique_url = re.sub(r'\W+', '-', self.get_full_listing_name) + "-" + str(count)
+        else:
+            count = 0
+            for l in Listing.objects.filter(listing_name=self.listing_name):
+                if l.unique_url != '':
+                    count += 1
+            if address != '':
+                self.unique_url = re.sub(r'\W+', '-', self.get_full_listing_name) + "-" + address + "-" + str(count)
+            else:
+                self.unique_url = re.sub(r'\W+', '-', self.get_full_listing_name) + "-" + str(count)
         super(Listing, self).save(**kwargs)
 
 
