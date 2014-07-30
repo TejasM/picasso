@@ -101,7 +101,7 @@
             <div class="col-sm-12 col-md-6 col-lg-6">
                 <div class="tab-pane fade in active" id="overview">
                     <div style="float: right;">
-                        {% if listing.owner == None  and listing.email != '' %}
+                        {% if listing.owner == None %}
                             {% if claimable %}
                                 <div class="popover-icon" data-container="body" data-toggle="popover"
                                      data-trigger="hover"
@@ -135,6 +135,19 @@
                                      title="">
                                     <button type="button" class="btn btn-primary btn-block"
                                             id="send-claim-button">
+                                        &nbsp;&nbsp;Claim
+                                        Listing&nbsp;&nbsp;
+                                    </button>
+                                </div>
+                            {% elif  listing.email == '' %}
+                                <div class="popover-icon" data-container="body" data-toggle="popover"
+                                     data-trigger="hover"
+                                     data-placement="top"
+                                     data-content="You can edit or remove any incorrect information after claiming the business"
+                                     data-original-title=""
+                                     title="">
+                                    <button type="button" class="btn btn-primary btn-block"
+                                            id="send-claim-email-button">
                                         &nbsp;&nbsp;Claim
                                         Listing&nbsp;&nbsp;
                                     </button>
@@ -298,6 +311,23 @@
         </section>
     </div>
     </div>
+    <div class="pp_pic_holder pp_default"
+         style="display: none; margin: 0 auto; top: 50%; -webkit-transform: translateY(-50%) translateX(-50%);  -ms-transform: translateY(-50%) translateX(-50%);  transform: translateY(-50%) translateX(-50%); left: 50%; width: auto;">
+        <form>
+            <div class="form-group">
+                <label for="claim-listing-email" accesskey="S" style="color: #fff">Email:</label>
+                <input id="claim-listing-email" class="form-control" type="email">
+            </div>
+            <button type="button" class="btn btn-lg btn-primary" id="cancel-claim-listing"
+                    onclick="$(this).hide();$('.pp_pic_holder').hide()">Cancel
+            </button>
+            <button type="button" class="btn btn-lg btn-primary" id="submit-claim-email-listing">
+                Claim Listing
+            </button>
+        </form>
+    </div>
+    <div class="pp_overlay" style="height: 1566px; width: 1905px; opacity: 0.8; display:none;"
+         onclick="$(this).hide();$('.pp_pic_holder').hide()"></div>
 {% endblock %}
 {% block scripts %}
     <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
@@ -437,9 +467,26 @@
 
         $main.on('click', '#send-claim-button', function () {
             $.post('{% url 'send_claim_email' listing.id %}', function () {
-                $('#send-claim-button').text('Email Sent');
+                $('#send-claim-button').text('&nbsp;&nbsp;Email Sent&nbsp;&nbsp;');
                 $('#send-claim-button').prop('disabled', true);
             });
+        });
+
+        $main.on('click', '#send-claim-email-button', function () {
+            $('.pp_overlay').show();
+            $('.pp_pic_holder').show();
+        });
+
+        $main.on('click', '#submit-claim-email-listing', function () {
+            var email = $('#claim-listing-email').val().trim();
+            if (email != '') {
+                $.post('{% url 'send_claim_email' listing.id %}', {'email': email}, function () {
+                    $('#send-claim-email-button').text('&nbsp;&nbsp;Email Sent&nbsp;&nbsp;');
+                    $('#send-claim-email-button').prop('disabled', true);
+                    $('.pp_overlay').hide();
+                    $('.pp_pic_holder').hide();
+                });
+            }
         });
 
         function loadScript() {

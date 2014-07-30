@@ -73,10 +73,23 @@ def hash_listing(request, hash_key):
 
 @csrf_exempt
 def send_claim_email(request, list_id):
-    # TODO create email
     if request.method == "POST":
         listing = Listing.objects.get(pk=list_id)
         if listing.email != '':
+            emails = ['emails/claim_email.html', 'emails/claim_email_2.html']
+            choice = random.choice(emails)
+            logger.debug('Listing claim sending email to : ' + listing.email + ' with ' + choice)
+            t = get_template(choice)
+            context = RequestContext(request, {'listing': listing})
+            content = t.render(context)
+            msg = EmailMessage('Picasso - Claim your Business', content, 'contact@findpicasso.com',
+                               [listing.email])
+            msg.content_subtype = "html"
+            msg.send()
+            return HttpResponse(json.dumps({'fail': False}), content_type='application/json')
+        elif request.POST.get('email', '') != '':
+            listing.email = request.POST.get('email', '')
+            listing.save()
             emails = ['emails/claim_email.html', 'emails/claim_email_2.html']
             choice = random.choice(emails)
             logger.debug('Listing claim sending email to : ' + listing.email + ' with ' + choice)
