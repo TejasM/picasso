@@ -1,37 +1,28 @@
-<div id="edit-listing-div" class="container mt30">
+<div id="edit-listing-div" class="container">
     <form class="clearfix" role="form" method="post" action="{% url 'profile:edit_listing' listing.id %}"
           id="editlistingform" onsubmit="return false;">
         {% csrf_token %}
-        <div class="row">
-            <div class="col-lg-4 col-sm-12">
+        <div class="row" id="checks">
+            <div class="col-lg-12 col-sm-12">
                 <div class="form-group">
-                    <label for="listing-name" accesskey="S">Instructor
+                    <label for="listing-name" accesskey="S"><input type="checkbox" id="inst-active" class="mt20"
+                                                                   style="margin-right: 20px;">Instructor
                         Name:</label>
                     <input id="listing-name" class="form-control" value="{{ listing.listing_name }}">
                 </div>
             </div>
-            <div class="col-lg-1 col-sm-12">
+            <div class="col-lg-12 col-sm-12">
                 <div class="form-group">
-                    <label accesskey="S">and/or</label>
-                    <input class="form-control" value="for" disabled>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-12">
-                <div class="form-group">
-                    <label for="class-name" accesskey="S">Class
+                    <label for="class-name" accesskey="S"><input type="checkbox" id="class-active" class="mt20"
+                                                                 style="margin-right: 20px;">Class
                         Name:</label>
                     <input id="class-name" class="form-control" value="">
                 </div>
             </div>
-            <div class="col-lg-1 col-sm-12">
+            <div class="col-lg-12 col-sm-12">
                 <div class="form-group">
-                    <label accesskey="S">and/or</label>
-                    <input class="form-control" value="at" disabled>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-12">
-                <div class="form-group">
-                    <label for="place-name" accesskey="S">School/Place
+                    <label for="place-name" accesskey="S"><input type="checkbox" id="school-active" class="mt20"
+                                                                 style="margin-right: 20px;">School/Place
                         Name:</label>
                     <input id="place-name" class="form-control" value="">
                 </div>

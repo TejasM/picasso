@@ -678,6 +678,24 @@ $(function () {
             $main.on('click', '.add-list', add_listing);
             $('#add-list').click(add_listing);
 
+            $('body').on('click', '#checks input[type="checkbox"]', function () {
+                if ($(this).parent().next().prop('disabled')) {
+                    $(this).parent().next().prop('disabled', '');
+                } else {
+                    $(this).parent().next().prop('disabled', '');
+                }
+            });
+
+            $('body').on('change', '#checks input.form-control', function () {
+                if ($('#listing-name').val().trim() == '' && $('#place-name').val().trim() == '' && $('#class-name').val().trim() == '') {
+                    $('#submit-create-listing').hide();
+                    $('#save-edit-listing').hide();
+                } else {
+                    $('#submit-create-listing').show();
+                    $('#save-edit-listing').show();
+                }
+            });
+
             $('body').on('click', '#submit-create-listing', function () {
                 var url = $(this).data('url');
                 var $range = $("#slider-range");
