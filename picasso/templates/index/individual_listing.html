@@ -467,7 +467,7 @@
 
         $main.on('click', '#send-claim-button', function () {
             $.post('{% url 'send_claim_email' listing.id %}', function () {
-                $('#send-claim-button').text('&nbsp;&nbsp;Email Sent&nbsp;&nbsp;');
+                $('#send-claim-button').text('  Email Sent  ');
                 $('#send-claim-button').prop('disabled', true);
             });
         });
@@ -481,7 +481,7 @@
             var email = $('#claim-listing-email').val().trim();
             if (email != '') {
                 $.post('{% url 'send_claim_email' listing.id %}', {'email': email}, function () {
-                    $('#send-claim-email-button').text('&nbsp;&nbsp;Email Sent&nbsp;&nbsp;');
+                    $('#send-claim-email-button').text('  Email Sent  ');
                     $('#send-claim-email-button').prop('disabled', true);
                     $('.pp_overlay').hide();
                     $('.pp_pic_holder').hide();
