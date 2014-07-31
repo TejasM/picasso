@@ -1,4 +1,4 @@
-<div id="edit-listing-div" class="container">
+<div id="edit-listing-div" class="container mt20">
     <form class="clearfix" role="form" method="post" action="{% url 'profile:edit_listing' listing.id %}"
           id="editlistingform" onsubmit="return false;">
         {% csrf_token %}
