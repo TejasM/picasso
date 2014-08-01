@@ -180,7 +180,7 @@ def signin(request):
                             l.visible = False
                             logger.debug("Listing " + l.listing_name + " was claimed")
                             t = get_template('emails/confirm_claim_email.html')
-                            context = RequestContext({}, {'listing': l})
+                            context = RequestContext(request, {'listing': l})
                             content_email = t.render(context)
                             msg = EmailMessage('Picasso - Thank You', content_email, 'contact@findpicasso.com',
                                                [l.email])
