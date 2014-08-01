@@ -75,7 +75,7 @@ USE_L10N = True
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
-########## END GENERAL CONFIGURATION
+# ######### END GENERAL CONFIGURATION
 
 
 ########## MEDIA CONFIGURATION
@@ -169,6 +169,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'watson.middleware.SearchContextMiddleware',
+    'picasso.middleware.SocialAuthExceptionMiddlewareCustom',
 )
 ########## END MIDDLEWARE CONFIGURATION
 
