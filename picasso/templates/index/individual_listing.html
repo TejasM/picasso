@@ -482,6 +482,7 @@
         $main.on('click', '#send-claim-button', function () {
             $.post('{% url 'send_claim_email' listing.id %}', function () {
                 $('#send-claim-button').text('  Email Sent  ');
+                $('.pp_overlay').show();
                 $('.confirm_claim').show();
                 $('#send-claim-button').prop('disabled', true);
             });
