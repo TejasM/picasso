@@ -618,6 +618,11 @@
                 });
             });
         {% endif %}
+
+        {% if request.session.sign_up %}
+            $main.hide();
+            $('#sign-in-choice-lightbox').show();
+        {% endif %}
     });
 
     function split(val) {

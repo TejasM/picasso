@@ -68,10 +68,14 @@ def add_listing(request):
         point = "POINT(%s %s)" % (lon, lat)
         address = Address.objects.create(city=city, country=country, postal_code=postal, location=address, point=point)
         if owner == "true":
-            owner = request.user
+            if request.user.is_authenticated():
+                owner = request.user
+            else:
+                owner = None
+                request.session['sign_up'] = True
         else:
             owner = None
-        if not request.user.is_anonymous():
+        if request.user.is_authenticated():
             listing = Listing.objects.create(listing_name=listing_name, description=description, address=address,
                                              phone=phone, active=active, owner=owner, created_by=request.user,
                                              level_of_expertise=l_o_e, price_min=price_min, price_max=price_max,
@@ -81,6 +85,9 @@ def add_listing(request):
                                              phone=phone, active=active, owner=owner,
                                              level_of_expertise=l_o_e, price_min=price_min, price_max=price_max,
                                              email=email, website=site, place_name=place_name, class_name=class_name)
+        if request.session.get('sign_up', '') != '':
+            if not request.user.is_authenticated():
+                request.session['key'] = listing.id
         if settings.DEBUG is False and not tags:
             tags.append(Tag.objects.get(tag_name="Blank"))
         listing.tags = tags

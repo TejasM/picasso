@@ -134,6 +134,7 @@ def signin(request):
             username = request.POST['email']
             password = request.POST['password']
             claim = request.POST.get('claim-id', '')
+            key = request.session.get('key', '')
             try:
                 user = User.objects.create(first_name=first_name, last_name=last_name, email=username,
                                            username=username)
@@ -156,6 +157,25 @@ def signin(request):
                         l.save()
                     except Listing.DoesNotExist:
                         pass
+                if key != '':
+                        try:
+                            l = Listing.objects.get(pk=int(key))
+                            l.visible = False
+                            logger.debug("Listing " + l.listing_name + " was claimed")
+                            t = get_template('emails/confirm_claim_email.html')
+                            context = RequestContext(request, {'listing': l})
+                            content_email = t.render(context)
+                            msg = EmailMessage('Picasso - Thank You', content_email, 'contact@findpicasso.com',
+                                               [l.email])
+                            msg.content_subtype = "html"
+                            msg.send()
+                            l.owner = user
+                            l.save()
+                        except Listing.DoesNotExist:
+                            pass
+                        del request.session['sign_up']
+                        del request.session['key']
+                        request.session.modified = True
                 login(request, user)
                 return HttpResponse(json.dumps({'success': 1}),
                                     content_type='application/json')
@@ -166,6 +186,7 @@ def signin(request):
             username = request.POST['email']
             password = request.POST['password']
             claim = request.POST.get('claim-id', '')
+            key = request.session.get('key', '')
             try:
                 User.objects.get(email=username, username=username)
             except User.DoesNotExist:
@@ -190,6 +211,25 @@ def signin(request):
                             l.save()
                         except Listing.DoesNotExist:
                             pass
+                    if key != '':
+                        try:
+                            l = Listing.objects.get(pk=int(key))
+                            l.visible = False
+                            logger.debug("Listing " + l.listing_name + " was claimed")
+                            t = get_template('emails/confirm_claim_email.html')
+                            context = RequestContext(request, {'listing': l})
+                            content_email = t.render(context)
+                            msg = EmailMessage('Picasso - Thank You', content_email, 'contact@findpicasso.com',
+                                               [l.email])
+                            msg.content_subtype = "html"
+                            msg.send()
+                            l.owner = user
+                            l.save()
+                        except Listing.DoesNotExist:
+                            pass
+                        del request.session['sign_up']
+                        del request.session['key']
+                        request.session.modified = True
                     login(request, user)
                     return HttpResponse(json.dumps({'success': 1}),
                                         content_type='application/json')
@@ -259,6 +299,7 @@ def terms(request):
 
 def promotion(request):
     return render(request, 'promotion.html')
+
 
 def content(request):
     return render(request, 'content.html')
