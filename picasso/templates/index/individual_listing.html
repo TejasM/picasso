@@ -311,7 +311,7 @@
         </section>
     </div>
     </div>
-    <div class="pp_pic_holder pp_default"
+    <div class="pp_pic_holder pp_default custom_claim_form"
          style="display: none; margin: 0 auto; top: 50%; -webkit-transform: translateY(-50%) translateX(-50%);  -ms-transform: translateY(-50%) translateX(-50%);  transform: translateY(-50%) translateX(-50%); left: 50%; width: auto;">
         <form>
             <div class="form-group">
@@ -319,15 +319,29 @@
                 <input id="claim-listing-email" class="form-control" type="email">
             </div>
             <button type="button" class="btn btn-lg btn-primary" id="cancel-claim-listing"
-                    onclick="$('.pp_overlay').hide();$('.pp_pic_holder').hide()">Cancel
+                    onclick="$('.pp_overlay').hide();$('.custom_claim_form').hide()">Cancel
             </button>
             <button type="button" class="btn btn-lg btn-primary" id="submit-claim-email-listing">
                 Claim Listing
             </button>
         </form>
     </div>
+
+    <div class="pp_pic_holder pp_default confirm_claim"
+         style="display: none; margin: 0 auto; top: 50%; -webkit-transform: translateY(-50%) translateX(-50%);  -ms-transform: translateY(-50%) translateX(-50%);  transform: translateY(-50%) translateX(-50%); left: 50%; width: auto;">
+        <div class="col-sm-12 col-lg-6 col-lg-offset-3">
+            <div class="alert alert-info">
+                An email has been sent to the contact email we have for you, if you do not receive an email, contact us
+                at <a href="mailto:contact@findpicasso.com">contact@findpicasso.com</a> with your listing URL.
+            </div>
+            <button type="button" class="btn btn-lg btn-primary"
+                    onclick="$('.pp_overlay').hide();$('.confirm_claim').hide()">
+                Ok
+            </button>
+        </div>
+    </div>
     <div class="pp_overlay" style="height: 1566px; width: 1905px; opacity: 0.8; display:none;"
-         onclick="$(this).hide();$('.pp_pic_holder').hide()"></div>
+         onclick="$(this).hide();$('.custom_claim_form').hide();$('.confirm_claim').hide()"></div>
 {% endblock %}
 {% block scripts %}
     <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
@@ -468,13 +482,14 @@
         $main.on('click', '#send-claim-button', function () {
             $.post('{% url 'send_claim_email' listing.id %}', function () {
                 $('#send-claim-button').text('  Email Sent  ');
+                $('.confirm_claim').show();
                 $('#send-claim-button').prop('disabled', true);
             });
         });
 
         $main.on('click', '#send-claim-email-button', function () {
             $('.pp_overlay').show();
-            $('.pp_pic_holder').show();
+            $('custom_claim_form').show();
         });
 
         $main.on('click', '#submit-claim-email-listing', function () {
@@ -483,8 +498,9 @@
                 $.post('{% url 'send_claim_email' listing.id %}', {'email': email}, function () {
                     $('#send-claim-email-button').text('  Email Sent  ');
                     $('#send-claim-email-button').prop('disabled', true);
-                    $('.pp_overlay').hide();
-                    $('.pp_pic_holder').hide();
+                    //$('.pp_overlay').hide();
+                    $('.confirm_claim').show();
+                    $('.custom_claim_form').hide();
                 });
             }
         });
