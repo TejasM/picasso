@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.gis import geos
 from django.core.mail import EmailMessage
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db import IntegrityError
+from django.db import IntegrityError, DataError
 from django.db.models import Q, Count
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -181,6 +181,9 @@ def signin(request):
                                     content_type='application/json')
             except IntegrityError:
                 return HttpResponse(json.dumps({'success': 0, 'error': 'Username is taken'}),
+                                    content_type='application/json')
+            except DataError:
+                return HttpResponse(json.dumps({'success': 0, 'error': 'Username/Password is too long'}),
                                     content_type='application/json')
         else:
             username = request.POST['email']
