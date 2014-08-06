@@ -126,6 +126,8 @@ class Listing(BaseModel):
     unique_url = models.CharField(max_length=1000, default="")
     last_modified = models.DateTimeField(default=timezone.now())
     website = models.CharField(default="", max_length=1000)
+    point = gis_models.PointField(u"longitude/latitude",
+                                  geography=True, blank=True, null=True)
     inner_point = gis_models.PointField(u"longitude/latitude",
                                   geography=True, blank=True, null=True)
     # total_rating = models.FloatField(default=0)
