@@ -264,7 +264,7 @@ class Listing(BaseModel):
             self.total_rating = self.review_set.aggregate(Avg('rating')).values()[0]
         else:
             self.total_rating = 0
-        self.hash_key = generate_hash
+        #self.hash_key = generate_hash
         self.inner_point = self.address.point
         super(Listing, self).save(**kwargs)
 
