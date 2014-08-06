@@ -63,9 +63,10 @@ def get_listings(request):
             if order_by == '':
                 temp_listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).distance(
                     current_point,
-                    field_name='address__point').extra(
-                    select={'factor': '0.01*(inner_point::distance + total_rating)'}).order_by(
-                    'factor')
+                    field_name='address__point').order_by('distance')
+                    #extra(
+                    #select={'factor': '0.01*(inner_point::distance + total_rating)'}).order_by(
+                    #'factor')
             else:
                 temp_listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).distance(
                     current_point, field_name='address__point')
