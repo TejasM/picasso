@@ -59,9 +59,14 @@ def get_listings(request):
             results = Geocoder.geocode(str(location + ' Canada'))
             lat, lon = results[0].coordinates
             current_point = geos.fromstr("POINT(%s %s)" % (lon, lat))
-            temp_listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).distance(current_point,
-                                                                                                       field_name='address__point').extra(
-                select={'factor': '0.01*distance + total_rating'}).order_by('distance')
+            if order_by == '':
+                temp_listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).distance(
+                    current_point,
+                    field_name='address__point').extra(select={'factor': '0.01*distance + total_rating'}).order_by(
+                    'factor')
+            else:
+                temp_listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).distance(
+                    current_point, field_name='address__point')
             if temp_listings.count() == 0:
                 raise Exception
             else:
