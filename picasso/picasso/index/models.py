@@ -130,7 +130,7 @@ class Listing(BaseModel):
                                   geography=True, blank=True, null=True)
     # total_rating = models.FloatField(default=0)
 
-    hash_key = models.CharField(max_length=40, default=generate_hash, unique=True)
+    hash_key = models.CharField(max_length=100, default=generate_hash, unique=True)
 
     photo = models.ImageField(upload_to='listings/', null=True, blank=True, default=None)
     visible = models.BooleanField(default=True)
