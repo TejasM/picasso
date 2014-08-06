@@ -60,8 +60,8 @@ def get_listings(request):
             lat, lon = results[0].coordinates
             current_point = geos.fromstr("POINT(%s %s)" % (lon, lat))
             temp_listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).distance(current_point,
-                                                                                                       field_name='address__point').order_by(
-                'distance')
+                                                                                                       field_name='address__point').extra(
+                select={'factor': '0.01*distance + total_rating'}).order_by('distance')
             if temp_listings.count() == 0:
                 raise Exception
             else:
@@ -158,24 +158,24 @@ def signin(request):
                     except Listing.DoesNotExist:
                         pass
                 if key != '':
-                        try:
-                            l = Listing.objects.get(pk=int(key))
-                            l.visible = False
-                            logger.debug("Listing " + l.listing_name + " was claimed")
-                            t = get_template('emails/confirm_claim_email.html')
-                            context = RequestContext(request, {'listing': l})
-                            content_email = t.render(context)
-                            msg = EmailMessage('Picasso - Thank You', content_email, 'contact@findpicasso.com',
-                                               [l.email])
-                            msg.content_subtype = "html"
-                            msg.send()
-                            l.owner = user
-                            l.save()
-                        except Listing.DoesNotExist:
-                            pass
-                        del request.session['sign_up']
-                        del request.session['key']
-                        request.session.modified = True
+                    try:
+                        l = Listing.objects.get(pk=int(key))
+                        l.visible = False
+                        logger.debug("Listing " + l.listing_name + " was claimed")
+                        t = get_template('emails/confirm_claim_email.html')
+                        context = RequestContext(request, {'listing': l})
+                        content_email = t.render(context)
+                        msg = EmailMessage('Picasso - Thank You', content_email, 'contact@findpicasso.com',
+                                           [l.email])
+                        msg.content_subtype = "html"
+                        msg.send()
+                        l.owner = user
+                        l.save()
+                    except Listing.DoesNotExist:
+                        pass
+                    del request.session['sign_up']
+                    del request.session['key']
+                    request.session.modified = True
                 login(request, user)
                 return HttpResponse(json.dumps({'success': 1}),
                                     content_type='application/json')

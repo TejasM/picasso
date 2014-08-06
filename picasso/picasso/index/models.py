@@ -126,6 +126,7 @@ class Listing(BaseModel):
     unique_url = models.CharField(max_length=1000, default="")
     last_modified = models.DateTimeField(default=timezone.now())
     website = models.CharField(default="", max_length=1000)
+    total_rating = models.FloatField(default=0)
 
     hash_key = models.CharField(max_length=40, default=generate_hash, unique=True)
 
@@ -257,6 +258,10 @@ class Listing(BaseModel):
                 self.unique_url = re.sub(r'\W+', '-', self.get_full_listing_name) + "-" + address + "-" + str(count)
             else:
                 self.unique_url = re.sub(r'\W+', '-', self.get_full_listing_name) + "-" + str(count)
+        if self.review_set.count() != 0:
+            self.total_rating = self.review_set.aggregate(Avg('rating')).values()[0]
+        else:
+            self.total_rating = 0
         super(Listing, self).save(**kwargs)
 
 
