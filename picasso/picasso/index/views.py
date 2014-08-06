@@ -48,6 +48,7 @@ def featured(request):
 def get_listings(request):
     if request.method == "GET":
         original_search = request.GET.get('term', '')
+        logger.debug('Search ' + original_search)
         order_by = request.GET.get('order_by', '')
         try:
             location = original_search.split('----')[1]
@@ -83,7 +84,8 @@ def get_listings(request):
                 listings = paginator.page(paginator.num_pages)
             lons = [x.address.point.x for x in listings]
             lats = [x.address.point.y for x in listings]
-        except:
+        except Exception as e:
+            logger.debug(e)
             lats = []
             lons = []
             if listings.count() != 0:
