@@ -126,7 +126,7 @@ class Listing(BaseModel):
     unique_url = models.CharField(max_length=1000, default="")
     last_modified = models.DateTimeField(default=timezone.now())
     website = models.CharField(default="", max_length=1000)
-    point = gis_models.PointField(u"longitude/latitude",
+    inner_point = gis_models.PointField(u"longitude/latitude",
                                   geography=True, blank=True, null=True)
     # total_rating = models.FloatField(default=0)
 
@@ -265,7 +265,7 @@ class Listing(BaseModel):
         else:
             self.total_rating = 0
         self.hash_key = generate_hash
-        self.point = self.address.point
+        self.inner_point = self.address.point
         super(Listing, self).save(**kwargs)
 
 
