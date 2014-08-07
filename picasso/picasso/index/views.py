@@ -5,6 +5,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.gis import geos
+from django.contrib.gis.measure import D
 from django.core.mail import EmailMessage
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import IntegrityError, DataError
@@ -63,10 +64,11 @@ def get_listings(request):
             if order_by == '':
                 temp_listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).distance(
                     current_point,
-                    field_name='address__point').order_by('distance')
-                    #extra(
-                    #select={'factor': '0.01*(inner_point::distance + total_rating)'}).order_by(
-                    #'factor')
+                    field_name='address__point').filter(
+                    address__point__distance__lte=(current_point, D(mi=20))).order_by('distance')
+                # extra(
+                #select={'factor': '0.01*(inner_point::distance + total_rating)'}).order_by(
+                #'factor')
             else:
                 temp_listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).distance(
                     current_point, field_name='address__point')
