@@ -21,7 +21,7 @@ def send_claim_email(listing):
         choice = random.choice(emails)
         logger.debug('Listing claim sending email to : ' + listing.email + ' with ' + choice)
         t = get_template(choice)
-        context = RequestContext({}, {'listing': listing})
+        context = RequestContext({'method': 'GET'}, {'listing': listing})
         content = t.render(context)
         msg = EmailMessage('Picasso - Claim your Business', content, 'contact@findpicasso.com', [listing.email])
         msg.content_subtype = "html"
