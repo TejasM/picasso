@@ -62,12 +62,12 @@ def get_listings(request):
             lat, lon = results[0].coordinates
             current_point = geos.fromstr("POINT(%s %s)" % (lon, lat))
             if order_by == '':
-                temp_listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).distance(
+                temp_listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).filter(
+                    address__point__distance__lte=(current_point, D(mi=20))).distance(
                     current_point,
-                    field_name='address__point').filter(
-                    address__point__distance__lte=(current_point, D(mi=20))).order_by('distance')
+                    field_name='address__point').order_by('distance')
                 # extra(
-                #select={'factor': '0.01*(inner_point::distance + total_rating)'}).order_by(
+                # select={'factor': '0.01*(inner_point::distance + total_rating)'}).order_by(
                 #'factor')
             else:
                 temp_listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).distance(
