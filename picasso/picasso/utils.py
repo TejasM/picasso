@@ -1,7 +1,7 @@
 import logging
 import random
 from django.core.mail import EmailMessage
-from django.template import RequestContext
+from django.template import RequestContext, Context
 from django.template.loader import get_template
 from picasso.index.models import Listing
 
@@ -21,7 +21,7 @@ def send_claim_email(listing):
         choice = random.choice(emails)
         logger.debug('Listing claim sending email to : ' + listing.email + ' with ' + choice)
         t = get_template(choice)
-        context = RequestContext({'method': 'GET'}, {'listing': listing})
+        context = Context({'listing': listing})
         content = t.render(context)
         msg = EmailMessage('Picasso - Claim your Business', content, 'contact@findpicasso.com', [listing.email])
         msg.content_subtype = "html"
