@@ -17,16 +17,20 @@ def send_claim_email(listing):
         except Exception as e:
             print e
             return "Fail"
-        emails = ['emails/claim_email.html', 'emails/claim_email_2.html']
-        choice = random.choice(emails)
-        logger.debug('Listing claim sending email to : ' + listing.email + ' with ' + choice)
-        t = get_template(choice)
-        context = Context({'listing': listing})
-        content = t.render(context)
-        msg = EmailMessage('Picasso - Claim your Business', content, 'contact@findpicasso.com', [listing.email])
-        msg.content_subtype = "html"
-        msg.send()
-        return "Success"
+        try:
+            emails = ['emails/claim_email.html', 'emails/claim_email_2.html']
+            choice = random.choice(emails)
+            logger.debug('Listing claim sending email to : ' + listing.email + ' with ' + choice)
+            t = get_template(choice)
+            context = Context({'listing': listing})
+            content = t.render(context)
+            msg = EmailMessage('Picasso - Claim your Business', content, 'contact@findpicasso.com', [listing.email])
+            msg.content_subtype = "html"
+            msg.send()
+            return "Success"
+        except:
+            print l.id
+            pass
     return "Fail"
 
 
