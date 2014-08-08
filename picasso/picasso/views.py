@@ -63,6 +63,7 @@ def hash_listing(request, hash_key):
                     context = {'listing': listing, 'reviewed': True}
                 if listing.owner is None:
                     listing.owner = request.user
+                    listing.visible = True
                     listing.save()
             else:
                 context = {'listing': listing, 'claimable': True}

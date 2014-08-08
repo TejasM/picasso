@@ -153,7 +153,7 @@ def signin(request):
                 if claim != '':
                     try:
                         l = Listing.objects.get(pk=int(claim))
-                        l.visible = False
+                        l.visible = True
                         logger.debug("Listing " + l.listing_name + " was claimed")
                         t = get_template('emails/confirm_claim_email.html')
                         context = Context({'listing': l})
@@ -169,7 +169,7 @@ def signin(request):
                 if key != '':
                     try:
                         l = Listing.objects.get(pk=int(key))
-                        l.visible = False
+                        l.visible = True
                         logger.debug("Listing " + l.listing_name + " was claimed")
                         t = get_template('emails/confirm_claim_email.html')
                         context = RequestContext(request, {'listing': l})
@@ -210,7 +210,7 @@ def signin(request):
                     if claim != '':
                         try:
                             l = Listing.objects.get(pk=int(claim))
-                            l.visible = False
+                            l.visible = True
                             logger.debug("Listing " + l.listing_name + " was claimed")
                             t = get_template('emails/confirm_claim_email.html')
                             context = RequestContext(request, {'listing': l})
@@ -226,7 +226,7 @@ def signin(request):
                     if key != '':
                         try:
                             l = Listing.objects.get(pk=int(key))
-                            l.visible = False
+                            l.visible = True
                             logger.debug("Listing " + l.listing_name + " was claimed")
                             t = get_template('emails/confirm_claim_email.html')
                             context = RequestContext(request, {'listing': l})
