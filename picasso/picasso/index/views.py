@@ -64,9 +64,9 @@ def get_listings(request):
                 temp_listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).distance(
                     current_point,
                     field_name='address__point').order_by('distance')
-                    #extra(
-                    #select={'factor': '0.01*(inner_point::distance + total_rating)'}).order_by(
-                    #'factor')
+                # extra(
+                #select={'factor': '0.01*(inner_point::distance + total_rating)'}).order_by(
+                #'factor')
             else:
                 temp_listings = listings.filter(~Q(address=None)).filter(~Q(address__point=None)).distance(
                     current_point, field_name='address__point')
@@ -289,6 +289,12 @@ def contact(request):
             msg.send()
         return HttpResponse(json.dumps({}), content_type='application/json')
     return HttpResponse(json.dumps({}), content_type='application/json')
+
+
+def internal_stats(request):
+    claimed = Listing.objects.filter(~Q(created_by=None) | ~Q(owner=None)).count()
+    reviews = Review.objects.count()
+    return render(request, 'internal_stats.html', {'claimed': claimed, 'reviews': reviews})
 
 
 @login_required()

@@ -21,6 +21,7 @@ urlpatterns = patterns('',
 
                        # main
                        url(r'^logout$', user_logout, name='logout'),
+                       url(r'^internalStats/$', internal_stats, name='internal'),
                        url(r'^about$', about, name='about'),
                        url(r'^privacy$', privacy, name='privacy'),
                        url(r'^terms$', terms, name='terms'),
